@@ -251,12 +251,6 @@ CvUnit::CvUnit() :
 	, m_iFriendlyLandsModifier("CvUnit::m_iFriendlyLandsModifier", m_syncArchive)
 	, m_iFriendlyLandsAttackModifier("CvUnit::m_iFriendlyLandsAttackModifier", m_syncArchive)
 	, m_iOutsideFriendlyLandsModifier("CvUnit::m_iOutsideFriendlyLandsModifier", m_syncArchive)
-#ifdef NQ_GOLDEN_AGE_FOREIGN_ATTACK_BONUS
-	, m_iGoldenAgeForeignAttackBonus("CvUnit::m_iGoldenAgeForeignAttackBonus", m_syncArchive)
-#endif
-#ifdef NQ_COMBAT_STRENGTH_NEAR_FRIENDLY_MINOR
-	, m_iCombatStrengthNearFriendlyMinor("CvUnit::m_iCombatStrengthNearFriendlyMinor", m_syncArchive)
-#endif
 	, m_iNumInterceptions("CvUnit::m_iNumInterceptions", m_syncArchive)
 	, m_iMadeInterceptionCount("CvUnit::m_iMadeInterceptionCount", m_syncArchive)
 	, m_iEverSelectedCount(0)
@@ -700,32 +694,16 @@ void CvUnit::initWithNameOffset(int iID, UnitTypes eUnit, int iNameOffset, UnitA
 	int iTourism = kPlayer.GetPlayerPolicies()->GetTourismFromUnitCreation((UnitClassTypes)(getUnitInfo().GetUnitClassType()));
 	if (iTourism > 0)
 	{
-#ifdef NQ_FIX_ADD_TOURISM_GAME_SPEED_MOD
-		iTourism = iTourism * GC.getGame().getGameSpeedInfo().getCulturePercent() / 100;
-#endif
 		kPlayer.GetCulture()->AddTourismAllKnownCivs(iTourism);
 	}
 
-#ifdef NQ_SCIENCE_PER_GREAT_PERSON_BORN || NQ_SCIENCE_PER_GREAT_PERSON_BORN_FROM_POLICIES || NQ_INFLUENCE_BOOST_PER_GREAT_PERSON_BORN_FROM_POLICIES
-	if (IsGreatPerson())
-	{
-		int iScienceBonus = 0;
 #ifdef NQ_SCIENCE_PER_GREAT_PERSON_BORN
-		int iScienceBonusPerEra = kPlayer.GetPlayerTraits()->GetSciencePerGreatPersonBorn();
-		if (iScienceBonusPerEra != 0)
+	int iScienceBonus = kPlayer.GetPlayerTraits()->GetSciencePerGreatPersonBorn();
+	if (iScienceBonus != 0)
+	{
+		if (IsGreatPerson())
 		{
-			iScienceBonus += iScienceBonusPerEra * (kPlayer.GetCurrentEra() + 1);
-		}
-#endif
-#ifdef NQ_SCIENCE_PER_GREAT_PERSON_BORN_FROM_POLICIES
-		int iScienceBonusFromPolicies = kPlayer.GetPlayerPolicies()->GetNumericModifier(POLICYMOD_SCIENCE_PER_GREAT_PERSON_BORN);
-		if (iScienceBonusFromPolicies != 0)
-		{
-			iScienceBonus += iScienceBonusFromPolicies;
-		}
-#endif
-		if (iScienceBonus > 0)
-		{
+			iScienceBonus *= (kPlayer.GetCurrentEra() + 1);
 			iScienceBonus *= GC.getGame().getGameSpeedInfo().getTrainPercent();
 			iScienceBonus /= 100;
 
@@ -748,17 +726,6 @@ void CvUnit::initWithNameOffset(int iID, UnitTypes eUnit, int iNameOffset, UnitA
 				DLLUI->AddPopupText(plot()->getX(), plot()->getY(), text, fDelay);
 			}
 		}
-
-#ifdef NQ_INFLUENCE_BOOST_PER_GREAT_PERSON_BORN_FROM_POLICIES
-		for (int iMinorCivLoop = MAX_MAJOR_CIVS; iMinorCivLoop < MAX_CIV_PLAYERS; iMinorCivLoop++)
-		{
-			PlayerTypes eMinorCivLoop = (PlayerTypes) iMinorCivLoop;
-			if (GET_PLAYER(eMinorCivLoop).isAlive() && GET_TEAM(kPlayer.getTeam()).isHasMet(GET_PLAYER(eMinorCivLoop).getTeam()))
-			{
-				GET_PLAYER(eMinorCivLoop).GetMinorCivAI()->ChangeFriendshipWithMajor(kPlayer.GetID(), kPlayer.GetPlayerPolicies()->GetNumericModifier(POLICYMOD_INFLUENCE_BOOST_PER_GREAT_PERSON_BORN));
-			}
-		}
-#endif
 	}
 #endif
 
@@ -3650,11 +3617,7 @@ void CvUnit::move(CvPlot& targetPlot, bool bShow)
 #endif
 
 	bool bShouldDeductCost = true;
-#ifdef NQ_FIX_MOVES_THAT_CONSUME_ALL_MOVEMENT
-	int iMoveCost = targetPlot.movementCost(this, plot(), getMoves());
-#else
 	int iMoveCost = targetPlot.movementCost(this, plot());
-#endif
 #ifdef AUI_UNIT_FIX_HOVERING_EMBARK
 	if (pOldPlot && CanEverEmbark())
 	{
@@ -3722,13 +3685,6 @@ void CvUnit::move(CvPlot& targetPlot, bool bShow)
 				bShouldDeductCost = false;
 			}
 		}
-	}
-#endif
-
-#ifdef NQ_FIX_MOVES_THAT_CONSUME_ALL_MOVEMENT
-	if (iMoveCost > getMoves())
-	{
-		iMoveCost = getMoves();
 	}
 #endif
 
@@ -4168,16 +4124,6 @@ bool CvUnit::canGift(bool bTestVisible, bool bTestTransport) const
 			}
 		}
 	}
-#ifdef NQ_NO_GIFTING_GREAT_PEOPLE_TO_MAJORS
-	// no gifting great people to non-city states
-	else 
-	{
-		if (IsGreatPerson())
-		{
-			return false;
-		}
-	}
-#endif
 
 	// No for religious units
 	if (getUnitInfo().IsSpreadReligion() || getUnitInfo().IsRemoveHeresy())
@@ -6732,32 +6678,6 @@ bool CvUnit::changeAdmiralPort(int iX, int iY)
 	return true;
 }
 
-#ifdef NQ_UNIT_IMMUNE_TO_PLUNDER_FROM_TRAIT
-bool CvUnit::IsPlunderBlockedByOpposingTrait() const
-{
-	CvPlot* pPlot = plot();
-	if (pPlot != NULL && GET_PLAYER(m_eOwner).GetTrade()->ContainsOpposingPlayerTradeUnit(pPlot))
-	{
-		std::vector<int> aiTradeUnitsAtPlot;
-		aiTradeUnitsAtPlot = GET_PLAYER(m_eOwner).GetTrade()->GetOpposingTradeUnitsAtPlot(pPlot, true);
-		if (aiTradeUnitsAtPlot.size() > 0)
-		{
-			PlayerTypes eTradeUnitOwner = GC.getGame().GetGameTrade()->GetOwnerFromID(aiTradeUnitsAtPlot[0]);
-			if (eTradeUnitOwner != NO_PLAYER)
-			{
-				DomainTypes eDomain = GC.getGame().GetGameTrade()->GetDomainFromID(aiTradeUnitsAtPlot[0]);
-				if (eDomain == DOMAIN_SEA && GET_PLAYER(eTradeUnitOwner).GetPlayerTraits()->IsSeaTradeRoutesArePlunderImmune())
-				{
-					return true;
-				}
-			}
-		}
-	}
-
-	return false;
-}
-#endif
-
 //	--------------------------------------------------------------------------------
 bool CvUnit::canPlunderTradeRoute(const CvPlot* pPlot, bool bOnlyTestVisibility) const
 {
@@ -6799,15 +6719,6 @@ bool CvUnit::canPlunderTradeRoute(const CvPlot* pPlot, bool bOnlyTestVisibility)
 			{
 				return false;
 			}
-
-#ifdef NQ_UNIT_IMMUNE_TO_PLUNDER_FROM_TRAIT
-			DomainTypes eDomain = GC.getGame().GetGameTrade()->GetDomainFromID(aiTradeUnitsAtPlot[0]);
-			if (eDomain == DOMAIN_SEA && GET_PLAYER(eTradeUnitOwner).GetPlayerTraits()->IsSeaTradeRoutesArePlunderImmune())
-			{
-				return false;
-			}
-#endif
-
 		}
 
 		return true;
@@ -7608,6 +7519,14 @@ bool CvUnit::found()
 	CvPlayerAI& kPlayer = GET_PLAYER(getOwner());
 	CvPlayerAI& kActivePlayer = GET_PLAYER(eActivePlayer);
 
+#ifdef NQ_AMERICAN_PIONEER
+	// When American Pioneer settles non-capital cities, a free Worker appears.
+	if (getUnitType() == (UnitTypes)GC.getInfoTypeForString("UNIT_AMERICAN_PIONEER") && kPlayer.getNumCities() > 0)
+	{
+		kPlayer.initUnit((UnitTypes)GC.getInfoTypeForString("UNIT_WORKER"), getX(), getY());
+	}
+	//TODO: maybe put this into XML as a trait for the pioneer? it seems like a unique snowflake so not sure how to/why we should make it generic...
+#endif
 	kPlayer.found(getX(), getY());
 
 	if(pPlot->isActiveVisible(false))
@@ -8647,11 +8566,7 @@ bool CvUnit::canHurry(const CvPlot* pPlot, bool bTestVisible) const
 			{
 				UnitTypes eUnit = pCity->getProductionUnit();
 				CvUnitEntry *pkUnit = GC.GetGameUnits()->GetEntry(eUnit);
-#ifdef NQ_ALLOW_SS_PART_HURRY_BY_DEFAULT
-				if (pkUnit)
-#else
 				if (pkUnit && GET_PLAYER(pCity->getOwner()).IsEnablesSSPartHurry())
-#endif
 				{
 					if (pkUnit->GetSpaceshipProject() != NO_PROJECT)
 					{
@@ -8761,11 +8676,7 @@ int CvUnit::getTradeInfluence(const CvPlot* pPlot) const
 		if (eMinor != NO_PLAYER)
 		{
 			iInf = /*30*/ GC.getMINOR_FRIENDSHIP_FROM_TRADE_MISSION();
-#ifdef NQ_TRADE_MISSION_INFLUENCE_MODIFIER_FROM_POLICIES
-			int iInfTimes100 = iInf * (100 + GetTradeMissionInfluenceModifier() + GET_PLAYER(getOwner()).GetPlayerPolicies()->GetNumericModifier(POLICYMOD_TRADE_MISSION_INFLUENCE_MODIFIER));
-#else
 			int iInfTimes100 = iInf * (100 + GetTradeMissionInfluenceModifier());
-#endif
 			iInf = iInfTimes100 / 100;
 		}
 	}
@@ -8845,15 +8756,6 @@ bool CvUnit::trade()
 #endif
 		kPlayer.DoGreatPersonExpended(getUnitType());
 	}
-
-#ifdef NQ_TOURISM_FROM_TRADE_MISSIONS_FROM_POLICIES
-	int iTourismFromTradeMissions = GET_PLAYER(getOwner()).GetPlayerPolicies()->GetNumericModifier(POLICYMOD_TOURISM_FROM_TRADE_MISSIONS);
-	if (iTourismFromTradeMissions > 0)
-	{
-		int iTourismBonus = iTradeGold * iTourismFromTradeMissions / 100;
-		GET_PLAYER(getOwner()).GetCulture()->AddTourismAllKnownCivs(iTourismBonus);
-	}
-#endif
 
 	kill(true);
 
@@ -9847,7 +9749,7 @@ bool CvUnit::build(BuildTypes eBuild)
 			}
 		}
 
-#ifndef NQ_FIX_BUILD_TIMES_UI
+#ifndef AUI_UNIT_FIX_2X_BUILD_SPEED_ON_FIRST_TURN_OF_BUILDING
 		// wipe out all build progress also
 
 		bFinished = pPlot->changeBuildProgress(eBuild, workRate(false), getOwner());
@@ -11096,80 +10998,6 @@ bool CvUnit::isGoldenAge() const
 	return m_pUnitInfo->GetGoldenAgeTurns() > 0;
 }
 
-#ifdef NQ_COMBAT_STRENGTH_NEAR_FRIENDLY_MINOR
-//	--------------------------------------------------------------------------------
-bool CvUnit::IsNearFriendlyMinor() const
-{
-	VALIDATE_OBJECT
-	if(isDelayedDeath())
-	{
-		return false;
-	}
-
-	bool bIsNearFriendlyMinor = false;
-	for (int iMinorCivLoop = MAX_MAJOR_CIVS; iMinorCivLoop < MAX_CIV_PLAYERS; iMinorCivLoop++)
-	{
-		CvPlayerAI& kMinor = GET_PLAYER((PlayerTypes) iMinorCivLoop);
-		if (!kMinor.isEverAlive() || !kMinor.isMinorCiv())
-		{
-			continue;
-		}
-		
-		CvMinorCivAI* pMinorAI = kMinor.GetMinorCivAI();
-		if (pMinorAI)
-		{
-			// if the minor was bought out, this will never apply
-			if (pMinorAI->IsBoughtOut())
-			{
-				continue;
-			}
-
-			// if the minor was conquered and we can liberate it...
-			if (!kMinor.isAlive() && !kMinor.IsEverConqueredBy(getOwner()))
-			{
-				CvCity* pCity = GC.getMap().findCity(kMinor.GetOriginalCapitalX(), kMinor.GetOriginalCapitalY());
-				
-				if (pCity)
-				{
-					// ... and we don't own the city ...
-					if (pCity->getOwner() != getOwner())
-					{
-						// ... and we are near it, give us the bonus!
-						if (plotDistance(getX(), getY(), kMinor.GetOriginalCapitalX(), kMinor.GetOriginalCapitalY()) <= 3)
-						{
-							bIsNearFriendlyMinor = true;
-							break;
-						}
-					}
-				}
-			}
-			
-			// if the minor is alive, and we have non-negative relations ...
-			if (kMinor.isAlive() && kMinor.GetMinorCivAI()->GetEffectiveFriendshipWithMajor(getOwner()) >= GC.getFRIENDSHIP_THRESHOLD_FRIENDS())
-			{
-				// check each of its cities, and if we are near one, give us the bonus!
-				int iLoop;
-				CvCity *pLoopCity;
-				for(pLoopCity = kMinor.firstCity(&iLoop); pLoopCity != NULL; pLoopCity = kMinor.nextCity(&iLoop))
-				{
-					if (pLoopCity)
-					{
-						if (plotDistance(getX(), getY(), pLoopCity->getX(), pLoopCity->getY()) <= 3)
-						{
-							bIsNearFriendlyMinor = true;
-							break;
-						}
-					}
-				}
-			}
-		}
-	}
-
-	return bIsNearFriendlyMinor;
-}
-#endif
-
-
 //	--------------------------------------------------------------------------------
 bool CvUnit::isGivesPolicies() const
 {
@@ -11564,15 +11392,6 @@ int CvUnit::GetGenericMaxStrengthModifier(const CvUnit* pOtherUnit, const CvPlot
 			}
 		}
 
-#ifdef NQ_COMBAT_STRENGTH_NEAR_FRIENDLY_MINOR
-		// combat strength near city states that are friendly or have been conquered by another civ
-		iTempModifier = getCombatStrengthNearFriendlyMinor();
-		if (iTempModifier > 0 && IsNearFriendlyMinor())
-		{
-			iModifier += iTempModifier;
-		}
-#endif
-
 		// Trait (player level) bonus against higher tech units
 		iTempModifier = GET_PLAYER(getOwner()).GetPlayerTraits()->GetCombatBonusVsHigherTech();
 		if(iTempModifier > 0)
@@ -11599,17 +11418,6 @@ int CvUnit::GetGenericMaxStrengthModifier(const CvUnit* pOtherUnit, const CvPlot
 				iModifier += iTempModifier;
 			}
 		}
-#ifdef NQ_COMBAT_BONUS_VS_SMALLER_CIV_FROM_POLICIES
-		// Policy bonus against smaller civs
-		iTempModifier = GET_PLAYER(getOwner()).GetPlayerPolicies()->GetNumericModifier(POLICYMOD_COMBAT_BONUS_VS_SMALLER_CIV);
-		if(iTempModifier > 0)
-		{
-			if(pOtherUnit && this->IsLargerCivThan(pOtherUnit))
-			{
-				iModifier += iTempModifier;
-			}
-		}
-#endif
 #endif
 	}
 
@@ -11762,17 +11570,6 @@ int CvUnit::GetMaxAttackStrength(const CvPlot* pFromPlot, const CvPlot* pToPlot,
 		{
 			iTempModifier = GetHeavyChargeDownhill();
 			iModifier += iTempModifier;
-		}
-#endif
-
-#ifdef NQ_GOLDEN_AGE_FOREIGN_ATTACK_BONUS
-		if (pToPlot->getOwner() != getOwner())
-		{
-			if (GET_PLAYER(getOwner()).isGoldenAge())
-			{
-				iTempModifier = getGoldenAgeForeignAttackBonus();
-				iModifier += iTempModifier;
-			}
 		}
 #endif
 
@@ -15133,8 +14930,6 @@ void CvUnit::setXY(int iX, int iY, bool bGroup, bool bUpdate, bool bShow, bool b
 
 						if(getOwner() < MAX_MAJOR_CIVS)
 						{
-#ifdef NQ_CLEARING_CAMPS_GIVES_INFLUENCE_NEARBY
-#endif
 							// Completes a quest for anyone?
 							PlayerTypes eMinor;
 							for(int iMinorLoop = MAX_MAJOR_CIVS; iMinorLoop < MAX_CIV_PLAYERS; iMinorLoop++)
@@ -17909,46 +17704,6 @@ void CvUnit::changeOutsideFriendlyLandsModifier(int iChange)
 	}
 }
 
-#ifdef NQ_GOLDEN_AGE_FOREIGN_ATTACK_BONUS
-//	--------------------------------------------------------------------------------
-int CvUnit::getGoldenAgeForeignAttackBonus() const
-{
-	VALIDATE_OBJECT
-	return m_iGoldenAgeForeignAttackBonus;
-}
-
-//	--------------------------------------------------------------------------------
-void CvUnit::changeGoldenAgeForeignAttackBonus(int iChange)
-{
-	VALIDATE_OBJECT
-	if(iChange != 0)
-	{
-		m_iGoldenAgeForeignAttackBonus += iChange;
-	}
-}
-#endif
-
-#ifdef NQ_COMBAT_STRENGTH_NEAR_FRIENDLY_MINOR
-//	--------------------------------------------------------------------------------
-int CvUnit::getCombatStrengthNearFriendlyMinor() const
-{
-	VALIDATE_OBJECT
-	return m_iCombatStrengthNearFriendlyMinor;
-}
-
-//	--------------------------------------------------------------------------------
-void CvUnit::changeCombatStrengthNearFriendlyMinor(int iChange)
-{
-	VALIDATE_OBJECT
-	if(iChange != 0)
-	{
-		m_iCombatStrengthNearFriendlyMinor += iChange;
-	}
-}
-#endif
-
-
-
 //	--------------------------------------------------------------------------------
 int CvUnit::getPillageChange() const
 {
@@ -19484,13 +19239,6 @@ void CvUnit::setHasPromotion(PromotionTypes eIndex, bool bNewValue)
 		changeFriendlyLandsModifier(thisPromotion.GetFriendlyLandsModifier() * iChange);
 		changeFriendlyLandsAttackModifier(thisPromotion.GetFriendlyLandsAttackModifier() * iChange);
 		changeOutsideFriendlyLandsModifier(thisPromotion.GetOutsideFriendlyLandsModifier() * iChange);
-#ifdef NQ_GOLDEN_AGE_FOREIGN_ATTACK_BONUS
-		changeGoldenAgeForeignAttackBonus(thisPromotion.GetGoldenAgeForeignAttackBonus() * iChange);
-#endif
-#ifdef NQ_COMBAT_STRENGTH_NEAR_FRIENDLY_MINOR
-		changeCombatStrengthNearFriendlyMinor(thisPromotion.GetCombatStrengthNearFriendlyMinor() * iChange);
-#endif
-
 		changeUpgradeDiscount(thisPromotion.GetUpgradeDiscount() * iChange);
 		changeExperiencePercent(thisPromotion.GetExperiencePercent() * iChange);
 		changeCargoSpace(thisPromotion.GetCargoChange() * iChange);
@@ -23324,13 +23072,6 @@ bool CvUnit::IsHigherTechThan(UnitTypes otherUnit) const
 //	--------------------------------------------------------------------------------
 bool CvUnit::IsLargerCivThan(const CvUnit* pOtherUnit) const
 {
-#ifdef NQ_COMBAT_BONUS_VS_SMALLER_CIV_FROM_POLICIES
-	// always disregard barbarians
-	if (isBarbarian() || pOtherUnit->isBarbarian())
-	{
-		return false;
-	}
-#endif
 	int iMyCities = 0;
 	int iOtherCities = 0;
 

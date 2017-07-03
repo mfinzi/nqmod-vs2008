@@ -427,9 +427,6 @@ public:
 	void DoUnresearchedTechBonusFromKill(UnitTypes eKilledUnitType, int iX, int iY, int &iNumBonuses);
 	void ReportYieldFromKill(YieldTypes eYield, int iValue, int iX, int iY, int iDelay);
 
-#ifdef NQ_BELIEF_TOGGLE_ALLOW_FAITH_GIFTS_TO_MINORS
-	bool CanFaithGiftMinors();
-#endif
 #ifdef NQ_ALLOW_RELIGION_ONE_SHOTS 
 	void DoReligionOneShots(ReligionTypes eReligion);
 #endif
@@ -541,12 +538,6 @@ public:
 	int GetHappinessPerTradeRoute() const;
 	void SetHappinessPerTradeRoute(int iValue);
 	void ChangeHappinessPerTradeRoute(int iChange);
-
-#ifdef NQ_RAIL_CONNECTION_HAPPINESS_FROM_POLICIES
-	int GetHappinessPerRailConnection() const;
-	void SetHappinessPerRailConnection(int iValue);
-	void ChangeHappinessPerRailConnection(int iChange);
-#endif
 
 	int GetHappinessPerXPopulation() const;
 	void SetHappinessPerXPopulation(int iValue);
@@ -871,10 +862,6 @@ public:
 
 	int getHappinessToScience() const;
 	void changeHappinessToScience(int iChange);
-#ifdef NQ_GOLD_TO_SCIENCE_FROM_POLICIES
-	int getGoldToScience() const;
-	void changeGoldToScience(int iChange);
-#endif
 
 	int getHalfSpecialistUnhappinessCount() const;
 	bool isHalfSpecialistUnhappiness() const;
@@ -899,42 +886,6 @@ public:
 	int GetEnablesSSPartHurryCount() const;
 	bool IsEnablesSSPartHurry() const;
 	void ChangeEnablesSSPartHurryCount(int iChange);
-
-#ifdef NQ_DIABLE_RESISTANCE_TIME_VIA_POLICIES
-	int GetDisablesResistanceTimeCount() const;
-	bool IsDisablesResistanceTime() const;
-	void ChangeDisablesResistanceTimeCount(int iChange);
-#endif
-
-#ifdef NQ_PATRIOTIC_WAR
-	int GetDoubleTrainedMilitaryLandUnitCount() const;
-	bool IsDoubleTrainedMilitaryLandUnit() const;
-	void ChangeDoubleTrainedMilitaryLandUnitCount(int iChange);
-#endif
-
-#ifdef NQ_WAR_HERO
-	int GetWarHeroCount() const;
-	bool IsWarHero() const;
-	void ChangeWarHeroCount(int iChange);
-#endif
-
-#ifdef NQ_IGNORE_PUPPETS_FOR_RESEARCH_COSTS_FROM_POLICIES
-	int GetIgnorePuppetsForResearchCostsCount() const;
-	bool IsIgnorePuppetsForResearchCosts() const;
-	void ChangeIgnorePuppetsForResearchCostsCount(int iChange);
-#endif
-
-#ifdef NQ_POLICY_TOGGLE_NO_MINOR_DOW_IF_FRIENDS
-	int GetNoMinorDOWIfFriendsCount() const;
-	bool IsNoMinorDOWIfFriends() const;
-	void ChangeNoMinorDOWIfFriendsCount(int iChange);
-#endif
-
-#ifdef NQ_ALLOW_PUPPET_PURCHASING_FROM_POLICIES
-	int GetAllowPuppetPurchasingCount() const;
-	bool IsAllowPuppetPurchasing() const;
-	void ChangeAllowPuppetPurchasingCount(int iChange);
-#endif
 
 	int GetEnablesSSPartPurchaseCount() const;
 	bool IsEnablesSSPartPurchase() const;
@@ -991,13 +942,6 @@ public:
 	int GetAbleToAnnexCityStatesCount() const;
 	void ChangeAbleToAnnexCityStatesCount(int iChange);
 
-#ifdef NQ_NUM_TURNS_BEFORE_MINOR_ALLIES_REFUSE_BRIBES_FROM_TRAIT
-	int GetNumTurnsBeforeMinorAlliesRefuseBribes() const;
-#endif
-#ifdef NQ_GOLDEN_PILGRIMAGE
-	int GetGoldenAgeTileBonusFaith() const;
-#endif
-
 	int getCultureBombTimer() const;
 	void setCultureBombTimer(int iNewValue);
 	void changeCultureBombTimer(int iChange);
@@ -1047,11 +991,6 @@ public:
 	uint getStartTime() const;
 	void setStartTime(uint uiStartTime);
 	uint getTotalTimePlayed() const;
-
-#ifdef NQ_CHEAT_FIRST_ROYAL_LIBRARY_COMES_WITH_GREAT_WORK
-	void SetHasEverBuiltRoyalLibrary(bool bValue);
-	bool GetHasEverBuiltRoyalLibrary();
-#endif
 
 	bool isMinorCiv() const;
 	bool IsHasBetrayedMinorCiv() const;
@@ -1180,12 +1119,6 @@ public:
 #else
 	int GetScienceFromHappinessTimes100() const;
 #endif
-#ifdef NQ_GOLD_TO_SCIENCE_FROM_POLICIES
-	int GetScienceFromGoldTimes100() const;
-#endif
-#ifdef NQ_MINOR_FRIENDSHIP_GAIN_BULLY_GOLD_SUCCESS_FROM_POLICIES
-	int GetMinorFriendshipGainBullyGoldSuccess() const;
-#endif
 	int GetScienceFromResearchAgreementsTimes100() const;
 	int GetScienceFromBudgetDeficitTimes100() const;
 
@@ -1274,7 +1207,7 @@ public:
 	int getImprovementCount(ImprovementTypes eIndex) const;
 	void changeImprovementCount(ImprovementTypes eIndex, int iChange);
 
-#if defined(AUI_WARNING_FIXES) || defined(AUI_CONSTIFY) || defined(NQ_HAPPINESS_FROM_GREAT_IMPROVEMENTS_FROM_POLICIES)
+#if defined(AUI_WARNING_FIXES) || defined(AUI_CONSTIFY)
 	int getGreatPersonImprovementCount() const;
 #else
 	int getGreatPersonImprovementCount();
@@ -1780,9 +1713,6 @@ protected:
 	FAutoVariable<int, CvPlayer> m_iCityRevoltCounter;
 	FAutoVariable<int, CvPlayer> m_iHappinessPerGarrisonedUnitCount;
 	FAutoVariable<int, CvPlayer> m_iHappinessPerTradeRouteCount;
-#ifdef NQ_RAIL_CONNECTION_HAPPINESS_FROM_POLICIES
-	FAutoVariable<int, CvPlayer> m_iHappinessPerRailConnectionCount;
-#endif
 	int m_iHappinessPerXPopulation;
 	int m_iHappinessFromLeagues;
 	FAutoVariable<int, CvPlayer> m_iSpecialPolicyBuildingHappiness;  //unused
@@ -1813,8 +1743,8 @@ protected:
 	int m_iGreatWritersCreated;
 	int m_iGreatArtistsCreated;
 	int m_iGreatMusiciansCreated;
-#ifdef NQ_FREE_SETTLERS_FROM_BELIEF
-	bool m_bHasUsedReligiousSettlements;
+#ifdef NQ_SHEPHERD_AND_FLOCK
+	bool m_bHasUsedShepherdAndFlock;
 #endif
 #ifdef NQ_DEUS_VULT
 	bool m_bHasUsedDeusVult;
@@ -1896,34 +1826,12 @@ protected:
 	FAutoVariable<int, CvPlayer> m_iHappyPerMilitaryUnit;
 	FAutoVariable<int, CvPlayer> m_iHappinessToCulture;
 	FAutoVariable<int, CvPlayer> m_iHappinessToScience;
-#ifdef NQ_GOLD_TO_SCIENCE_FROM_POLICIES
-	FAutoVariable<int, CvPlayer> m_iGoldToScience;
-#endif
 	FAutoVariable<int, CvPlayer> m_iHalfSpecialistUnhappinessCount;
 	FAutoVariable<int, CvPlayer> m_iHalfSpecialistFoodCount;
 	FAutoVariable<int, CvPlayer> m_iMilitaryFoodProductionCount;
 	int m_iGoldenAgeCultureBonusDisabledCount;
 	int m_iSecondReligionPantheonCount;
 	int m_iEnablesSSPartHurryCount;
-#ifdef NQ_DIABLE_RESISTANCE_TIME_VIA_POLICIES
-	int m_iDisablesResistanceTimeCount;
-#endif
-#ifdef NQ_PATRIOTIC_WAR
-	int m_iDoubleTrainedMilitaryLandUnitCount;
-#endif
-#ifdef NQ_WAR_HERO
-	int m_iWarHeroCount;
-#endif
-#ifdef NQ_IGNORE_PUPPETS_FOR_RESEARCH_COSTS_FROM_POLICIES
-	int m_iIgnorePuppetsForResearchCostsCount;
-#endif
-#ifdef NQ_POLICY_TOGGLE_NO_MINOR_DOW_IF_FRIENDS
-	int m_iNoMinorDOWIfFriendsCount;
-#endif
-#ifdef NQ_ALLOW_PUPPET_PURCHASING_FROM_POLICIES
-	int m_iAllowPuppetPurchasingCount;
-#endif
-
 	int m_iEnablesSSPartPurchaseCount;
 	FAutoVariable<int, CvPlayer> m_iConscriptCount;
 	FAutoVariable<int, CvPlayer> m_iMaxConscript;
@@ -2006,9 +1914,6 @@ protected:
 
 	FAutoVariable<uint, CvPlayer> m_uiStartTime;  // XXX save these?
 
-#ifdef NQ_CHEAT_FIRST_ROYAL_LIBRARY_COMES_WITH_GREAT_WORK
-	FAutoVariable<bool, CvPlayer> m_bHasEverBuiltRoyalLibrary;
-#endif
 	FAutoVariable<bool, CvPlayer> m_bHasBetrayedMinorCiv;
 	FAutoVariable<bool, CvPlayer> m_bAlive;
 	FAutoVariable<bool, CvPlayer> m_bEverAlive;

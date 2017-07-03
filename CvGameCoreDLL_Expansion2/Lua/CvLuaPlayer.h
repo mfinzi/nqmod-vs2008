@@ -269,9 +269,6 @@ protected:
 	static int lGetFaithPerTurnFromCities(lua_State* L);
 	static int lGetFaithPerTurnFromMinorCivs(lua_State* L);
 	static int lGetFaithPerTurnFromReligion(lua_State* L);
-#ifdef NQ_BELIEF_TOGGLE_ALLOW_FAITH_GIFTS_TO_MINORS
-	static int lCanFaithGiftMinors(lua_State* L);
-#endif
 	static int lHasCreatedPantheon(lua_State* L);
 	static int lGetBeliefInPantheon(lua_State* L);
 	static int lCanCreatePantheon(lua_State* L);
@@ -348,9 +345,6 @@ protected:
 	static int lChangeBarbarianCombatBonus(lua_State* L);
 	static int lGetCombatBonusVsHigherTech(lua_State* L);
 	static int lGetCombatBonusVsLargerCiv(lua_State* L);
-#ifdef NQ_COMBAT_BONUS_VS_SMALLER_CIV_FROM_POLICIES
-	static int lGetCombatBonusVsSmallerCiv(lua_State* L);
-#endif
 
 	static int lGetGarrisonedCityRangeStrikeModifier(lua_State* L);
 	static int lChangeGarrisonedCityRangeStrikeModifier(lua_State* L);
@@ -553,9 +547,6 @@ protected:
 	static int lIsPlayerHasOpenBordersAutomatically(lua_State* L);
 	static int lGetFriendshipChangePerTurnTimes100(lua_State* L);
 	static int lGetMinorCivFriendshipWithMajor(lua_State* L);
-#ifdef NQ_SHOW_BASE_INFLUENCE_WHILE_AT_WAR_IN_CS_TOOLTIP
-	static int lGetMinorCivBaseFriendshipWithMajor(lua_State* L);
-#endif
 	static int lChangeMinorCivFriendshipWithMajor(lua_State* L);
 	static int lGetMinorCivFriendshipAnchorWithMajor(lua_State* L);
 	static int lGetFriendshipNeededForNextLevel(lua_State* L);
@@ -580,9 +571,6 @@ protected:
 	static int lGetTurnsSinceThreatenedByBarbarians(lua_State* L); // DEPRECATED, use lGetTurnsSinceThreatenedAnnouncement instead
 	static int lGetTurnsSinceThreatenedAnnouncement(lua_State* L);
 	static int lGetFriendshipFromGoldGift(lua_State* L);
-#ifdef NQ_BELIEF_TOGGLE_ALLOW_FAITH_GIFTS_TO_MINORS
-	static int lGetFriendshipFromFaithGift(lua_State* L);
-#endif
 	static int lGetMinorCivFavoriteMajor(lua_State* L);
 	static int lGetMinorCivScienceFriendshipBonus(lua_State* L);
 	static int lGetMinorCivCultureFriendshipBonus(lua_State* L); // DEPRECATED
@@ -658,12 +646,6 @@ protected:
 	static int lGetScienceFromCitiesTimes100(lua_State* L);
 	static int lGetScienceFromOtherPlayersTimes100(lua_State* L);
 	static int lGetScienceFromHappinessTimes100(lua_State* L);
-#ifdef NQ_GOLD_TO_SCIENCE_FROM_POLICIES
-	static int lGetScienceFromGoldTimes100(lua_State* L);
-#endif
-#ifdef NQ_MINOR_FRIENDSHIP_GAIN_BULLY_GOLD_SUCCESS_FROM_POLICIES
-	static int lGetMinorFriendshipGainBullyGoldSuccess(lua_State* L);
-#endif
 	static int lGetScienceFromResearchAgreementsTimes100(lua_State* L);
 	static int lGetScienceFromBudgetDeficitTimes100(lua_State* L);
 
@@ -910,9 +892,6 @@ protected:
 	static int lIsTraitBonusReligiousBelief(lua_State* L);
 	static int lGetHappinessFromLuxury(lua_State* L);
 	static int lIsAbleToAnnexCityStates(lua_State* L);
-#ifdef NQ_NUM_TURNS_BEFORE_MINOR_ALLIES_REFUSE_BRIBES_FROM_TRAIT
-	static int lGetNumTurnsBeforeMinorAlliesRefuseBribes(lua_State* L);
-#endif
 	static int lIsUsingMayaCalendar(lua_State* L);
 	static int lGetMayaCalendarString(lua_State* L);
 	static int lGetMayaCalendarLongString(lua_State* L);
@@ -950,9 +929,6 @@ protected:
 	static int lGetDealTheyreValue(lua_State* L);
 
 	static int lMayNotAnnex(lua_State* L);
-#ifdef NQ_ALLOW_PUPPET_PURCHASING_FROM_POLICIES
-	static int lIsAllowPuppetPurchasing(lua_State* L);
-#endif
 
 	//Espionage Methods
 	static int lGetEspionageCityStatus(lua_State* L);

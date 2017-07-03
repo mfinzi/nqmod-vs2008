@@ -45,9 +45,6 @@ CvPolicyEntry::CvPolicyEntry(void):
 	m_iNumFreeTechs(0),
 	m_iNumFreePolicies(0),
 	m_iNumFreeGreatPeople(0),
-#ifdef NQ_EXTRA_SPIES_FROM_POLICIES
-	m_iNumExtraSpies(0),
-#endif
 	m_iMedianTechPercentChange(0),
 	m_iStrategicResourceMod(0),
 	m_iWonderProductionModifier(0),
@@ -82,9 +79,6 @@ CvPolicyEntry::CvPolicyEntry(void):
 	m_iHappinessPerGarrisonedUnit(0),
 	m_iCulturePerGarrisonedUnit(0),
 	m_iHappinessPerTradeRoute(0),
-#ifdef NQ_RAIL_CONNECTION_HAPPINESS_FROM_POLICIES
-	m_iHappinessPerRailConnection(0),
-#endif
 	m_iHappinessPerXPopulation(0),
 	m_iExtraHappinessPerLuxury(0),
 	m_iUnhappinessFromUnitsMod(0),
@@ -146,39 +140,6 @@ CvPolicyEntry::CvPolicyEntry(void):
 #ifdef FRUITY_TRADITION_LANDED_ELITE 
 	m_iInternalTradeRouteFoodYieldChange(0),
 #endif
-#ifdef NQ_INTERNAL_TRADE_ROUTE_PRODUCTION_YIELD_CHANGE_FROM_POLICIES
-	m_iInternalTradeRouteProductionYieldChange(0),
-#endif
-#ifdef NQ_RAIL_CONNECTION_PRODUCTION_MODIFIER_FROM_POLICIES
-	m_iRailConnectionProductionModifier(0),
-#endif
-#ifdef NQ_COMBAT_BONUS_VS_SMALLER_CIV_FROM_POLICIES
-	m_iCombatBonusVsSmallerCiv(0),
-#endif
-#ifdef NQ_PRODUCTION_TO_GREAT_MUSICIANS_MODIFIER_FROM_POLICIES
-	m_iProductionToGreatMusiciansModifier(0),
-#endif
-#ifdef NQ_TRADE_MISSION_INFLUENCE_MODIFIER_FROM_POLICIES
-	m_iTradeMissionInfluenceModifier(0),
-#endif
-#ifdef NQ_SCIENCE_PER_GREAT_PERSON_BORN_FROM_POLICIES
-	m_iSciencePerGreatPersonBorn(0),
-#endif
-#ifdef NQ_INFLUENCE_BOOST_PER_GREAT_PERSON_BORN_FROM_POLICIES
-	m_iInfluenceBoostPerGreatPersonBorn(0),
-#endif
-#ifdef NQ_TOURISM_FROM_TRADE_MISSIONS_FROM_POLICIES
-	m_iTourismFromTradeMissions(0),
-#endif
-#ifdef NQ_HAPPINESS_FROM_GREAT_IMPROVEMENTS_FROM_POLICIES
-	m_iHappinessFromGreatImprovements(0),
-#endif
-#ifdef NQ_MINOR_FRIENDSHIP_GAIN_BULLY_GOLD_SUCCESS_FROM_POLICIES
-	m_iMinorFriendshipGainBullyGoldSuccess(0),
-#endif
-#ifdef NQ_COUP_CHANCE_MODIFIER_FROM_POLICIES
-	m_iCoupChanceModifier(0),
-#endif
 	m_iSharedReligionTourismModifier(0),
 	m_iTradeRouteTourismModifier(0),
 	m_iOpenBordersTourismModifier(0),
@@ -191,44 +152,16 @@ CvPolicyEntry::CvPolicyEntry(void):
 	m_iExtraTerritoryClaim(0), // NQMP GJS - Colonialism
 	m_iExtraTourismPerGreatWork(0), // NQMP GJS - Cultural Exchange
 	m_iTourismPerWonder(0), // NQMP GJS - Flourishing of the Arts
-#ifdef NQ_TOURISM_PER_CITY
-	m_iTourismPerCity(0),
-#endif
-#ifdef NQ_IDEOLOGY_PRESSURE_UNHAPPINESS_MODIFIER_FROM_POLICIES
-	m_iIdeologyPressureUnhappinessModifier(0),
-#endif
-
 	m_iProductionFromGarrison(0), // NQMP GJS - Military Caste
 	m_bGoldenAgeCultureBonusDisabled(false),
 	m_bSecondReligionPantheon(false),
 	m_bAddReformationBelief(false),
 	m_bEnablesSSPartHurry(false),
-#ifdef NQ_DIABLE_RESISTANCE_TIME_VIA_POLICIES
-	m_bDisablesResistanceTime(false),
-#endif
-#ifdef NQ_PATRIOTIC_WAR
-	m_bDoubleTrainedMilitaryLandUnit(false),
-#endif
-#ifdef NQ_WAR_HERO
-	m_bWarHero(false),
-#endif
-#ifdef NQ_IGNORE_PUPPETS_FOR_RESEARCH_COSTS_FROM_POLICIES
-	m_bIgnorePuppetsForResearchCosts(false),
-#endif
-#ifdef NQ_POLICY_TOGGLE_NO_MINOR_DOW_IF_FRIENDS
-	m_bNoMinorDOWIfFriends(false),
-#endif
-#ifdef NQ_ALLOW_PUPPET_PURCHASING_FROM_POLICIES
-	m_bAllowPuppetPurchasing(false),
-#endif
 	m_bEnablesSSPartPurchase(false),
 	m_iPolicyBranchType(NO_POLICY_BRANCH_TYPE),
 	m_iNumExtraBranches(0),
 	m_iHappinessToCulture(0),
 	m_iHappinessToScience(0),
-#ifdef NQ_GOLD_TO_SCIENCE_FROM_POLICIES
-	m_iGoldToScience(0),
-#endif
 	m_iNumCitiesFreeAestheticsSchools(0), // NQMP GJS - add support for NumCitiesFreeAestheticsSchools
 	m_iNumCitiesFreeWalls(0), // NQMP GJS - New Oligarchy add support for NumCitiesFreeWalls
 	m_iNumCitiesFreeCultureBuilding(0),
@@ -372,9 +305,6 @@ bool CvPolicyEntry::CacheResults(Database::Results& kResults, CvDatabaseUtility&
 	m_iNumFreeTechs = kResults.GetInt("NumFreeTechs");
 	m_iNumFreePolicies = kResults.GetInt("NumFreePolicies");
 	m_iNumFreeGreatPeople = kResults.GetInt("NumFreeGreatPeople");
-#ifdef NQ_EXTRA_SPIES_FROM_POLICIES
-	m_iNumExtraSpies = kResults.GetInt("NumExtraSpies");
-#endif
 	m_iMedianTechPercentChange = kResults.GetInt("MedianTechPercentChange");
 	m_iStrategicResourceMod = kResults.GetInt("StrategicResourceMod");
 	m_iWonderProductionModifier = kResults.GetInt("WonderProductionModifier");
@@ -409,9 +339,6 @@ bool CvPolicyEntry::CacheResults(Database::Results& kResults, CvDatabaseUtility&
 	m_iHappinessPerGarrisonedUnit = kResults.GetInt("HappinessPerGarrisonedUnit");
 	m_iCulturePerGarrisonedUnit = kResults.GetInt("CulturePerGarrisonedUnit");
 	m_iHappinessPerTradeRoute = kResults.GetInt("HappinessPerTradeRoute");
-#ifdef NQ_RAIL_CONNECTION_HAPPINESS_FROM_POLICIES
-	m_iHappinessPerRailConnection = kResults.GetInt("HappinessPerRailConnection");
-#endif
 	m_iHappinessPerXPopulation = kResults.GetInt("HappinessPerXPopulation");
 	m_iExtraHappinessPerLuxury = kResults.GetInt("ExtraHappinessPerLuxury");
 	m_iUnhappinessFromUnitsMod = kResults.GetInt("UnhappinessFromUnitsMod");
@@ -447,9 +374,6 @@ bool CvPolicyEntry::CacheResults(Database::Results& kResults, CvDatabaseUtility&
 	m_iHappyPerMilitaryUnit = kResults.GetInt("HappyPerMilitaryUnit");
 	m_iHappinessToCulture = kResults.GetInt("HappinessToCulture");
 	m_iHappinessToScience = kResults.GetInt("HappinessToScience");
-#ifdef NQ_GOLD_TO_SCIENCE_FROM_POLICIES
-	m_iGoldToScience = kResults.GetInt("GoldToScience");
-#endif
 	m_iNumCitiesFreeAestheticsSchools = kResults.GetInt("NumCitiesFreeAestheticsSchools"); // NQMP GJS - add support for NumCitiesFreeAestheticsSchools
 	m_iNumCitiesFreeWalls = kResults.GetInt("NumCitiesFreeWalls"); // NQMP GJS - New Oligarchy add support for NumCitiesFreeWalls
 	m_iNumCitiesFreeCultureBuilding = kResults.GetInt("NumCitiesFreeCultureBuilding");
@@ -491,39 +415,6 @@ bool CvPolicyEntry::CacheResults(Database::Results& kResults, CvDatabaseUtility&
 #ifdef FRUITY_TRADITION_LANDED_ELITE
 	m_iInternalTradeRouteFoodYieldChange = kResults.GetInt("InternalTradeRouteFoodYieldChange");
 #endif
-#ifdef NQ_INTERNAL_TRADE_ROUTE_PRODUCTION_YIELD_CHANGE_FROM_POLICIES
-	m_iInternalTradeRouteProductionYieldChange = kResults.GetInt("InternalTradeRouteProductionYieldChange");
-#endif
-#ifdef NQ_RAIL_CONNECTION_PRODUCTION_MODIFIER_FROM_POLICIES
-	m_iRailConnectionProductionModifier = kResults.GetInt("RailConnectionProductionModifier");
-#endif
-#ifdef NQ_COMBAT_BONUS_VS_SMALLER_CIV_FROM_POLICIES
-	m_iCombatBonusVsSmallerCiv = kResults.GetInt("CombatBonusVsSmallerCiv");
-#endif
-#ifdef NQ_PRODUCTION_TO_GREAT_MUSICIANS_MODIFIER_FROM_POLICIES
-	m_iProductionToGreatMusiciansModifier = kResults.GetInt("ProductionToGreatMusiciansModifier");
-#endif
-#ifdef NQ_TRADE_MISSION_INFLUENCE_MODIFIER_FROM_POLICIES
-	m_iTradeMissionInfluenceModifier = kResults.GetInt("TradeMissionInfluenceModifier");
-#endif
-#ifdef NQ_SCIENCE_PER_GREAT_PERSON_BORN_FROM_POLICIES
-	m_iSciencePerGreatPersonBorn = kResults.GetInt("SciencePerGreatPersonBorn");
-#endif
-#ifdef NQ_INFLUENCE_BOOST_PER_GREAT_PERSON_BORN_FROM_POLICIES
-	m_iInfluenceBoostPerGreatPersonBorn = kResults.GetInt("InfluenceBoostPerGreatPersonBorn");
-#endif
-#ifdef NQ_TOURISM_FROM_TRADE_MISSIONS_FROM_POLICIES
-	m_iTourismFromTradeMissions = kResults.GetInt("TourismFromTradeMissions");
-#endif
-#ifdef NQ_HAPPINESS_FROM_GREAT_IMPROVEMENTS_FROM_POLICIES
-	m_iHappinessFromGreatImprovements = kResults.GetInt("HappinessFromGreatImprovements");
-#endif
-#ifdef NQ_MINOR_FRIENDSHIP_GAIN_BULLY_GOLD_SUCCESS_FROM_POLICIES
-	m_iMinorFriendshipGainBullyGoldSuccess = kResults.GetInt("MinorFriendshipGainBullyGoldSuccess");
-#endif
-#ifdef NQ_COUP_CHANCE_MODIFIER_FROM_POLICIES
-	m_iCoupChanceModifier = kResults.GetInt("CoupChanceModifier");
-#endif
 	m_iSharedReligionTourismModifier = kResults.GetInt("SharedReligionTourismModifier");
 	m_iTradeRouteTourismModifier = kResults.GetInt("TradeRouteTourismModifier");
 	m_iOpenBordersTourismModifier = kResults.GetInt("OpenBordersTourismModifier");
@@ -536,37 +427,11 @@ bool CvPolicyEntry::CacheResults(Database::Results& kResults, CvDatabaseUtility&
 	m_iExtraTerritoryClaim = kResults.GetInt("ExtraTerritoryClaim"); // NQMP GJS - Colonialism
 	m_iExtraTourismPerGreatWork = kResults.GetInt("ExtraTourismPerGreatWork"); // NQMP GJS - Cultural Exchange
 	m_iTourismPerWonder = kResults.GetInt("TourismPerWonder"); // NQMP GJS - Flourishing of the Arts
-#ifdef NQ_TOURISM_PER_CITY
-	m_iTourismPerCity = kResults.GetInt("TourismPerCity");
-#endif
-#ifdef NQ_IDEOLOGY_PRESSURE_UNHAPPINESS_MODIFIER_FROM_POLICIES
-	m_iIdeologyPressureUnhappinessModifier = kResults.GetInt("IdeologyPressureUnhappinessModifier");
-#endif
-
 	m_iProductionFromGarrison = kResults.GetInt("ProductionFromGarrison"); // NQMP GJS - Military Caste
 	m_bGoldenAgeCultureBonusDisabled = kResults.GetBool("GoldenAgeCultureBonusDisabled");
 	m_bSecondReligionPantheon = kResults.GetBool("SecondReligionPantheon");
 	m_bAddReformationBelief = kResults.GetBool("AddReformationBelief");
 	m_bEnablesSSPartHurry = kResults.GetBool("EnablesSSPartHurry");
-#ifdef NQ_DIABLE_RESISTANCE_TIME_VIA_POLICIES
-	m_bDisablesResistanceTime = kResults.GetBool("DisablesResistanceTime");
-#endif
-#ifdef NQ_PATRIOTIC_WAR
-	m_bDoubleTrainedMilitaryLandUnit = kResults.GetBool("IsDoubleTrainedMilitaryLandUnits");
-#endif
-#ifdef NQ_WAR_HERO
-	m_bWarHero = kResults.GetBool("IsWarHero");
-#endif
-#ifdef NQ_IGNORE_PUPPETS_FOR_RESEARCH_COSTS_FROM_POLICIES
-	m_bIgnorePuppetsForResearchCosts = kResults.GetBool("IgnorePuppetsForResearchCosts");
-#endif
-#ifdef NQ_POLICY_TOGGLE_NO_MINOR_DOW_IF_FRIENDS
-	m_bNoMinorDOWIfFriends = kResults.GetBool("NoMinorDOWIfFriends");
-#endif
-#ifdef NQ_ALLOW_PUPPET_PURCHASING_FROM_POLICIES
-	m_bAllowPuppetPurchasing = kResults.GetBool("AllowPuppetPurchasing");
-#endif
-
 	m_bEnablesSSPartPurchase = kResults.GetBool("EnablesSSPartPurchase");
 	m_bAbleToAnnexCityStates = kResults.GetBool("AbleToAnnexCityStates");
 	m_bOneShot = kResults.GetBool("OneShot");
@@ -994,14 +859,6 @@ int CvPolicyEntry::GetNumFreeGreatPeople() const
 	return m_iNumFreeGreatPeople;
 }
 
-#ifdef NQ_EXTRA_SPIES_FROM_POLICIES
-/// Number of free Spies
-int CvPolicyEntry::GetNumExtraSpies() const
-{
-	return m_iNumExtraSpies;
-}
-#endif
-
 /// Boost to percentage of median tech awarded for research agreement
 int CvPolicyEntry::GetMedianTechPercentChange() const
 {
@@ -1205,14 +1062,6 @@ int CvPolicyEntry::GetHappinessPerTradeRoute() const
 {
 	return m_iHappinessPerTradeRoute;
 }
-
-#ifdef NQ_RAIL_CONNECTION_HAPPINESS_FROM_POLICIES
-/// Happiness from each City with a railroad connection to the capital
-int CvPolicyEntry::GetHappinessPerRailConnection() const
-{
-	return m_iHappinessPerRailConnection;
-}
-#endif
 
 /// Happiness from large cities
 int CvPolicyEntry::GetHappinessPerXPopulation() const
@@ -1572,95 +1421,6 @@ int CvPolicyEntry::GetInternalTradeRouteFoodYieldChange() const
 }
 #endif
 
-#ifdef NQ_INTERNAL_TRADE_ROUTE_PRODUCTION_YIELD_CHANGE_FROM_POLICIES
-/// Flat production increase for internal trade routes
-int CvPolicyEntry::GetInternalTradeRouteProductionYieldChange() const
-{
-	return m_iInternalTradeRouteProductionYieldChange;
-}
-#endif
-
-#ifdef NQ_RAIL_CONNECTION_PRODUCTION_MODIFIER_FROM_POLICIES
-/// bonus production modifier from railway connections
-int CvPolicyEntry::GetRailConnectionProductionModifier() const
-{
-	return m_iRailConnectionProductionModifier;
-}
-#endif
-
-#ifdef NQ_COMBAT_BONUS_VS_SMALLER_CIV_FROM_POLICIES
-/// combat modifier vs smaller civs
-int CvPolicyEntry::GetCombatBonusVsSmallerCiv() const
-{
-	return m_iCombatBonusVsSmallerCiv;
-}
-#endif
-
-#ifdef NQ_PRODUCTION_TO_GREAT_MUSICIANS_MODIFIER_FROM_POLICIES
-/// % of empire production converted into a +X% bonus to Great Musician points
-int CvPolicyEntry::GetProductionToGreatMusiciansModifier() const
-{
-	return m_iProductionToGreatMusiciansModifier;
-}
-#endif
-
-
-#ifdef NQ_TRADE_MISSION_INFLUENCE_MODIFIER_FROM_POLICIES
-/// trade mission influence modifier
-int CvPolicyEntry::GetTradeMissionInfluenceModifier() const
-{
-	return m_iTradeMissionInfluenceModifier;
-}
-#endif
-
-#ifdef NQ_SCIENCE_PER_GREAT_PERSON_BORN_FROM_POLICIES
-/// science per great person born
-int CvPolicyEntry::GetSciencePerGreatPersonBorn() const
-{
-	return m_iSciencePerGreatPersonBorn;
-}
-#endif
-
-#ifdef NQ_INFLUENCE_BOOST_PER_GREAT_PERSON_BORN_FROM_POLICIES
-/// influence boost per great person born
-int CvPolicyEntry::GetInfluenceBoostPerGreatPersonBorn() const
-{
-	return m_iInfluenceBoostPerGreatPersonBorn;
-}
-#endif
-
-#ifdef NQ_TOURISM_FROM_TRADE_MISSIONS_FROM_POLICIES
-/// tourism from trade missions, percentage of gold converted into tourism with all known civs
-int CvPolicyEntry::GetTourismFromTradeMissions() const
-{
-	return m_iTourismFromTradeMissions;
-}
-#endif
-
-#ifdef NQ_HAPPINESS_FROM_GREAT_IMPROVEMENTS_FROM_POLICIES
-/// happiness from great person tile improvements
-int CvPolicyEntry::GetHappinessFromGreatImprovements() const
-{
-	return m_iHappinessFromGreatImprovements;
-}
-#endif
-
-#ifdef NQ_MINOR_FRIENDSHIP_GAIN_BULLY_GOLD_SUCCESS_FROM_POLICIES
-/// influence gained when tributing (instead of losing influence)
-int CvPolicyEntry::GetMinorFriendshipGainBullyGoldSuccess() const
-{
-	return m_iMinorFriendshipGainBullyGoldSuccess;
-}
-#endif
-
-#ifdef NQ_COUP_CHANCE_MODIFIER_FROM_POLICIES
-/// flat boost to % chance for all coups
-int CvPolicyEntry::GetCoupChanceModifier() const
-{
-	return m_iCoupChanceModifier;
-}
-#endif
-
 /// Boost to tourism bonus for shared religion
 int CvPolicyEntry::GetSharedReligionTourismModifier() const
 {
@@ -1738,22 +1498,6 @@ int CvPolicyEntry::GetTourismPerWonder() const
 	return m_iTourismPerWonder;
 }
 
-#ifdef NQ_TOURISM_PER_CITY
-/// Get extra tourism per city?
-int CvPolicyEntry::GetTourismPerCity() const
-{
-	return m_iTourismPerCity;
-}
-#endif
-
-#ifdef NQ_IDEOLOGY_PRESSURE_UNHAPPINESS_MODIFIER_FROM_POLICIES
-/// Get ideology pressure unhappiness modifier?
-int CvPolicyEntry::GetIdeologyPressureUnhappinessModifier() const
-{
-	return m_iIdeologyPressureUnhappinessModifier;
-}
-#endif
-
 // NQMP GJS - Military Caste
 /// Get production from garrison?
 int CvPolicyEntry::GetProductionFromGarrison() const
@@ -1784,14 +1528,6 @@ int CvPolicyEntry::GetHappinessToScience() const
 {
 	return m_iHappinessToScience;
 }
-
-#ifdef NQ_GOLD_TO_SCIENCE_FROM_POLICIES
-/// Gold converted into Science
-int CvPolicyEntry::GetGoldToScience() const
-{
-	return m_iGoldToScience;
-}
-#endif
 
 // NQMP GJS - add support for NumCitiesFreeAestheticsSchools
 /// Cities that receive free Aesthetics Schools from Fine Arts social policy
@@ -1892,48 +1628,6 @@ bool CvPolicyEntry::IsEnablesSSPartHurry() const
 {
 	return m_bEnablesSSPartHurry;
 }
-
-#ifdef NQ_DIABLE_RESISTANCE_TIME_VIA_POLICIES
-bool CvPolicyEntry::IsDisablesResistanceTime() const
-{
-	return m_bDisablesResistanceTime;
-}
-#endif
-
-#ifdef NQ_PATRIOTIC_WAR
-bool CvPolicyEntry::IsDoubleTrainedMilitaryLandUnit() const
-{
-	return m_bDoubleTrainedMilitaryLandUnit;
-}
-#endif
-
-#ifdef NQ_WAR_HERO
-bool CvPolicyEntry::IsWarHero() const
-{
-	return m_bWarHero;
-}
-#endif
-
-#ifdef NQ_IGNORE_PUPPETS_FOR_RESEARCH_COSTS_FROM_POLICIES
-bool CvPolicyEntry::IsIgnorePuppetsForResearchCosts() const
-{
-	return m_bIgnorePuppetsForResearchCosts;
-}
-#endif
-
-#ifdef NQ_POLICY_TOGGLE_NO_MINOR_DOW_IF_FRIENDS
-bool CvPolicyEntry::IsNoMinorDOWIfFriends() const
-{
-	return m_bNoMinorDOWIfFriends;
-}
-#endif
-
-#ifdef NQ_ALLOW_PUPPET_PURCHASING_FROM_POLICIES
-bool CvPolicyEntry::IsAllowPuppetPurchasing() const
-{
-	return m_bAllowPuppetPurchasing;
-}
-#endif
 
 bool CvPolicyEntry::IsEnablesSSPartPurchase() const
 {
@@ -3089,16 +2783,6 @@ int CvPlayerPolicies::GetNumericModifier(PolicyModifierType eType)
 				rtnValue += m_pPolicies->GetPolicyEntry(i)->GetTourismPerWonder();
 				break;
 			// NQMP GJS - Flourishing of the Arts end
-#ifdef NQ_TOURISM_PER_CITY
-			case POLICYMOD_TOURISM_PER_CITY:
-				rtnValue += m_pPolicies->GetPolicyEntry(i)->GetTourismPerCity();
-				break;
-#endif
-#ifdef NQ_IDEOLOGY_PRESSURE_UNHAPPINESS_MODIFIER_FROM_POLICIES
-			case POLICYMOD_IDEOLOGY_PRESSURE_UNHAPPINESS_MODIFIER:
-				rtnValue += m_pPolicies->GetPolicyEntry(i)->GetIdeologyPressureUnhappinessModifier();
-				break;
-#endif
 			// NQMP GJS - Military Caste begin
 			case POLICYMOD_PRODUCTION_FROM_GARRISON:
 				rtnValue += m_pPolicies->GetPolicyEntry(i)->GetProductionFromGarrison();
@@ -3175,61 +2859,6 @@ int CvPlayerPolicies::GetNumericModifier(PolicyModifierType eType)
 #ifdef FRUITY_TRADITION_LANDED_ELITE
 			case POLICYMOD_INTERNAL_TRADE_FOOD_YIELD_CHANGE:
 				rtnValue += m_pPolicies->GetPolicyEntry(i)->GetInternalTradeRouteFoodYieldChange();
-				break;
-#endif
-#ifdef NQ_INTERNAL_TRADE_ROUTE_PRODUCTION_YIELD_CHANGE_FROM_POLICIES
-			case POLICYMOD_INTERNAL_TRADE_PRODUCTION_YIELD_CHANGE:
-				rtnValue += m_pPolicies->GetPolicyEntry(i)->GetInternalTradeRouteProductionYieldChange();
-				break;
-#endif
-#ifdef NQ_RAIL_CONNECTION_PRODUCTION_MODIFIER_FROM_POLICIES
-			case POLICYMOD_RAIL_CONNECTION_PRODUCTION_MODIFIER:
-				rtnValue += m_pPolicies->GetPolicyEntry(i)->GetRailConnectionProductionModifier();
-				break;
-#endif
-#ifdef NQ_COMBAT_BONUS_VS_SMALLER_CIV_FROM_POLICIES
-			case POLICYMOD_COMBAT_BONUS_VS_SMALLER_CIV:
-				rtnValue += m_pPolicies->GetPolicyEntry(i)->GetCombatBonusVsSmallerCiv();
-				break;
-#endif
-#ifdef NQ_PRODUCTION_TO_GREAT_MUSICIANS_MODIFIER_FROM_POLICIES
-			case POLICYMOD_PRODUCTION_TO_GREAT_MUSICIANS_MODIFIER:
-				rtnValue += m_pPolicies->GetPolicyEntry(i)->GetProductionToGreatMusiciansModifier();
-				break;
-#endif
-#ifdef NQ_TRADE_MISSION_INFLUENCE_MODIFIER_FROM_POLICIES
-			case POLICYMOD_TRADE_MISSION_INFLUENCE_MODIFIER:
-				rtnValue += m_pPolicies->GetPolicyEntry(i)->GetTradeMissionInfluenceModifier();
-				break;
-#endif
-#ifdef NQ_SCIENCE_PER_GREAT_PERSON_BORN_FROM_POLICIES
-			case POLICYMOD_SCIENCE_PER_GREAT_PERSON_BORN:
-				rtnValue += m_pPolicies->GetPolicyEntry(i)->GetSciencePerGreatPersonBorn();
-				break;
-#endif
-#ifdef NQ_INFLUENCE_BOOST_PER_GREAT_PERSON_BORN_FROM_POLICIES
-			case POLICYMOD_INFLUENCE_BOOST_PER_GREAT_PERSON_BORN:
-				rtnValue += m_pPolicies->GetPolicyEntry(i)->GetInfluenceBoostPerGreatPersonBorn();
-				break;
-#endif
-#ifdef NQ_TOURISM_FROM_TRADE_MISSIONS_FROM_POLICIES
-			case POLICYMOD_TOURISM_FROM_TRADE_MISSIONS:
-				rtnValue += m_pPolicies->GetPolicyEntry(i)->GetTourismFromTradeMissions();
-				break;
-#endif
-#ifdef NQ_HAPPINESS_FROM_GREAT_IMPROVEMENTS_FROM_POLICIES
-			case POLICYMOD_HAPPINESS_FROM_GREAT_IMPROVEMENTS:
-				rtnValue += m_pPolicies->GetPolicyEntry(i)->GetHappinessFromGreatImprovements();
-				break;
-#endif
-#ifdef NQ_MINOR_FRIENDSHIP_GAIN_BULLY_GOLD_SUCCESS_FROM_POLICIES
-			case POLICYMOD_MINOR_FRIENDSHIP_GAIN_BULLY_GOLD_SUCCESS:
-				rtnValue += m_pPolicies->GetPolicyEntry(i)->GetMinorFriendshipGainBullyGoldSuccess();
-				break;
-#endif
-#ifdef NQ_COUP_CHANCE_MODIFIER_FROM_POLICIES
-			case POLICYMOD_COUP_CHANCE_MODIFIER:
-				rtnValue += m_pPolicies->GetPolicyEntry(i)->GetCoupChanceModifier();
 				break;
 #endif
 			case POLICYMOD_SHARED_RELIGION_TOURISM_MODIFIER:

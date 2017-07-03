@@ -173,9 +173,6 @@ void CvLuaUnit::PushMethods(lua_State* L, int t)
 	Method(IsFound);
 	Method(IsWork);
 	Method(IsGoldenAge);
-#ifdef NQ_COMBAT_STRENGTH_NEAR_FRIENDLY_MINOR
-	Method(IsNearFriendlyMinor);
-#endif
 	Method(CanCoexistWithEnemyUnit);
 
 	Method(IsGreatPerson);
@@ -370,12 +367,6 @@ void CvLuaUnit::PushMethods(lua_State* L, int t)
 	Method(GetFriendlyLandsModifier);
 	Method(GetFriendlyLandsAttackModifier);
 	Method(GetOutsideFriendlyLandsModifier);
-#ifdef NQ_GOLDEN_AGE_FOREIGN_ATTACK_BONUS
-	Method(GetGoldenAgeForeignAttackBonus);
-#endif
-#ifdef NQ_COMBAT_STRENGTH_NEAR_FRIENDLY_MINOR
-	Method(GetCombatStrengthNearFriendlyMinor);
-#endif
 	Method(GetExtraCityAttackPercent);
 	Method(GetExtraCityDefensePercent);
 	Method(GetExtraHillsAttackPercent);
@@ -486,9 +477,6 @@ void CvLuaUnit::PushMethods(lua_State* L, int t)
 	Method(IsLargerCivThan);
 
 	Method(IsRangedSupportFire);
-#ifdef NQ_UNIT_IMMUNE_TO_PLUNDER_FROM_TRAIT
-	Method(IsPlunderBlockedByOpposingTrait);
-#endif
 }
 //------------------------------------------------------------------------------
 const char* CvLuaUnit::GetTypeName()
@@ -1872,22 +1860,10 @@ int CvLuaUnit::lIsGoldenAge(lua_State* L)
 {
 	CvUnit* pkUnit = GetInstance(L);
 	const bool bResult = pkUnit->isGoldenAge();
-	
-	lua_pushboolean(L, bResult);
-	return 1;
-}
-#ifdef NQ_COMBAT_STRENGTH_NEAR_FRIENDLY_MINOR
-//------------------------------------------------------------------------------
-//bool IsNearFriendlyMinor();
-int CvLuaUnit::lIsNearFriendlyMinor(lua_State* L)
-{
-	CvUnit* pkUnit = GetInstance(L);
-	const bool bResult = pkUnit->IsNearFriendlyMinor();
 
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-#endif
 //------------------------------------------------------------------------------
 //bool canCoexistWithEnemyUnit(int /*TeamTypes*/ eTeam);
 int CvLuaUnit::lCanCoexistWithEnemyUnit(lua_State* L)
@@ -3671,30 +3647,6 @@ int CvLuaUnit::lGetOutsideFriendlyLandsModifier(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-#ifdef NQ_GOLDEN_AGE_FOREIGN_ATTACK_BONUS
-//------------------------------------------------------------------------------
-//int GetGoldenAgeForeignAttackBonus();
-int CvLuaUnit::lGetGoldenAgeForeignAttackBonus(lua_State* L)
-{
-	CvUnit* pkUnit = GetInstance(L);
-
-	const int iResult = pkUnit->getGoldenAgeForeignAttackBonus();
-	lua_pushinteger(L, iResult);
-	return 1;
-}
-#endif
-#ifdef NQ_COMBAT_STRENGTH_NEAR_FRIENDLY_MINOR
-//------------------------------------------------------------------------------
-//int GetCombatStrengthNearFriendlyMinor();
-int CvLuaUnit::lGetCombatStrengthNearFriendlyMinor(lua_State* L)
-{
-	CvUnit* pkUnit = GetInstance(L);
-
-	const int iResult = pkUnit->getCombatStrengthNearFriendlyMinor();
-	lua_pushinteger(L, iResult);
-	return 1;
-}
-#endif
 //------------------------------------------------------------------------------
 //int getExtraCityAttackPercent();
 int CvLuaUnit::lGetExtraCityAttackPercent(lua_State* L)
@@ -4594,8 +4546,7 @@ int CvLuaUnit::lIsLargerCivThan(lua_State* L)
 
 	lua_pushboolean(L, bResult);
 	return 1;
-}
-//------------------------------------------------------------------------------
+}//------------------------------------------------------------------------------
 //bool IsRangedSupportFire();
 int CvLuaUnit::lIsRangedSupportFire(lua_State* L)
 {
@@ -4605,15 +4556,3 @@ int CvLuaUnit::lIsRangedSupportFire(lua_State* L)
 	lua_pushboolean(L, bResult);
 	return 1;
 }
-#ifdef NQ_UNIT_IMMUNE_TO_PLUNDER_FROM_TRAIT
-//------------------------------------------------------------------------------
-//bool IsPlunderBlockedByOpposingTrait();
-int CvLuaUnit::lIsPlunderBlockedByOpposingTrait(lua_State* L)
-{
-	CvUnit* pkUnit = GetInstance(L);
-	const bool bResult = pkUnit->IsPlunderBlockedByOpposingTrait();
-
-	lua_pushboolean(L, bResult);
-	return 1;
-}
-#endif

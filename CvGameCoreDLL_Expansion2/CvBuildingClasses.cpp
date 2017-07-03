@@ -86,9 +86,6 @@ CvBuildingEntry::CvBuildingEntry(void):
 	m_iCityCountUnhappinessMod(0),
 	m_bNoOccupiedUnhappiness(false),
 	m_iGlobalPopulationChange(0),
-#ifdef NQ_LOCAL_POPULATION_CHANGE_FROM_BUILDING
-	m_iLocalPopulationChange(0),
-#endif
 	m_iTechShare(0),
 	m_iFreeTechs(0),
 	m_iFreePolicies(0),
@@ -100,9 +97,6 @@ CvBuildingEntry::CvBuildingEntry(void):
 	m_bNearbyMountainRequired(false),
 	m_bAllowsRangeStrike(false),
 	m_iDefenseModifier(0),
-#ifdef NQ_BUILDING_DEFENSE_FROM_CITIZENS
-	m_iDefensePerCitizen(0),
-#endif
 	m_iGlobalDefenseModifier(0),
 	m_iExtraCityHitPoints(0),
 	m_iMissionType(NO_MISSION),
@@ -158,9 +152,6 @@ CvBuildingEntry::CvBuildingEntry(void):
 	m_bRequiresHolyCity(false),
 	m_bAffectSpiesNow(false),
 	m_bEspionage(false),
-#ifdef NQ_MALI_TREASURY
-	m_bMalianTreasury(false),
-#endif
 	m_bAllowsFoodTradeRoutes(false),
 	m_bAllowsProductionTradeRoutes(false),
 	m_bNullifyInfluenceModifier(false),
@@ -320,9 +311,6 @@ bool CvBuildingEntry::CacheResults(Database::Results& kResults, CvDatabaseUtilit
 	m_bRequiresHolyCity = kResults.GetBool("HolyCity");
 	m_bAffectSpiesNow = kResults.GetBool("AffectSpiesNow");
 	m_bEspionage = kResults.GetBool("Espionage");
-#ifdef NQ_MALI_TREASURY
-	m_bMalianTreasury = kResults.GetBool("MaliTreasury");
-#endif
 	m_bAllowsFoodTradeRoutes = kResults.GetBool("AllowsFoodTradeRoutes");
 	m_bAllowsProductionTradeRoutes = kResults.GetBool("AllowsProductionTradeRoutes");
 	m_bNullifyInfluenceModifier = kResults.GetBool("NullifyInfluenceModifier");
@@ -369,9 +357,6 @@ bool CvBuildingEntry::CacheResults(Database::Results& kResults, CvDatabaseUtilit
 	m_iPlotBuyCostModifier = kResults.GetInt("PlotBuyCostModifier");
 	m_iGlobalPlotBuyCostModifier = kResults.GetInt("GlobalPlotBuyCostModifier");
 	m_iGlobalPopulationChange = kResults.GetInt("GlobalPopulationChange");
-#ifdef NQ_LOCAL_POPULATION_CHANGE_FROM_BUILDING
-	m_iLocalPopulationChange = kResults.GetInt("LocalPopulationChange");
-#endif
 	m_iTechShare = kResults.GetInt("TechShare");
 	m_iFreeTechs = kResults.GetInt("FreeTechs");
 	m_iFreePolicies = kResults.GetInt("FreePolicies");
@@ -383,9 +368,6 @@ bool CvBuildingEntry::CacheResults(Database::Results& kResults, CvDatabaseUtilit
 	m_bNearbyMountainRequired = kResults.GetInt("NearbyMountainRequired");
 	m_bAllowsRangeStrike = kResults.GetInt("AllowsRangeStrike");
 	m_iDefenseModifier = kResults.GetInt("Defense");
-#ifdef NQ_BUILDING_DEFENSE_FROM_CITIZENS
-	m_iDefensePerCitizen = kResults.GetInt("DefensePerCitizen");
-#endif
 	m_iGlobalDefenseModifier = kResults.GetInt("GlobalDefenseMod");
 	m_iExtraCityHitPoints = kResults.GetInt("ExtraCityHitPoints");
 	m_iMinorFriendshipChange = kResults.GetInt("MinorFriendshipChange");
@@ -1225,14 +1207,6 @@ int CvBuildingEntry::GetGlobalPopulationChange() const
 	return m_iGlobalPopulationChange;
 }
 
-#ifdef NQ_LOCAL_POPULATION_CHANGE_FROM_BUILDING
-/// Population added to this city
-int CvBuildingEntry::GetLocalPopulationChange() const
-{
-	return m_iLocalPopulationChange;
-}
-#endif
-
 /// If this # of players have a Tech then the owner of this Building gets that Tech as well
 int CvBuildingEntry::GetTechShare() const
 {
@@ -1302,15 +1276,6 @@ int CvBuildingEntry::GetDefenseModifier() const
 {
 	return m_iDefenseModifier;
 }
-
-#ifdef NQ_BUILDING_DEFENSE_FROM_CITIZENS
-/// defense per population point in a city
-int CvBuildingEntry::GetDefensePerCitizen() const
-{
-	return m_iDefensePerCitizen;
-}
-#endif
-
 
 /// Modifier to every City's Building defense
 int CvBuildingEntry::GetGlobalDefenseModifier() const
@@ -1575,14 +1540,6 @@ bool CvBuildingEntry::IsEspionage() const
 {
 	return m_bEspionage;
 }
-
-#ifdef NQ_MALI_TREASURY
-// HACK: Is this a Malian Treasury?
-bool CvBuildingEntry::IsMalianTreasury() const
-{
-	return m_bMalianTreasury;
-}
-#endif
 
 bool CvBuildingEntry::AllowsFoodTradeRoutes() const
 {
@@ -2279,9 +2236,6 @@ CvCityBuildings::CvCityBuildings():
 	m_iNumBuildings(0),
 	m_iBuildingProductionModifier(0),
 	m_iBuildingDefense(0),
-#ifdef NQ_BUILDING_DEFENSE_FROM_CITIZENS
-	m_iBuildingDefensePerCitizen(0),
-#endif
 	m_iBuildingDefenseMod(0),
 	m_iMissionaryExtraSpreads(0),
 	m_iLandmarksTourismPercent(0),
@@ -2362,9 +2316,6 @@ void CvCityBuildings::Reset()
 	m_iNumBuildings = 0;
 	m_iBuildingProductionModifier = 0;
 	m_iBuildingDefense = 0;
-#ifdef NQ_BUILDING_DEFENSE_FROM_CITIZENS
-	m_iBuildingDefensePerCitizen = 0;
-#endif
 	m_iBuildingDefenseMod = 0;
 	m_iMissionaryExtraSpreads = 0;
 	m_iLandmarksTourismPercent = 0;
@@ -2395,9 +2346,6 @@ void CvCityBuildings::Read(FDataStream& kStream)
 	kStream >> m_iNumBuildings;
 	kStream >> m_iBuildingProductionModifier;
 	kStream >> m_iBuildingDefense;
-#ifdef NQ_BUILDING_DEFENSE_FROM_CITIZENS
-	kStream >> m_iBuildingDefensePerCitizen;
-#endif
 	kStream >> m_iBuildingDefenseMod;
 	kStream >> m_iMissionaryExtraSpreads;
 	kStream >> m_iLandmarksTourismPercent;
@@ -2428,9 +2376,6 @@ void CvCityBuildings::Write(FDataStream& kStream)
 	kStream << m_iNumBuildings;
 	kStream << m_iBuildingProductionModifier;
 	kStream << m_iBuildingDefense;
-#ifdef NQ_BUILDING_DEFENSE_FROM_CITIZENS
-	kStream << m_iBuildingDefensePerCitizen;
-#endif
 	kStream << m_iBuildingDefenseMod;
 	kStream << m_iMissionaryExtraSpreads;
 	kStream << m_iLandmarksTourismPercent;
@@ -3714,27 +3659,6 @@ void CvCityBuildings::ChangeBuildingDefense(int iChange)
 		m_pCity->plot()->plotAction(PUF_makeInfoBarDirty);
 	}
 }
-
-#ifdef NQ_BUILDING_DEFENSE_FROM_CITIZENS
-/// Accessor: Get current defense boost from buildings
-int CvCityBuildings::GetBuildingDefensePerCitizen() const
-{
-	return m_iBuildingDefensePerCitizen;
-}
-
-/// Accessor: Change current defense boost from buildings
-void CvCityBuildings::ChangeBuildingDefensePerCitizen(int iChange)
-{
-	if(iChange != 0)
-	{
-		m_iBuildingDefensePerCitizen = (m_iBuildingDefensePerCitizen + iChange);
-		CvAssert(GetBuildingDefensePerCitizen() >= 0);
-
-		m_pCity->plot()->plotAction(PUF_makeInfoBarDirty);
-	}
-}
-#endif
-
 
 /// Accessor: Get current defense boost Mod from buildings
 int CvCityBuildings::GetBuildingDefenseMod() const

@@ -76,12 +76,6 @@ public:
 #ifdef NQ_SCIENCE_PER_GREAT_PERSON_BORN
 	int GetSciencePerGreatPersonBorn() const;
 #endif
-#ifdef NQ_NUM_TURNS_BEFORE_MINOR_ALLIES_REFUSE_BRIBES_FROM_TRAIT
-	int GetNumTurnsBeforeMinorAlliesRefuseBribes() const;
-#endif
-#ifdef NQ_GOLDEN_PILGRIMAGE
-	int GetGoldenAgeTileBonusFaith() const;
-#endif
 	int GetCultureFromKills() const;
 	int GetFaithFromKills() const;
 	int GetCityCultureBonus() const;
@@ -145,9 +139,7 @@ public:
 	bool IsTechBoostFromCapitalScienceBuildings() const;
 	bool IsStaysAliveZeroCities() const;
 	bool IsFaithFromUnimprovedForest() const;
-#ifdef NQ_UNIT_IMMUNE_TO_PLUNDER_FROM_TRAIT
-	bool IsSeaTradeRoutesArePlunderImmune() const;
-#endif
+
 	// NQMP GJS - New France UA begin
 	bool IsEarnsGreatPersonOnSlotOrGuild() const;
 	bool IsHasBuiltWritersGuild() const;
@@ -223,13 +215,6 @@ protected:
 #ifdef NQ_SCIENCE_PER_GREAT_PERSON_BORN
 	int m_iSciencePerGreatPersonBorn;
 #endif
-#ifdef NQ_NUM_TURNS_BEFORE_MINOR_ALLIES_REFUSE_BRIBES_FROM_TRAIT
-	int m_iNumTurnsBeforeMinorAlliesRefuseBribes;
-#endif
-#ifdef NQ_GOLDEN_PILGRIMAGE
-	int m_iGoldenAgeTileBonusFaith;
-#endif
-
 	int m_iCultureFromKills;
 	int m_iFaithFromKills;
 	int m_iCityCultureBonus;
@@ -295,9 +280,6 @@ protected:
 	bool m_bTechBoostFromCapitalScienceBuildings;
 	bool m_bStaysAliveZeroCities;
 	bool m_bFaithFromUnimprovedForest;
-#ifdef NQ_UNIT_IMMUNE_TO_PLUNDER_FROM_TRAIT
-	bool m_bSeaTradeRoutesArePlunderImmune;
-#endif
 
 	// NQMP GJS - New France UA begin
 	bool m_bEarnsGreatPersonOnSlotOrGuild;
@@ -493,18 +475,6 @@ public:
 	int GetSciencePerGreatPersonBorn() const
 	{
 		return m_iSciencePerGreatPersonBorn;
-	}
-#endif
-#ifdef NQ_NUM_TURNS_BEFORE_MINOR_ALLIES_REFUSE_BRIBES_FROM_TRAIT
-	int GetNumTurnsBeforeMinorAlliesRefuseBribes() const
-	{
-		return m_iNumTurnsBeforeMinorAlliesRefuseBribes;
-	}
-#endif
-#ifdef NQ_GOLDEN_PILGRIMAGE
-	int GetGoldenAgeTileBonusFaith() const
-	{
-		return m_iGoldenAgeTileBonusFaith;
 	}
 #endif
 	int GetCultureFromKills() const
@@ -768,12 +738,6 @@ public:
 	{
 		return m_bFaithFromUnimprovedForest;
 	};
-#ifdef NQ_UNIT_IMMUNE_TO_PLUNDER_FROM_TRAIT
-	bool IsSeaTradeRoutesArePlunderImmune() const
-	{
-		return m_bSeaTradeRoutesArePlunderImmune;
-	};
-#endif
 	bool IsBonusReligiousBelief() const
 	{
 		return m_bBonusReligiousBelief;
@@ -940,12 +904,6 @@ private:
 #ifdef NQ_SCIENCE_PER_GREAT_PERSON_BORN
 	int m_iSciencePerGreatPersonBorn;
 #endif
-#ifdef NQ_NUM_TURNS_BEFORE_MINOR_ALLIES_REFUSE_BRIBES_FROM_TRAIT
-	int m_iNumTurnsBeforeMinorAlliesRefuseBribes;
-#endif
-#ifdef NQ_GOLDEN_PILGRIMAGE
-	int m_iGoldenAgeTileBonusFaith;
-#endif
 	int m_iCultureFromKills;
 	int m_iFaithFromKills;
 	int m_iCityCultureBonus;
@@ -1005,9 +963,6 @@ private:
 	bool m_bTechBoostFromCapitalScienceBuildings;
 	bool m_bStaysAliveZeroCities;
 	bool m_bFaithFromUnimprovedForest;
-#ifdef NQ_UNIT_IMMUNE_TO_PLUNDER_FROM_TRAIT
-	bool m_bSeaTradeRoutesArePlunderImmune;
-#endif
 
 	// NQMP GJS - New France UA begin
 	bool m_bEarnsGreatPersonOnSlotOrGuild;

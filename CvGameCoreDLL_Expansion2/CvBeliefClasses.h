@@ -58,9 +58,6 @@ public:
 	int GetProphetStrengthModifier() const;
 	int GetProphetCostModifier() const;
 	int GetMissionaryStrengthModifier() const;
-#ifdef NQ_FLAT_FAITH_PER_CITIZEN_BORN_FROM_BELIEFS
-	int GetFlatFaithPerCitizenBorn() const;
-#endif
 #ifdef NQ_BELIEF_EXTRA_MISSIONARY_SPREADS
 	int GetMissionaryExtraSpreads() const;
 #endif
@@ -89,9 +86,6 @@ public:
 	int GetSpyPressure() const;
 	int GetInquisitorPressureRetention() const;
 	int GetFaithBuildingTourism() const;
-#ifdef NQ_FREE_SETTLERS_FROM_BELIEF
-	int GetNumFreeSettlers() const;
-#endif
 
 	bool IsPantheonBelief() const;
 	bool IsFounderBelief() const;
@@ -100,13 +94,13 @@ public:
 	bool IsReformationBelief() const;
 	bool RequiresPeace() const;
 	bool ConvertsBarbarians() const;
+#ifdef NQ_SHEPHERD_AND_FLOCK
+	bool ShepherdAndFlock() const;
+#endif
 #ifdef NQ_DEUS_VULT
 	bool DeusVult() const;
 #endif
 	bool FaithPurchaseAllGreatPeople() const;
-#ifdef NQ_BELIEF_TOGGLE_ALLOW_FAITH_GIFTS_TO_MINORS
-	bool AllowsFaithGiftsToMinors() const;
-#endif
 
 	EraTypes GetObsoleteEra() const;
 	ResourceTypes GetResourceRevealed() const;
@@ -175,9 +169,6 @@ protected:
 	int m_iProphetStrengthModifier;
 	int m_iProphetCostModifier;
 	int m_iMissionaryStrengthModifier;
-#ifdef NQ_FLAT_FAITH_PER_CITIZEN_BORN_FROM_BELIEFS
-	int m_iFlatFaithPerCitizenBorn;
-#endif
 #ifdef NQ_BELIEF_EXTRA_MISSIONARY_SPREADS
 	int m_iMissionaryExtraSpreads;
 #endif
@@ -206,9 +197,6 @@ protected:
 	int m_iSpyPressure;
 	int m_iInquisitorPressureRetention;
 	int m_iFaithBuildingTourism;
-#ifdef NQ_FREE_SETTLERS_FROM_BELIEF
-	int m_iNumFreeSettlers;
-#endif
 
 	bool m_bPantheon;
 	bool m_bFounder;
@@ -217,13 +205,13 @@ protected:
 	bool m_bReformer;
 	bool m_bRequiresPeace;
 	bool m_bConvertsBarbarians;
+#ifdef NQ_SHEPHERD_AND_FLOCK
+	bool m_bShepherdAndFlock;
+#endif
 #ifdef NQ_DEUS_VULT
 	bool m_bDeusVult;
 #endif
 	bool m_bFaithPurchaseAllGreatPeople;
-#ifdef NQ_BELIEF_TOGGLE_ALLOW_FAITH_GIFTS_TO_MINORS
-	bool m_bAllowsFaithGiftsToMinors;
-#endif
 
 	EraTypes m_eObsoleteEra;
 	ResourceTypes m_eResourceRevealed;
@@ -384,12 +372,6 @@ public:
 	{
 		return m_iMissionaryStrengthModifier;
 	};
-#ifdef NQ_FLAT_FAITH_PER_CITIZEN_BORN_FROM_BELIEFS
-	int GetFlatFaithPerCitizenBorn() const
-	{
-		return m_iFlatFaithPerCitizenBorn;
-	};
-#endif
 #ifdef NQ_BELIEF_EXTRA_MISSIONARY_SPREADS
 	int GetMissionaryExtraSpreads() const
 	{
@@ -515,20 +497,17 @@ public:
 	int GetYieldChangeWorldWonder(YieldTypes eYieldType) const;
 	int GetYieldModifierNaturalWonder(YieldTypes eYieldType) const;
 	int GetMaxYieldModifierPerFollower(YieldTypes eYieldType) const;
-#ifdef NQ_FREE_SETTLERS_FROM_BELIEF
-	int GetNumFreeSettlers() const;
-#endif
 
 	bool IsBuildingClassEnabled(BuildingClassTypes eType) const;
 	bool IsFaithBuyingEnabled(EraTypes eEra) const;
 	bool IsConvertsBarbarians() const;
+#ifdef NQ_SHEPHERD_AND_FLOCK
+	bool IsShepherdAndFlock() const;
+#endif
 #ifdef NQ_DEUS_VULT
 	bool IsDeusVult() const;
 #endif
 	bool IsFaithPurchaseAllGreatPeople() const;
-#ifdef NQ_BELIEF_TOGGLE_ALLOW_FAITH_GIFTS_TO_MINORS
-	bool IsAllowsFaithGiftsToMinors() const;
-#endif
 
 	// Serialization
 	void Read(FDataStream& kStream);
@@ -550,9 +529,6 @@ private:
 	int m_iProphetStrengthModifier;
 	int m_iProphetCostModifier;
 	int m_iMissionaryStrengthModifier;
-#ifdef NQ_FLAT_FAITH_PER_CITIZEN_BORN_FROM_BELIEFS
-	int m_iFlatFaithPerCitizenBorn;
-#endif
 #ifdef NQ_BELIEF_EXTRA_MISSIONARY_SPREADS
 	int m_iMissionaryExtraSpreads;
 #endif

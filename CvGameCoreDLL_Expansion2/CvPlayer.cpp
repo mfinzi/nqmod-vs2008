@@ -161,9 +161,6 @@ CvPlayer::CvPlayer() :
 	, m_iCityRevoltCounter("CvPlayer::m_iCityRevoltCounter", m_syncArchive)
 	, m_iHappinessPerGarrisonedUnitCount("CvPlayer::m_iHappinessPerGarrisonedUnitCount", m_syncArchive)
 	, m_iHappinessPerTradeRouteCount("CvPlayer::m_iHappinessPerTradeRouteCount", m_syncArchive)
-#ifdef NQ_RAIL_CONNECTION_HAPPINESS_FROM_POLICIES
-	, m_iHappinessPerRailConnectionCount("CvPlayer::m_iHappinessPerRailConnectionCount", m_syncArchive)
-#endif
 	, m_iHappinessPerXPopulation(0)
 	, m_iHappinessFromLeagues(0)
 	, m_iEspionageModifier(0)
@@ -194,8 +191,8 @@ CvPlayer::CvPlayer() :
 	, m_iGreatWritersCreated(0)
 	, m_iGreatArtistsCreated(0)
 	, m_iGreatMusiciansCreated(0)
-#ifdef NQ_FREE_SETTLERS_FROM_BELIEF
-	, m_bHasUsedReligiousSettlements(false)
+#ifdef NQ_SHEPHERD_AND_FLOCK
+	, m_bHasUsedShepherdAndFlock(false)
 #endif
 #ifdef NQ_DEUS_VULT
 	, m_bHasUsedDeusVult(false)
@@ -270,33 +267,12 @@ CvPlayer::CvPlayer() :
 	, m_iHappyPerMilitaryUnit("CvPlayer::m_iHappyPerMilitaryUnit", m_syncArchive)
 	, m_iHappinessToCulture("CvPlayer::m_iHappinessToCulture", m_syncArchive)
 	, m_iHappinessToScience("CvPlayer::m_iHappinessToScience", m_syncArchive)
-#ifdef NQ_GOLD_TO_SCIENCE_FROM_POLICIES
-	, m_iGoldToScience("CvPlayer::m_iGoldToScience", m_syncArchive)
-#endif
 	, m_iHalfSpecialistUnhappinessCount("CvPlayer::m_iHalfSpecialistUnhappinessCount", m_syncArchive)
 	, m_iHalfSpecialistFoodCount("CvPlayer::m_iHalfSpecialistFoodCount", m_syncArchive)
 	, m_iMilitaryFoodProductionCount("CvPlayer::m_iMilitaryFoodProductionCount", m_syncArchive)
 	, m_iGoldenAgeCultureBonusDisabledCount(0)
 	, m_iSecondReligionPantheonCount(0)
 	, m_iEnablesSSPartHurryCount(0)
-#ifdef NQ_DIABLE_RESISTANCE_TIME_VIA_POLICIES
-	, m_iDisablesResistanceTimeCount(0)
-#endif
-#ifdef NQ_PATRIOTIC_WAR
-	, m_iDoubleTrainedMilitaryLandUnitCount(0)
-#endif
-#ifdef NQ_WAR_HERO
-	, m_iWarHeroCount(0)
-#endif
-#ifdef NQ_IGNORE_PUPPETS_FOR_RESEARCH_COSTS_FROM_POLICIES
-	, m_iIgnorePuppetsForResearchCostsCount(0)
-#endif
-#ifdef NQ_POLICY_TOGGLE_NO_MINOR_DOW_IF_FRIENDS
-	, m_iNoMinorDOWIfFriendsCount(0)
-#endif
-#ifdef NQ_ALLOW_PUPPET_PURCHASING_FROM_POLICIES
-	, m_iAllowPuppetPurchasingCount(0)
-#endif
 	, m_iEnablesSSPartPurchaseCount(0)
 	, m_iConscriptCount("CvPlayer::m_iConscriptCount", m_syncArchive)
 	, m_iMaxConscript("CvPlayer::m_iMaxConscript", m_syncArchive)
@@ -360,9 +336,6 @@ CvPlayer::CvPlayer() :
 	, m_iNumPolicies("CvPlayer::m_iNumPolicies", m_syncArchive)
 	, m_iNumGreatPeople("CvPlayer::m_iNumGreatPeople", m_syncArchive)
 	, m_uiStartTime("CvPlayer::m_uiStartTime", m_syncArchive)  // XXX save these?
-#ifdef NQ_CHEAT_FIRST_ROYAL_LIBRARY_COMES_WITH_GREAT_WORK
-	, m_bHasEverBuiltRoyalLibrary("CvPlayer::m_bHasEverBuiltRoyalLibrary", m_syncArchive)
-#endif
 	, m_bHasBetrayedMinorCiv("CvPlayer::m_bHasBetrayedMinorCiv", m_syncArchive)
 	, m_bAlive("CvPlayer::m_bAlive", m_syncArchive)
 	, m_bEverAlive("CvPlayer::m_bEverAlive", m_syncArchive)
@@ -830,9 +803,6 @@ void CvPlayer::uninit()
 	m_iCityRevoltCounter = 0;
 	m_iHappinessPerGarrisonedUnitCount = 0;
 	m_iHappinessPerTradeRouteCount = 0;
-#ifdef NQ_RAIL_CONNECTION_HAPPINESS_FROM_POLICIES
-	m_iHappinessPerRailConnectionCount = 0;
-#endif
 	m_iHappinessPerXPopulation = 0;
 	m_iHappinessFromLeagues = 0;
 	m_iEspionageModifier = 0;
@@ -863,8 +833,8 @@ void CvPlayer::uninit()
 	m_iGreatWritersCreated = 0;
 	m_iGreatArtistsCreated = 0;
 	m_iGreatMusiciansCreated = 0;
-#ifdef NQ_FREE_SETTLERS_FROM_BELIEF
-	m_bHasUsedReligiousSettlements = false;
+#ifdef NQ_SHEPHERD_AND_FLOCK
+	m_bHasUsedShepherdAndFlock = false;
 #endif
 #ifdef NQ_DEUS_VULT
 	m_bHasUsedDeusVult = false;
@@ -946,33 +916,12 @@ void CvPlayer::uninit()
 	m_iHappyPerMilitaryUnit = 0;
 	m_iHappinessToCulture = 0;
 	m_iHappinessToScience = 0;
-#ifdef NQ_GOLD_TO_SCIENCE_FROM_POLICIES
-	m_iGoldToScience = 0;
-#endif
 	m_iHalfSpecialistUnhappinessCount = 0;
 	m_iHalfSpecialistFoodCount = 0;
 	m_iMilitaryFoodProductionCount = 0;
 	m_iGoldenAgeCultureBonusDisabledCount = 0;
 	m_iSecondReligionPantheonCount = 0;
 	m_iEnablesSSPartHurryCount = 0;
-#ifdef NQ_DIABLE_RESISTANCE_TIME_VIA_POLICIES
-	m_iDisablesResistanceTimeCount = 0;
-#endif
-#ifdef NQ_PATRIOTIC_WAR
-	m_iDoubleTrainedMilitaryLandUnitCount = 0;
-#endif
-#ifdef NQ_WAR_HERO
-	m_iWarHeroCount = 0;
-#endif
-#ifdef NQ_IGNORE_PUPPETS_FOR_RESEARCH_COSTS_FROM_POLICIES
-	m_iIgnorePuppetsForResearchCostsCount = 0;
-#endif
-#ifdef NQ_POLICY_TOGGLE_NO_MINOR_DOW_IF_FRIENDS
-	m_iNoMinorDOWIfFriendsCount = 0;
-#endif
-#ifdef NQ_ALLOW_PUPPET_PURCHASING_FROM_POLICIES
-	m_iAllowPuppetPurchasingCount = 0;
-#endif
 	m_iEnablesSSPartPurchaseCount = 0;
 	m_iConscriptCount = 0;
 	m_iMaxConscript = 0;
@@ -1056,9 +1005,6 @@ void CvPlayer::uninit()
 	m_iMaxEffectiveCities = 1;
 	m_iLastSliceMoved = 0;
 
-#ifdef NQ_CHEAT_FIRST_ROYAL_LIBRARY_COMES_WITH_GREAT_WORK
-	m_bHasEverBuiltRoyalLibrary = false;
-#endif
 	m_bHasBetrayedMinorCiv = false;
 	m_bAlive = false;
 	m_bEverAlive = false;
@@ -2573,7 +2519,7 @@ void CvPlayer::acquireCity(CvCity* pOldCity, bool bConquest, bool bGift)
 	for(iI = 0; iI < (int)freeConquestBuildings.size(); iI++)
 #endif
 	{
-		BuildingTypes eLoopBuilding = freeConquestBuildings[iI];
+		const BuildingTypes eLoopBuilding = freeConquestBuildings[iI];
 		if (eLoopBuilding != NO_BUILDING)
 		{
 			CvBuildingEntry* pkLoopBuildingInfo = GC.getBuildingInfo(eLoopBuilding);
@@ -2880,17 +2826,6 @@ void CvPlayer::acquireCity(CvCity* pOldCity, bool bConquest, bool bGift)
 
 			int iInfluenceReduction = GetCulture()->GetInfluenceCityConquestReduction(eOldOwner);
 
-#ifdef NQ_DIABLE_RESISTANCE_TIME_VIA_POLICIES
-			int iResistanceTurns = 0;
-			if (!IsDisablesResistanceTime())
-			{
-				iResistanceTurns = pNewCity->getPopulation() * GC.getGame().getGameSpeedInfo().getVictoryDelayPercent();
-				iResistanceTurns *= (100 - iInfluenceReduction); // take tourism into account
-				if (iResistanceTurns % 20000 != 0)
-					iResistanceTurns += 20000; // acts as ceil(), but without any weird int <-> float conversions
-				iResistanceTurns /= 20000;
-			}
-#else
 			// NQMP GJS - reduce resistance time BEGIN
 			int iResistanceTurns = pNewCity->getPopulation() * GC.getGame().getGameSpeedInfo().getVictoryDelayPercent();
 			iResistanceTurns *= (100 - iInfluenceReduction); // take tourism into account
@@ -2898,7 +2833,6 @@ void CvPlayer::acquireCity(CvCity* pOldCity, bool bConquest, bool bGift)
 				iResistanceTurns += 20000; // acts as ceil(), but without any weird int <-> float conversions
 			iResistanceTurns /= 20000;
 			// NQMP GJS - reduce resistance time END
-#endif
 
 			if (iResistanceTurns > 0)
 			{
@@ -3482,11 +3416,7 @@ void CvPlayer::DoLiberatePlayer(PlayerTypes ePlayer, int iOldCityID)
 	}
 
 	// Move Units from player that don't belong here
-#ifdef NQ_NEVER_PUSH_OUT_OF_MINORS_ON_PEACE
-	if(pPlot && pPlot->getNumUnits() > 0 && !GET_PLAYER(ePlayer).isMinorCiv())
-#else
 	if(pPlot->getNumUnits() > 0)
-#endif
 	{
 		// Get the current list of units because we will possibly be moving them out of the plot's list
 		IDInfoVector currentUnits;
@@ -8535,11 +8465,6 @@ int CvPlayer::getProductionNeeded(UnitTypes eUnit) const
 
 	iProductionNeeded += getUnitExtraCost(eUnitClass);
 
-#ifdef NQ_UNIT_FINAL_PRODUCTION_COST_MODIFIER
-	iProductionNeeded *= (100 + pkUnitEntry->GetFinalProductionCostModifier());
-	iProductionNeeded /= 100;
-#endif
-
 	return std::max(1, iProductionNeeded);
 }
 
@@ -11145,41 +11070,25 @@ void CvPlayer::ReportYieldFromKill(YieldTypes eYield, int iValue, int iX, int iY
 	}
 }
 
-#ifdef NQ_BELIEF_TOGGLE_ALLOW_FAITH_GIFTS_TO_MINORS
-bool CvPlayer::CanFaithGiftMinors()
-{
-	ReligionTypes eReligion = GC.getGame().GetGameReligions()->GetReligionCreatedByPlayer(GetID());
-	if (eReligion != NO_RELIGION)
-	{
-		const CvReligion* pReligion = GC.getGame().GetGameReligions()->GetReligion(eReligion, NO_PLAYER);
-		if (pReligion && pReligion->m_Beliefs.IsAllowsFaithGiftsToMinors())
-		{
-			return true;
-		}
-	}
-
-	return false;
-}
-#endif
-
 #ifdef NQ_ALLOW_RELIGION_ONE_SHOTS 
 void CvPlayer::DoReligionOneShots(ReligionTypes eReligion)
 {
 	bool setUnitReligion = false;
 	const CvReligion* pReligion = GC.getGame().GetGameReligions()->GetReligion(eReligion, NO_PLAYER);
 
-#ifdef NQ_FREE_SETTLERS_FROM_BELIEF
-	if (!m_bHasUsedReligiousSettlements && pReligion->m_Beliefs.GetNumFreeSettlers() > 0)
+#ifdef NQ_SHEPHERD_AND_FLOCK
+	if (!m_bHasUsedShepherdAndFlock && pReligion->m_Beliefs.IsShepherdAndFlock())
 	{
-		m_bHasUsedReligiousSettlements = true;
+		m_bHasUsedShepherdAndFlock = true;
+		setUnitReligion = true;
 
-		// add free settlers from Religious Settlements belief - I know this is super ugly, sorry :(
-		// real solution is to make a Belief_FreeUnitClasses table and figure out how to check for each belief being triggered only once... :(
+		// add free units if Shepherd & Flock belief - I know this is super ugly, faster/easier than making Belief_FreeUnitClasses table... :(
 		// also should be regular settlers, not uniques (like American Pioneer for example)
-		for (int iFreeSettlerLoop = 0; iFreeSettlerLoop < pReligion->m_Beliefs.GetNumFreeSettlers(); iFreeSettlerLoop++)
-		{
-			addFreeUnit((UnitTypes)GC.getInfoTypeForString("UNIT_SETTLER"));
-		}
+		addFreeUnit((UnitTypes)GC.getInfoTypeForString("UNIT_MISSIONARY"));
+		addFreeUnit((UnitTypes)GC.getInfoTypeForString("UNIT_SETTLER"));
+		addFreeUnit((UnitTypes)GC.getInfoTypeForString("UNIT_SETTLER"));
+		addFreeUnit((UnitTypes)GC.getInfoTypeForString("UNIT_WORKER"));
+		addFreeUnit((UnitTypes)GC.getInfoTypeForString("UNIT_WORKER"));
 	}
 #endif
 
@@ -11192,14 +11101,6 @@ void CvPlayer::DoReligionOneShots(ReligionTypes eReligion)
 		// minimum mounted is chariot archer
 		UnitTypes eBestMountedUnit = (UnitTypes)getCivilizationInfo().getCivilizationUnits((UnitClassTypes)GC.getInfoTypeForString("UNITCLASS_CHARIOT_ARCHER"));
 		int iBestMountedScore = GC.getUnitInfo(eBestMountedUnit)->GetProductionCost();
-		
-		// minimum ranged is archer
-		UnitTypes eBestRangedUnit = (UnitTypes)getCivilizationInfo().getCivilizationUnits((UnitClassTypes)GC.getInfoTypeForString("UNITCLASS_ARCHER"));
-		int iBestRangedScore = GC.getUnitInfo(eBestRangedUnit)->GetProductionCost();
-
-		// minimum siege is catapult
-		UnitTypes eBestSiegeUnit = (UnitTypes)getCivilizationInfo().getCivilizationUnits((UnitClassTypes)GC.getInfoTypeForString("UNITCLASS_CATAPULT"));
-		int iBestSiegeScore = GC.getUnitInfo(eBestSiegeUnit)->GetProductionCost();
 
 		// minimum melee is warrior
 		UnitTypes eBestMeleeUnit = (UnitTypes)getCivilizationInfo().getCivilizationUnits((UnitClassTypes)GC.getInfoTypeForString("UNITCLASS_WARRIOR"));
@@ -11238,22 +11139,6 @@ void CvPlayer::DoReligionOneShots(ReligionTypes eReligion)
 						eBestMountedUnit = eLoopUnit;
 					}
 				}
-				if ((UnitCombatTypes)pkUnitInfo->GetUnitCombatType() == (UnitCombatTypes)GC.getInfoTypeForString("UNITCOMBAT_ARCHER"))
-				{
-					if (pkUnitInfo->GetProductionCost() > iBestRangedScore)
-					{
-						iBestRangedScore = pkUnitInfo->GetProductionCost();
-						eBestRangedUnit = eLoopUnit;
-					}
-				}
-				if ((UnitCombatTypes)pkUnitInfo->GetUnitCombatType() == (UnitCombatTypes)GC.getInfoTypeForString("UNITCOMBAT_SIEGE"))
-				{
-					if (pkUnitInfo->GetProductionCost() > iBestSiegeScore)
-					{
-						iBestSiegeScore = pkUnitInfo->GetProductionCost();
-						eBestSiegeUnit = eLoopUnit;
-					}
-				}
 				if ((UnitCombatTypes)pkUnitInfo->GetUnitCombatType() == (UnitCombatTypes)GC.getInfoTypeForString("UNITCOMBAT_MELEE"))
 				{
 					if (pkUnitInfo->GetProductionCost() > iBestMeleeScore)
@@ -11275,28 +11160,14 @@ void CvPlayer::DoReligionOneShots(ReligionTypes eReligion)
 			addFreeUnit(eBestMountedUnit);
 		}
 
-		// 2 ranged
-		if (eBestRangedUnit)
+		// 4 melee
+		if (eBestMountedUnit)
 		{
-			addFreeUnit(eBestRangedUnit);
-			addFreeUnit(eBestRangedUnit);
+			addFreeUnit(eBestMeleeUnit);
+			addFreeUnit(eBestMeleeUnit);
+			addFreeUnit(eBestMeleeUnit);
+			addFreeUnit(eBestMeleeUnit);
 		}
-
-		// 2 siege
-		if (eBestSiegeUnit)
-		{
-			addFreeUnit(eBestSiegeUnit);
-			addFreeUnit(eBestSiegeUnit);
-		}
-
-		// no longer gives any melee
-		/*if (eBestMeleeUnit)
-		{
-			addFreeUnit(eBestMeleeUnit);
-			addFreeUnit(eBestMeleeUnit);
-			addFreeUnit(eBestMeleeUnit);
-			addFreeUnit(eBestMeleeUnit);
-		}*/
 	}
 #endif
 
@@ -11421,7 +11292,9 @@ void CvPlayer::DoGreatWorkFromCityConquer(CvCity* pConqueredCity)
 				pCity->GetCityBuildings()->SetBuildingGreatWork(eBuildingClass, iSlot, iGWindex);
 
 				// --- notification ---
+				bool bDontShowRewardPopup = GC.GetEngineUserInterface()->IsOptionNoRewardPopups();
 				Localization::String localizedText;
+
 				CvNotifications* pNotifications = this->GetNotifications();
 				if(pNotifications)
 				{
@@ -11572,7 +11445,7 @@ int CvPlayer::GetFaithPerTurnFromReligion() const
 			iFaithPerTurn += pReligion->m_Beliefs.GetHolyCityYieldChange(YIELD_FAITH);
 
 #ifdef NQ_FAITH_PER_FOREIGN_TRADE_ROUTE
-			iFaithPerTurn += pReligion->m_Beliefs.GetFaithPerForeignTradeRoute() * GetTrade()->GetNumForeignTradeRoutes(GetID());
+			iFaithPerTurn += pReligion->m_Beliefs.GetFaithPerForeignTradeRoute() * GetTrade()->GetNumForeignTradeRoutes();
 #endif
 
 #ifdef NQ_FAITH_PER_CITY_STATE_THIS_RELIGION
@@ -12275,10 +12148,6 @@ int CvPlayer::GetHappinessFromPolicies() const
 			}
 		}
 	}
-
-#ifdef NQ_HAPPINESS_FROM_GREAT_IMPROVEMENTS_FROM_POLICIES
-	iHappiness += (getGreatPersonImprovementCount() * m_pPlayerPolicies->GetNumericModifier(POLICYMOD_HAPPINESS_FROM_GREAT_IMPROVEMENTS));
-#endif
 
 	return iHappiness;
 }
@@ -13272,15 +13141,9 @@ int CvPlayer::GetHappinessFromTradeRoutes() const
 void CvPlayer::DoUpdateCityConnectionHappiness()
 {
 	int iHappinessPerTradeRoute = GetHappinessPerTradeRoute();
-	int iNumCities = 0;
-#ifdef NQ_RAIL_CONNECTION_HAPPINESS_FROM_POLICIES
-	int iHappinessPerRailConnection = GetHappinessPerRailConnection();
-	int iNumCitiesWithRailroads = 0;
 
-	if (iHappinessPerTradeRoute != 0 || iHappinessPerRailConnection != 0)
-#else
-	if (iHappinessPerTradeRoute != 0)
-#endif
+	int iNumCities = 0;
+	if(iHappinessPerTradeRoute != 0)
 	{
 		CvCity* pCapitalCity = getCapitalCity();
 
@@ -13299,19 +13162,10 @@ void CvPlayer::DoUpdateCityConnectionHappiness()
 						iNumCities++;
 					}
 				}
-#ifdef NQ_RAIL_CONNECTION_HAPPINESS_FROM_POLICIES
-				if (pLoopCity != pCapitalCity && pLoopCity->IsIndustrialRouteToCapital())
-				{
-					iNumCitiesWithRailroads++;
-				}
-#endif
 			}
 		}
 	}
 	m_iCityConnectionHappiness = iHappinessPerTradeRoute * iNumCities / 100;	// Bring it out of hundreds
-#ifdef NQ_RAIL_CONNECTION_HAPPINESS_FROM_POLICIES
-	m_iCityConnectionHappiness += iHappinessPerRailConnection * iNumCitiesWithRailroads / 100;	// Bring it out of hundreds
-#endif
 }
 
 //	--------------------------------------------------------------------------------
@@ -13334,30 +13188,6 @@ void CvPlayer::ChangeHappinessPerTradeRoute(int iChange)
 {
 	SetHappinessPerTradeRoute(m_iHappinessPerTradeRouteCount + iChange);
 }
-
-#ifdef NQ_RAIL_CONNECTION_HAPPINESS_FROM_POLICIES
-//	--------------------------------------------------------------------------------
-/// How muchHappiness are we getting from Rail Connections?
-int CvPlayer::GetHappinessPerRailConnection() const
-{
-	return m_iHappinessPerRailConnectionCount;
-}
-
-//	--------------------------------------------------------------------------------
-/// Set the amont of Happiness we're getting from Railroad connections
-void CvPlayer::SetHappinessPerRailConnection(int iValue)
-{
-	m_iHappinessPerRailConnectionCount = iValue;
-}
-
-//	--------------------------------------------------------------------------------
-/// Change the amont of Happiness we're getting from Railroad connections
-void CvPlayer::ChangeHappinessPerRailConnection(int iChange)
-{
-	SetHappinessPerRailConnection(m_iHappinessPerRailConnectionCount + iChange);
-}
-#endif
-
 
 //	--------------------------------------------------------------------------------
 /// How much Happiness are we getting from large cities?
@@ -13857,8 +13687,6 @@ void CvPlayer::DoProcessGoldenAge()
 			ChangeGoldenAgeProgressMeter(getCachedExcessHappinessForThisTurn());
 #else
 			ChangeGoldenAgeProgressMeter(GetExcessHappiness());
-#endif
-#ifdef NQ_GOLDEN_AGE_OVERHAUL
 #endif
 
 			// Enough GA Progress to trigger new GA?
@@ -14882,12 +14710,6 @@ void CvPlayer::DoSpawnGreatPerson(PlayerTypes eMinor)
 
 		if (pNewGreatPeople)
 		{
-#ifdef NQ_WAR_HERO
-			if(pNewGreatPeople->IsGreatGeneral() && IsWarHero())
-			{
-				addFreeUnit((UnitTypes)GC.getInfoTypeForString("UNIT_ARTIST"));
-			}
-#endif
 			// Bump up the count
 			/* NQMP GJS: Actually don't bump up the count lolz ... patronage finisher now gives free Great People :)
 			if(pNewGreatPeople->IsGreatGeneral())
@@ -15695,24 +15517,6 @@ void CvPlayer::changeHappinessToScience(int iChange)
 	}
 }
 
-#ifdef NQ_GOLD_TO_SCIENCE_FROM_POLICIES
-//	--------------------------------------------------------------------------------
-int CvPlayer::getGoldToScience() const
-{
-	return m_iGoldToScience;
-}
-
-//	--------------------------------------------------------------------------------
-void CvPlayer::changeGoldToScience(int iChange)
-{
-	if(iChange != 0)
-	{
-		m_iGoldToScience = (m_iGoldToScience + iChange);
-		CvAssert(getGoldToScience() >= 0);
-	}
-}
-#endif
-
 //	--------------------------------------------------------------------------------
 int CvPlayer::getHalfSpecialistUnhappinessCount() const
 {
@@ -15856,149 +15660,6 @@ void CvPlayer::ChangeEnablesSSPartHurryCount(int iChange)
 		CvAssert(GetEnablesSSPartHurryCount() >= 0);
 	}
 }
-
-#ifdef NQ_DIABLE_RESISTANCE_TIME_VIA_POLICIES
-//	--------------------------------------------------------------------------------
-int CvPlayer::GetDisablesResistanceTimeCount() const
-{
-	return m_iDisablesResistanceTimeCount;
-}
-
-//	--------------------------------------------------------------------------------
-bool CvPlayer::IsDisablesResistanceTime() const
-{
-	return (GetDisablesResistanceTimeCount() > 0);
-}
-
-//	--------------------------------------------------------------------------------
-void CvPlayer::ChangeDisablesResistanceTimeCount(int iChange)
-{
-	if (iChange != 0)
-	{
-		m_iDisablesResistanceTimeCount = m_iDisablesResistanceTimeCount + iChange;
-		CvAssert(GetDisablesResistanceTimeCount() >= 0);
-	}
-}
-#endif
-
-#ifdef NQ_PATRIOTIC_WAR
-//	--------------------------------------------------------------------------------
-int CvPlayer::GetDoubleTrainedMilitaryLandUnitCount() const
-{
-	return m_iDoubleTrainedMilitaryLandUnitCount;
-}
-
-//	--------------------------------------------------------------------------------
-bool CvPlayer::IsDoubleTrainedMilitaryLandUnit() const
-{
-	return (GetDoubleTrainedMilitaryLandUnitCount() > 0);
-}
-
-//	--------------------------------------------------------------------------------
-void CvPlayer::ChangeDoubleTrainedMilitaryLandUnitCount(int iChange)
-{
-	if (iChange != 0)
-	{
-		m_iDoubleTrainedMilitaryLandUnitCount = m_iDoubleTrainedMilitaryLandUnitCount + iChange;
-		CvAssert(GetDoubleTrainedMilitaryLandUnitCount() >= 0);
-	}
-}
-#endif
-
-#ifdef NQ_WAR_HERO
-//	--------------------------------------------------------------------------------
-int CvPlayer::GetWarHeroCount() const
-{
-	return m_iWarHeroCount;
-}
-
-//	--------------------------------------------------------------------------------
-bool CvPlayer::IsWarHero() const
-{
-	return (GetWarHeroCount() > 0);
-}
-
-//	--------------------------------------------------------------------------------
-void CvPlayer::ChangeWarHeroCount(int iChange)
-{
-	if (iChange != 0)
-	{
-		m_iWarHeroCount = m_iWarHeroCount + iChange;
-		CvAssert(GetWarHeroCount() >= 0);
-	}
-}
-#endif
-#ifdef NQ_IGNORE_PUPPETS_FOR_RESEARCH_COSTS_FROM_POLICIES
-//	--------------------------------------------------------------------------------
-int CvPlayer::GetIgnorePuppetsForResearchCostsCount() const
-{
-	return m_iIgnorePuppetsForResearchCostsCount;
-}
-
-//	--------------------------------------------------------------------------------
-bool CvPlayer::IsIgnorePuppetsForResearchCosts() const
-{
-	return (GetIgnorePuppetsForResearchCostsCount() > 0);
-}
-
-//	--------------------------------------------------------------------------------
-void CvPlayer::ChangeIgnorePuppetsForResearchCostsCount(int iChange)
-{
-	if (iChange != 0)
-	{
-		m_iIgnorePuppetsForResearchCostsCount = m_iIgnorePuppetsForResearchCostsCount + iChange;
-		CvAssert(GetIgnorePuppetsForResearchCostsCount() >= 0);
-	}
-}
-#endif
-
-#ifdef NQ_POLICY_TOGGLE_NO_MINOR_DOW_IF_FRIENDS
-//	--------------------------------------------------------------------------------
-int CvPlayer::GetNoMinorDOWIfFriendsCount() const
-{
-	return m_iNoMinorDOWIfFriendsCount;
-}
-
-//	--------------------------------------------------------------------------------
-bool CvPlayer::IsNoMinorDOWIfFriends() const
-{
-	return (GetNoMinorDOWIfFriendsCount() > 0);
-}
-
-//	--------------------------------------------------------------------------------
-void CvPlayer::ChangeNoMinorDOWIfFriendsCount(int iChange)
-{
-	if (iChange != 0)
-	{
-		m_iNoMinorDOWIfFriendsCount = m_iNoMinorDOWIfFriendsCount + iChange;
-		CvAssert(GetNoMinorDOWIfFriendsCount() >= 0);
-	}
-}
-#endif
-
-#ifdef NQ_ALLOW_PUPPET_PURCHASING_FROM_POLICIES
-//	--------------------------------------------------------------------------------
-int CvPlayer::GetAllowPuppetPurchasingCount() const
-{
-	return m_iAllowPuppetPurchasingCount;
-}
-
-//	--------------------------------------------------------------------------------
-bool CvPlayer::IsAllowPuppetPurchasing() const
-{
-	return (GetAllowPuppetPurchasingCount() > 0);
-}
-
-//	--------------------------------------------------------------------------------
-void CvPlayer::ChangeAllowPuppetPurchasingCount(int iChange)
-{
-	if (iChange != 0)
-	{
-		m_iAllowPuppetPurchasingCount = m_iAllowPuppetPurchasingCount + iChange;
-		CvAssert(GetAllowPuppetPurchasingCount() >= 0);
-	}
-}
-#endif
 
 //	--------------------------------------------------------------------------------
 int CvPlayer::GetEnablesSSPartPurchaseCount() const
@@ -16295,22 +15956,6 @@ bool CvPlayer::IsAbleToAnnexCityStates() const
 
 	return false;
 }
-
-#ifdef NQ_NUM_TURNS_BEFORE_MINOR_ALLIES_REFUSE_BRIBES_FROM_TRAIT
-//	--------------------------------------------------------------------------------
-int CvPlayer::GetNumTurnsBeforeMinorAlliesRefuseBribes() const
-{
-	return GetPlayerTraits()->GetNumTurnsBeforeMinorAlliesRefuseBribes();
-}
-#endif
-
-#ifdef NQ_GOLDEN_PILGRIMAGE
-//	--------------------------------------------------------------------------------
-int CvPlayer::GetGoldenAgeTileBonusFaith() const
-{
-	return GetPlayerTraits()->GetGoldenAgeTileBonusFaith();
-}
-#endif
 
 //	--------------------------------------------------------------------------------
 int CvPlayer::GetAbleToAnnexCityStatesCount() const
@@ -17455,19 +17100,6 @@ bool CvPlayer::isMinorCiv() const
 	return CvPreGame::isMinorCiv(m_eID);
 }
 
-#ifdef NQ_CHEAT_FIRST_ROYAL_LIBRARY_COMES_WITH_GREAT_WORK
-//	--------------------------------------------------------------------------------
-void CvPlayer::SetHasEverBuiltRoyalLibrary(bool bValue)
-{
-	m_bHasEverBuiltRoyalLibrary = bValue;
-}
-
-//	--------------------------------------------------------------------------------
-bool CvPlayer::GetHasEverBuiltRoyalLibrary()
-{
-	return m_bHasEverBuiltRoyalLibrary;
-}
-#endif
 
 //	--------------------------------------------------------------------------------
 /// Has this player betrayed a Minor Civ he was bullying by declaring war on him?
@@ -18649,11 +18281,6 @@ int CvPlayer::GetScienceTimes100() const
 	// Happiness converted to Science? (Policies, etc.)
 	iValue += GetScienceFromHappinessTimes100();
 
-#ifdef NQ_GOLD_TO_SCIENCE_FROM_POLICIES
-	// Gold output of empire converted to Science? (Ideology tenet Free Market)
-	iValue += GetScienceFromGoldTimes100();
-#endif
-
 	// Research Agreement bonuses
 	iValue += GetScienceFromResearchAgreementsTimes100();
 
@@ -18798,35 +18425,6 @@ int CvPlayer::GetScienceFromHappinessTimes100() const
 
 	return iScience;
 }
-
-#ifdef NQ_GOLD_TO_SCIENCE_FROM_POLICIES
-// Gold output of empire converted to Science? (Ideology tenet Free Market)
-int CvPlayer::GetScienceFromGoldTimes100() const
-{
-	int iScience = 0;
-	int iGoldToScience = getGoldToScience();
-
-	if(iGoldToScience != 0)
-	{
-		int iGoldPerTurn = calculateGoldRateTimes100();
-		if(iGoldPerTurn > 0)
-		{
-			iScience += iGoldPerTurn * iGoldToScience / 100;
-		}
-	}
-
-	return iScience;
-}
-#endif
-
-#ifdef NQ_MINOR_FRIENDSHIP_GAIN_BULLY_GOLD_SUCCESS_FROM_POLICIES
-// Influence gain from tributing gold (instead of losing influence)
-int CvPlayer::GetMinorFriendshipGainBullyGoldSuccess() const
-{
-	int iInfluenceChange = GetPlayerPolicies()->GetNumericModifier(POLICYMOD_MINOR_FRIENDSHIP_GAIN_BULLY_GOLD_SUCCESS) / 100;
-	return iInfluenceChange;
-}
-#endif
 
 //	--------------------------------------------------------------------------------
 /// Where is our Science coming from?
@@ -20117,7 +19715,7 @@ void CvPlayer::changeImprovementCount(ImprovementTypes eIndex, int iChange)
 
 
 //	--------------------------------------------------------------------------------
-#if defined(AUI_WARNING_FIXES) || defined(AUI_CONSTIFY) || defined(NQ_HAPPINESS_FROM_GREAT_IMPROVEMENTS_FROM_POLICIES)
+#if defined(AUI_WARNING_FIXES) || defined(AUI_CONSTIFY)
 int CvPlayer::getGreatPersonImprovementCount() const
 #else
 int CvPlayer::getGreatPersonImprovementCount()
@@ -23177,10 +22775,6 @@ void CvPlayer::processPolicies(PolicyTypes ePolicy, int iChange)
 	changeBaseFreeUnits(pPolicy->GetBaseFreeUnits() * iChange);
 	ChangeHappinessPerGarrisonedUnit(pPolicy->GetHappinessPerGarrisonedUnit() * iChange);
 	ChangeHappinessPerTradeRoute(pPolicy->GetHappinessPerTradeRoute() * iChange);
-#ifdef NQ_RAIL_CONNECTION_HAPPINESS_FROM_POLICIES
-	ChangeHappinessPerRailConnection(pPolicy->GetHappinessPerRailConnection() * iChange);
-#endif
-
 	ChangeHappinessPerXPopulation(pPolicy->GetHappinessPerXPopulation() * iChange);
 	ChangeExtraHappinessPerLuxury(pPolicy->GetExtraHappinessPerLuxury() * iChange);
 	ChangeUnhappinessFromUnitsMod(pPolicy->GetUnhappinessFromUnitsMod() * iChange);
@@ -23216,33 +22810,12 @@ void CvPlayer::processPolicies(PolicyTypes ePolicy, int iChange)
 	changeHappyPerMilitaryUnit(pPolicy->GetHappyPerMilitaryUnit() * iChange);
 	changeHappinessToCulture(pPolicy->GetHappinessToCulture() * iChange);
 	changeHappinessToScience(pPolicy->GetHappinessToScience() * iChange);
-#ifdef NQ_GOLD_TO_SCIENCE_FROM_POLICIES
-	changeGoldToScience(pPolicy->GetGoldToScience() * iChange);
-#endif
 	changeHalfSpecialistUnhappinessCount((pPolicy->IsHalfSpecialistUnhappiness()) ? iChange : 0);
 	changeHalfSpecialistFoodCount((pPolicy->IsHalfSpecialistFood()) ? iChange : 0);
 	changeMilitaryFoodProductionCount((pPolicy->IsMilitaryFoodProduction()) ? iChange : 0);
 	ChangeGoldenAgeCultureBonusDisabledCount((pPolicy->IsGoldenAgeCultureBonusDisabled()) ? iChange : 0);
 	ChangeSecondReligionPantheonCount((pPolicy->IsSecondReligionPantheon()) ? iChange : 0);
 	ChangeEnablesSSPartHurryCount((pPolicy->IsEnablesSSPartHurry()) ? iChange : 0);
-#ifdef NQ_DIABLE_RESISTANCE_TIME_VIA_POLICIES
-	ChangeDisablesResistanceTimeCount((pPolicy->IsDisablesResistanceTime()) ? iChange : 0);
-#endif
-#ifdef NQ_PATRIOTIC_WAR
-	ChangeDoubleTrainedMilitaryLandUnitCount((pPolicy->IsDoubleTrainedMilitaryLandUnit()) ? iChange : 0);
-#endif
-#ifdef NQ_WAR_HERO
-	ChangeWarHeroCount((pPolicy->IsWarHero()) ? iChange : 0);
-#endif
-#ifdef NQ_IGNORE_PUPPETS_FOR_RESEARCH_COSTS_FROM_POLICIES
-	ChangeIgnorePuppetsForResearchCostsCount((pPolicy->IsIgnorePuppetsForResearchCosts()) ? iChange : 0);
-#endif
-#ifdef NQ_POLICY_TOGGLE_NO_MINOR_DOW_IF_FRIENDS
-	ChangeNoMinorDOWIfFriendsCount((pPolicy->IsNoMinorDOWIfFriends()) ? iChange : 0);
-#endif
-#ifdef NQ_ALLOW_PUPPET_PURCHASING_FROM_POLICIES
-	ChangeAllowPuppetPurchasingCount((pPolicy->IsAllowPuppetPurchasing()) ? iChange : 0);
-#endif
 	ChangeEnablesSSPartPurchaseCount((pPolicy->IsEnablesSSPartPurchase()) ? iChange : 0);
 	changeMaxConscript(getWorldSizeMaxConscript(kPolicy) * iChange);
 	changeExpModifier(pPolicy->GetExpModifier() * iChange);
@@ -23269,21 +22842,6 @@ void CvPlayer::processPolicies(PolicyTypes ePolicy, int iChange)
 			m_pPlayerPolicies->SetOneShotPolicyFired(ePolicy,true);
 		}
 	}
-
-#ifdef NQ_EXTRA_SPIES_FROM_POLICIES
-	int iNumExtraSpies = pPolicy->GetNumExtraSpies() * iChange;
-	if (iNumExtraSpies > 0)
-	{
-		CvPlayerEspionage* pEspionage = GetEspionage();
-		if (pEspionage)
-		{
-			for (int i = 0; i < iNumExtraSpies; i++)
-			{
-				pEspionage->CreateSpy();
-			}
-		}
-	}
-#endif
 
 	GetPlayerPolicies()->ChangeNumExtraBranches(pPolicy->GetNumExtraBranches() * iChange);
 
@@ -23787,12 +23345,6 @@ void CvPlayer::processPolicies(PolicyTypes ePolicy, int iChange)
 									{
 										incrementGreatGeneralsCreated();
 										pNewUnit->jumpToNearestValidPlot();
-#ifdef NQ_WAR_HERO
-										if (IsWarHero())
-										{
-											addFreeUnit((UnitTypes)GC.getInfoTypeForString("UNIT_ARTIST"));
-										}
-#endif
 									}
 									else if(pNewUnit->IsGreatAdmiral())
 									{
@@ -24197,9 +23749,6 @@ void CvPlayer::Read(FDataStream& kStream)
 	kStream >> m_iCityRevoltCounter;
 	kStream >> m_iHappinessPerGarrisonedUnitCount;
 	kStream >> m_iHappinessPerTradeRouteCount;
-#ifdef NQ_RAIL_CONNECTION_HAPPINESS_FROM_POLICIES
-	kStream >> m_iHappinessPerRailConnectionCount;
-#endif
 	kStream >> m_iHappinessPerXPopulation;
 	kStream >> m_iHappinessPerXPolicies;
 	if (uiVersion >= 8)
@@ -24252,8 +23801,8 @@ void CvPlayer::Read(FDataStream& kStream)
 	kStream >> m_iGreatWritersCreated;
 	kStream >> m_iGreatArtistsCreated;
 	kStream >> m_iGreatMusiciansCreated;
-#ifdef NQ_FREE_SETTLERS_FROM_BELIEF
-	kStream >> m_bHasUsedReligiousSettlements;
+#ifdef NQ_SHEPHERD_AND_FLOCK
+	kStream >> m_bHasUsedShepherdAndFlock;
 #endif
 #ifdef NQ_DEUS_VULT
 	kStream >> m_bHasUsedDeusVult;
@@ -24356,9 +23905,6 @@ void CvPlayer::Read(FDataStream& kStream)
 	kStream >> m_iHappyPerMilitaryUnit;
 	kStream >> m_iHappinessToCulture;
 	kStream >> m_iHappinessToScience;
-#ifdef NQ_GOLD_TO_SCIENCE_FROM_POLICIES
-	kStream >> m_iGoldToScience;
-#endif
 	kStream >> m_iHalfSpecialistUnhappinessCount;
 	kStream >> m_iHalfSpecialistFoodCount;
 	kStream >> m_iMilitaryFoodProductionCount;
@@ -24372,24 +23918,6 @@ void CvPlayer::Read(FDataStream& kStream)
 	{
 		m_iEnablesSSPartHurryCount = 0;
 	}
-#ifdef NQ_DIABLE_RESISTANCE_TIME_VIA_POLICIES
-	kStream >> m_iDisablesResistanceTimeCount;
-#endif
-#ifdef NQ_PATRIOTIC_WAR
-	kStream >> m_iDoubleTrainedMilitaryLandUnitCount;
-#endif
-#ifdef NQ_WAR_HERO
-	kStream >> m_iWarHeroCount;
-#endif
-#ifdef NQ_IGNORE_PUPPETS_FOR_RESEARCH_COSTS_FROM_POLICIES
-	kStream >> m_iIgnorePuppetsForResearchCostsCount;
-#endif
-#ifdef NQ_POLICY_TOGGLE_NO_MINOR_DOW_IF_FRIENDS
-	kStream >> m_iNoMinorDOWIfFriendsCount;
-#endif
-#ifdef NQ_ALLOW_PUPPET_PURCHASING_FROM_POLICIES
-	kStream >> m_iAllowPuppetPurchasingCount;
-#endif
 	if (uiVersion >= 3)
 	{
 		kStream >> m_iEnablesSSPartPurchaseCount;
@@ -24502,9 +24030,6 @@ void CvPlayer::Read(FDataStream& kStream)
 	}
 
 	kStream >> m_iLastSliceMoved;
-#ifdef NQ_CHEAT_FIRST_ROYAL_LIBRARY_COMES_WITH_GREAT_WORK
-	kStream >> m_bHasEverBuiltRoyalLibrary;
-#endif
 	kStream >> m_bHasBetrayedMinorCiv;
 	kStream >> m_bAlive;
 	kStream >> m_bEverAlive;
@@ -24810,9 +24335,6 @@ void CvPlayer::Write(FDataStream& kStream) const
 	kStream << m_iCityRevoltCounter;
 	kStream << m_iHappinessPerGarrisonedUnitCount;
 	kStream << m_iHappinessPerTradeRouteCount;
-#ifdef NQ_RAIL_CONNECTION_HAPPINESS_FROM_POLICIES
-	kStream << m_iHappinessPerRailConnectionCount;
-#endif
 	kStream << m_iHappinessPerXPopulation;
 	kStream << m_iHappinessPerXPolicies;
 	kStream << m_iHappinessFromLeagues;
@@ -24843,8 +24365,8 @@ void CvPlayer::Write(FDataStream& kStream) const
 	kStream << m_iGreatWritersCreated;
 	kStream << m_iGreatArtistsCreated;
 	kStream << m_iGreatMusiciansCreated;
-#ifdef NQ_FREE_SETTLERS_FROM_BELIEF
-	kStream << m_bHasUsedReligiousSettlements;
+#ifdef NQ_SHEPHERD_AND_FLOCK
+	kStream << m_bHasUsedShepherdAndFlock;
 #endif
 #ifdef NQ_DEUS_VULT
 	kStream << m_bHasUsedDeusVult;
@@ -24926,34 +24448,12 @@ void CvPlayer::Write(FDataStream& kStream) const
 	kStream << m_iHappyPerMilitaryUnit;
 	kStream << m_iHappinessToCulture;
 	kStream << m_iHappinessToScience;
-#ifdef NQ_GOLD_TO_SCIENCE_FROM_POLICIES
-	kStream << m_iGoldToScience;
-#endif
 	kStream << m_iHalfSpecialistUnhappinessCount;
 	kStream << m_iHalfSpecialistFoodCount;
 	kStream << m_iMilitaryFoodProductionCount;
 	kStream << m_iGoldenAgeCultureBonusDisabledCount;
 	kStream << m_iSecondReligionPantheonCount;
 	kStream << m_iEnablesSSPartHurryCount;
-#ifdef NQ_DIABLE_RESISTANCE_TIME_VIA_POLICIES
-	kStream << m_iDisablesResistanceTimeCount;
-#endif
-#ifdef NQ_PATRIOTIC_WAR
-	kStream << m_iDoubleTrainedMilitaryLandUnitCount;
-#endif
-#ifdef NQ_WAR_HERO
-	kStream << m_iWarHeroCount;
-#endif
-#ifdef NQ_IGNORE_PUPPETS_FOR_RESEARCH_COSTS_FROM_POLICIES
-	kStream << m_iIgnorePuppetsForResearchCostsCount;
-#endif
-#ifdef NQ_POLICY_TOGGLE_NO_MINOR_DOW_IF_FRIENDS
-	kStream << m_iNoMinorDOWIfFriendsCount;
-#endif
-#ifdef NQ_ALLOW_PUPPET_PURCHASING_FROM_POLICIES
-	kStream << m_iAllowPuppetPurchasingCount;
-#endif
-
 	kStream << m_iEnablesSSPartPurchaseCount;
 	kStream << m_iConscriptCount;
 	kStream << m_iMaxConscript;
@@ -25034,9 +24534,6 @@ void CvPlayer::Write(FDataStream& kStream) const
 	kStream << m_iMaxEffectiveCities;
 	kStream << m_iLastSliceMoved;
 
-#ifdef NQ_CHEAT_FIRST_ROYAL_LIBRARY_COMES_WITH_GREAT_WORK
-	kStream << m_bHasEverBuiltRoyalLibrary;
-#endif
 	kStream << m_bHasBetrayedMinorCiv;
 	kStream << m_bAlive;
 	kStream << m_bEverAlive;
@@ -25246,12 +24743,6 @@ void CvPlayer::createGreatGeneral(UnitTypes eGreatPersonUnit, int iX, int iY)
 	ChangeNumGreatPeople(1);
 
 	incrementGreatGeneralsCreated();
-#ifdef NQ_WAR_HERO
-	if (IsWarHero())
-	{
-		addFreeUnit((UnitTypes)GC.getInfoTypeForString("UNIT_ARTIST"));
-	}
-#endif
 
 	changeGreatGeneralsThresholdModifier(/*50*/ GC.getGREAT_GENERALS_THRESHOLD_INCREASE() * ((getGreatGeneralsCreated() / 10) + 1));
 

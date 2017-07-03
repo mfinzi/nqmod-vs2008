@@ -5951,22 +5951,6 @@ void CvMinorCivAI::DoFriendshipChangeEffects(PlayerTypes ePlayer, int iOldFriend
 		bAdd = false;
 		bFriends = true;
 
-#ifdef NQ_POLICY_TOGGLE_NO_MINOR_DOW_IF_FRIENDS
-		// if we are at war with a city state's ally but it didn't declare on us because we were friends and had a special policy 
-		// preventing that declaration, declare war here
-
-		if (GetAlly() != NO_PLAYER)
-		{
-			TeamTypes ePlayerTeam = GET_PLAYER(ePlayer).getTeam();
-			TeamTypes eAllyTeam = GET_PLAYER(GetAlly()).getTeam();
-			TeamTypes eOurTeam = GetPlayer()->getTeam();
-			if (GET_TEAM(ePlayerTeam).isAtWar(eAllyTeam))
-			{
-				GET_TEAM(eOurTeam).declareWar(ePlayerTeam);
-			}
-		}
-#endif
-
 		ICvEngineScriptSystem1* pkScriptSystem = gDLL->GetScriptSystem();
 		if (pkScriptSystem) 
 		{
@@ -8517,24 +8501,7 @@ void CvMinorCivAI::DoMajorBullyGold(PlayerTypes eBully, int iGold)
 		}
 
 		GET_PLAYER(eBully).GetTreasury()->ChangeGold(iGold);
-#ifdef NQ_MINOR_FRIENDSHIP_GAIN_BULLY_GOLD_SUCCESS_FROM_POLICIES
-		int iInfluenceChange = 0;
-		int iBullyInfluenceGain = GET_PLAYER(eBully).GetPlayerPolicies()->GetNumericModifier(POLICYMOD_MINOR_FRIENDSHIP_GAIN_BULLY_GOLD_SUCCESS);
-		bool bShouldRemoveQuests;
-		if (iBullyInfluenceGain > 0)
-		{
-			iInfluenceChange = iBullyInfluenceGain;
-			bShouldRemoveQuests = false;
-		}
-		else
-		{
-			iInfluenceChange = GC.getMINOR_FRIENDSHIP_DROP_BULLY_GOLD_SUCCESS();
-			bShouldRemoveQuests = true;
-		}
-		DoBulliedByMajorReaction(eBully, iInfluenceChange, bShouldRemoveQuests);
-#else
 		DoBulliedByMajorReaction(eBully, GC.getMINOR_FRIENDSHIP_DROP_BULLY_GOLD_SUCCESS());
-#endif
 	}
 
 	// Logging
@@ -8580,11 +8547,7 @@ void CvMinorCivAI::DoMajorBullyUnit(PlayerTypes eBully, UnitTypes eUnitType)
 			if(GetPlayer()->getCapitalCity())
 				GetPlayer()->getCapitalCity()->addProductionExperience(pNewUnit);
 
-#ifdef NQ_MINOR_FRIENDSHIP_GAIN_BULLY_GOLD_SUCCESS_FROM_POLICIES
-			DoBulliedByMajorReaction(eBully, GC.getMINOR_FRIENDSHIP_DROP_BULLY_WORKER_SUCCESS(), true);
-#else
 			DoBulliedByMajorReaction(eBully, GC.getMINOR_FRIENDSHIP_DROP_BULLY_WORKER_SUCCESS());
-#endif
 		}
 		else
 			pNewUnit->kill(false);	// Could not find a spot for the unit!
@@ -8597,12 +8560,7 @@ void CvMinorCivAI::DoMajorBullyUnit(PlayerTypes eBully, UnitTypes eUnitType)
 }
 
 // We were just bullied, how do we react?
-
-#ifdef NQ_MINOR_FRIENDSHIP_GAIN_BULLY_GOLD_SUCCESS_FROM_POLICIES
-void CvMinorCivAI::DoBulliedByMajorReaction(PlayerTypes eBully, int iInfluenceChangeTimes100, bool bShouldRemoveQuests)
-#else
 void CvMinorCivAI::DoBulliedByMajorReaction(PlayerTypes eBully, int iInfluenceChangeTimes100)
-#endif
 {
 	CvAssertMsg(eBully >= 0, "eBully is expected to be non-negative (invalid Index)");
 	CvAssertMsg(eBully < MAX_MAJOR_CIVS, "eBully is expected to be within maximum bounds (invalid Index)");
@@ -8615,9 +8573,6 @@ void CvMinorCivAI::DoBulliedByMajorReaction(PlayerTypes eBully, int iInfluenceCh
 	SetTurnLastBulliedByMajor(eBully, GC.getGame().getGameTurn());
 	ChangeFriendshipWithMajorTimes100(eBully, iInfluenceChangeTimes100);
 
-#ifdef NQ_MINOR_FRIENDSHIP_GAIN_BULLY_GOLD_SUCCESS_FROM_POLICIES
-	if (bShouldRemoveQuests)
-#endif
 	// In case we have quests that bullying makes obsolete, check now
 	DoTestActiveQuests(/*bTestComplete*/ false, /*bTestObsolete*/ true);
 
@@ -8995,17 +8950,6 @@ void CvMinorCivAI::ChangeNumGoldGifted(PlayerTypes ePlayer, int iChange)
 /// Major Civ gifted some Gold to this Minor
 void CvMinorCivAI::DoGoldGiftFromMajor(PlayerTypes ePlayer, int iGold)
 {
-#ifdef NQ_NUM_TURNS_BEFORE_MINOR_ALLIES_REFUSE_BRIBES_FROM_TRAIT
-	PlayerTypes iAlly = GetAlly();
-	if (iAlly != NO_PLAYER && iAlly != ePlayer)
-	{
-		int iNumTurns = GET_PLAYER(iAlly).GetNumTurnsBeforeMinorAlliesRefuseBribes();
-		if (iNumTurns > 0 && GetAlliedTurns() >= iNumTurns)
-		{
-			return;
-		}
-	}
-#endif
 	if(GET_PLAYER(ePlayer).GetTreasury()->GetGold() >= iGold)
 	{
 		int iFriendshipChange = GetFriendshipFromGoldGift(ePlayer, iGold);
@@ -9024,7 +8968,6 @@ void CvMinorCivAI::DoGoldGiftFromMajor(PlayerTypes ePlayer, int iGold)
 
 	GC.GetEngineUserInterface()->setDirty(GameData_DIRTY_BIT, true);
 }
-
 
 /// How many friendship points gained from a gift of Gold
 int CvMinorCivAI::GetFriendshipFromGoldGift(PlayerTypes eMajor, int iGold)
@@ -9077,56 +9020,6 @@ int CvMinorCivAI::GetFriendshipFromGoldGift(PlayerTypes eMajor, int iGold)
 
 	return iFriendship;
 }
-
-#ifdef NQ_BELIEF_TOGGLE_ALLOW_FAITH_GIFTS_TO_MINORS
-/// Major Civ gifted some Faith to this Minor
-void CvMinorCivAI::DoFaithGiftFromMajor(PlayerTypes ePlayer, int iFaith)
-{
-	if(GET_PLAYER(ePlayer).CanFaithGiftMinors() && GET_PLAYER(ePlayer).GetFaith() >= iFaith)
-	{
-		int iFriendshipChange = GetFriendshipFromFaithGift(ePlayer, iFaith);
-
-		// GJS: not sure what this part here does, but I am going to skip it for now.
-		//if(iFriendshipChange > 0)
-			//GET_PLAYER(ePlayer).GetTreasury()->LogExpenditure(GetPlayer()->GetMinorCivAI()->GetNamesListAsString(0), iGold,4);
-
-		GET_PLAYER(ePlayer).ChangeFaith(-iFaith);
-		
-		// GJS: we're not gifting gold, so it's fine to skip this.
-		//ChangeNumGoldGifted(ePlayer, iGold);
-		
-		ChangeFriendshipWithMajor(ePlayer, iFriendshipChange);
-
-		// GJS: this is no longer applicable, but might want to do somethign with this in the future: 
-		// In case we had a Gold Gift quest active, complete it now
-		//DoTestActiveQuestsForPlayer(ePlayer, /*bTestComplete*/ true, /*bTestObsolete*/ false, MINOR_CIV_QUEST_GIVE_GOLD);
-	}
-
-	GC.GetEngineUserInterface()->setDirty(GameData_DIRTY_BIT, true);
-}
-
-/// How much influence do you get from a faith gift of a specific amount?
-int CvMinorCivAI::GetFriendshipFromFaithGift(PlayerTypes eMajor, int iFaith)
-{
-	int iFriendship = iFaith * 24; // hard-coded to be 24% of faith spent, which becomes 30% on quick speed
-	iFriendship /= 100;
-
-	// Game Speed Mod
-	iFriendship *= GC.getGame().getGameSpeedInfo().getGoldGiftMod(); // on quick speed this multiplies it by 125%
-	iFriendship /= 100;
-
-	// Friendship gained should always be positive
-	iFriendship = max(iFriendship, /*5*/ GC.getMINOR_CIV_GOLD_GIFT_MINIMUM_FRIENDSHIP_REWARD());
-
-	// Round the number so it's pretty
-	int iVisibleDivisor = /*5*/ GC.getMINOR_CIV_GOLD_GIFT_VISIBLE_DIVISOR();
-	iFriendship /= iVisibleDivisor;
-	iFriendship *= iVisibleDivisor;
-
-	return iFriendship;
-}
-#endif
-
 
 // Can this major gift us a tile improvement?
 bool CvMinorCivAI::CanMajorGiftTileImprovement(PlayerTypes eMajor)

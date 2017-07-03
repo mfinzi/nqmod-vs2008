@@ -48,9 +48,6 @@ CvBeliefEntry::CvBeliefEntry() :
 	m_iProphetStrengthModifier(0),
 	m_iProphetCostModifier(0),
 	m_iMissionaryStrengthModifier(0),
-#ifdef NQ_FLAT_FAITH_PER_CITIZEN_BORN_FROM_BELIEFS
-	m_iFlatFaithPerCitizenBorn(0),
-#endif
 #ifdef NQ_BELIEF_EXTRA_MISSIONARY_SPREADS
 	m_iMissionaryExtraSpreads(0),
 #endif
@@ -79,9 +76,6 @@ CvBeliefEntry::CvBeliefEntry() :
 	m_iSpyPressure(0),
 	m_iInquisitorPressureRetention(0),
 	m_iFaithBuildingTourism(0),
-#ifdef NQ_FREE_SETTLERS_FROM_BELIEF
-	m_iNumFreeSettlers(0),
-#endif
 
 	m_bPantheon(false),
 	m_bFounder(false),
@@ -90,13 +84,13 @@ CvBeliefEntry::CvBeliefEntry() :
 	m_bReformer(false),
 	m_bRequiresPeace(false),
 	m_bConvertsBarbarians(false),
+#ifdef NQ_SHEPHERD_AND_FLOCK
+	m_bShepherdAndFlock(false),
+#endif
 #ifdef NQ_DEUS_VULT
 	m_bDeusVult(false),
 #endif
 	m_bFaithPurchaseAllGreatPeople(false),
-#ifdef NQ_BELIEF_TOGGLE_ALLOW_FAITH_GIFTS_TO_MINORS
-	m_bAllowsFaithGiftsToMinors(false),
-#endif
 
 	m_eObsoleteEra(NO_ERA),
 	m_eResourceRevealed(NO_RESOURCE),
@@ -341,14 +335,6 @@ int CvBeliefEntry::GetMissionaryStrengthModifier() const
 	return m_iMissionaryStrengthModifier;
 }
 
-#ifdef NQ_FLAT_FAITH_PER_CITIZEN_BORN_FROM_BELIEFS
-/// Accessor:: flat faith gain in the empire when a citizen is born
-int CvBeliefEntry::GetFlatFaithPerCitizenBorn() const
-{
-	return m_iFlatFaithPerCitizenBorn;
-}
-#endif
-
 #ifdef NQ_BELIEF_EXTRA_MISSIONARY_SPREADS
 /// Accessor:: missionary extra spreads
 int CvBeliefEntry::GetMissionaryExtraSpreads() const
@@ -457,14 +443,6 @@ int CvBeliefEntry::GetFaithBuildingTourism() const
 	return m_iFaithBuildingTourism;
 }
 
-#ifdef NQ_FREE_SETTLERS_FROM_BELIEF
-/// Accessor: how many free settlers do I get from selecting this belief?
-int CvBeliefEntry::GetNumFreeSettlers() const
-{
-	return m_iNumFreeSettlers;
-}
-#endif
-
 /// Accessor: is this a belief a pantheon can adopt
 bool CvBeliefEntry::IsPantheonBelief() const
 {
@@ -507,6 +485,14 @@ bool CvBeliefEntry::ConvertsBarbarians() const
 	return m_bConvertsBarbarians;
 }
 
+#ifdef NQ_SHEPHERD_AND_FLOCK
+/// Accessor: is this belief shepherd and flock?
+bool CvBeliefEntry::ShepherdAndFlock() const
+{
+	return m_bShepherdAndFlock;
+}
+#endif
+
 #ifdef NQ_DEUS_VULT
 /// Accessor: is this belief deus vult?
 bool CvBeliefEntry::DeusVult() const
@@ -520,14 +506,6 @@ bool CvBeliefEntry::FaithPurchaseAllGreatPeople() const
 {
 	return m_bFaithPurchaseAllGreatPeople;
 }
-
-#ifdef NQ_BELIEF_TOGGLE_ALLOW_FAITH_GIFTS_TO_MINORS
-/// Accessor: is this a belief that allows you to gift Faith to city states?
-bool CvBeliefEntry::AllowsFaithGiftsToMinors() const
-{
-	return m_bAllowsFaithGiftsToMinors;
-}
-#endif
 
 /// Accessor: era when wonder production modifier goes obsolete
 EraTypes CvBeliefEntry::GetObsoleteEra() const
@@ -804,9 +782,6 @@ bool CvBeliefEntry::CacheResults(Database::Results& kResults, CvDatabaseUtility&
 	m_iProphetStrengthModifier        = kResults.GetInt("ProphetStrengthModifier");
 	m_iProphetCostModifier            = kResults.GetInt("ProphetCostModifier");
 	m_iMissionaryStrengthModifier     = kResults.GetInt("MissionaryStrengthModifier");
-#ifdef NQ_FLAT_FAITH_PER_CITIZEN_BORN_FROM_BELIEFS
-	m_iFlatFaithPerCitizenBorn        = kResults.GetInt("FlatFaithPerCitizenBorn");
-#endif
 #ifdef NQ_BELIEF_EXTRA_MISSIONARY_SPREADS
 	m_iMissionaryExtraSpreads		  = kResults.GetInt("MissionaryExtraSpreads");
 #endif
@@ -835,9 +810,6 @@ bool CvBeliefEntry::CacheResults(Database::Results& kResults, CvDatabaseUtility&
 	m_iSpyPressure					  = kResults.GetInt("SpyPressure");
 	m_iInquisitorPressureRetention    = kResults.GetInt("InquisitorPressureRetention");
 	m_iFaithBuildingTourism           = kResults.GetInt("FaithBuildingTourism");
-#ifdef NQ_FREE_SETTLERS_FROM_BELIEF
-	m_iNumFreeSettlers				  = kResults.GetInt("NumFreeSettlers");
-#endif
 
 	m_bPantheon						  = kResults.GetBool("Pantheon");
 	m_bFounder						  = kResults.GetBool("Founder");
@@ -846,13 +818,13 @@ bool CvBeliefEntry::CacheResults(Database::Results& kResults, CvDatabaseUtility&
 	m_bReformer						  = kResults.GetBool("Reformation");
 	m_bRequiresPeace				  = kResults.GetBool("RequiresPeace");
 	m_bConvertsBarbarians			  = kResults.GetBool("ConvertsBarbarians");
+#ifdef NQ_SHEPHERD_AND_FLOCK
+	m_bShepherdAndFlock				  = kResults.GetBool("ShepherdAndFlock");
+#endif
 #ifdef NQ_DEUS_VULT
 	m_bDeusVult						  = kResults.GetBool("DeusVult");
 #endif
 	m_bFaithPurchaseAllGreatPeople	  = kResults.GetBool("FaithPurchaseAllGreatPeople");
-#ifdef NQ_BELIEF_TOGGLE_ALLOW_FAITH_GIFTS_TO_MINORS
-	m_bAllowsFaithGiftsToMinors       = kResults.GetBool("AllowsFaithGiftsToMinors");
-#endif
 
 	//References
 	const char* szTextVal;
@@ -1156,9 +1128,6 @@ CvReligionBeliefs::CvReligionBeliefs(const CvReligionBeliefs& source)
 	m_iProphetStrengthModifier = source.m_iProphetStrengthModifier;
 	m_iProphetCostModifier = source.m_iProphetCostModifier;
 	m_iMissionaryStrengthModifier = source.m_iMissionaryStrengthModifier;
-#ifdef NQ_FLAT_FAITH_PER_CITIZEN_BORN_FROM_BELIEFS
-	m_iFlatFaithPerCitizenBorn = source.m_iFlatFaithPerCitizenBorn;
-#endif
 #ifdef NQ_BELIEF_EXTRA_MISSIONARY_SPREADS
 	m_iMissionaryExtraSpreads = source.m_iMissionaryExtraSpreads;
 #endif
@@ -1235,9 +1204,6 @@ void CvReligionBeliefs::Reset()
 	m_iProphetStrengthModifier = 0;
 	m_iProphetCostModifier = 0;
 	m_iMissionaryStrengthModifier = 0;
-#ifdef NQ_FLAT_FAITH_PER_CITIZEN_BORN_FROM_BELIEFS
-	m_iFlatFaithPerCitizenBorn = 0;
-#endif
 #ifdef NQ_BELIEF_EXTRA_MISSIONARY_SPREADS
 	m_iMissionaryExtraSpreads = 0;
 #endif
@@ -1320,9 +1286,6 @@ void CvReligionBeliefs::AddBelief(BeliefTypes eBelief)
 	m_iProphetStrengthModifier += belief->GetProphetStrengthModifier();
 	m_iProphetCostModifier += belief->GetProphetCostModifier();
 	m_iMissionaryStrengthModifier += belief->GetMissionaryStrengthModifier();
-#ifdef NQ_FLAT_FAITH_PER_CITIZEN_BORN_FROM_BELIEFS
-	m_iFlatFaithPerCitizenBorn += belief->GetFlatFaithPerCitizenBorn();
-#endif
 #ifdef NQ_BELIEF_EXTRA_MISSIONARY_SPREADS
 	m_iMissionaryExtraSpreads += belief->GetMissionaryExtraSpreads();
 #endif
@@ -1966,25 +1929,6 @@ int CvReligionBeliefs::GetMaxYieldModifierPerFollower(YieldTypes eYieldType) con
 	return rtnValue;
 }
 
-#ifdef NQ_FREE_SETTLERS_FROM_BELIEF
-/// Get number of free settlers from beliefs
-int CvReligionBeliefs::GetNumFreeSettlers() const
-{
-	CvBeliefXMLEntries* pBeliefs = GC.GetGameBeliefs();
-	int rtnValue = 0;
-
-	for(int i = 0; i < pBeliefs->GetNumBeliefs(); i++)
-	{
-		if(HasBelief((BeliefTypes)i))
-		{
-			rtnValue += pBeliefs->GetEntry(i)->GetNumFreeSettlers();
-		}
-	}
-
-	return rtnValue;
-}
-#endif
-
 /// Does this belief allow a building to be constructed?
 bool CvReligionBeliefs::IsBuildingClassEnabled(BuildingClassTypes eType) const
 {
@@ -2029,6 +1973,27 @@ bool CvReligionBeliefs::IsConvertsBarbarians() const
 	return false;
 }
 
+#ifdef NQ_SHEPHERD_AND_FLOCK
+/// Is there a belief that matches Shepherd & Flock?
+bool CvReligionBeliefs::IsShepherdAndFlock() const
+{
+	CvBeliefXMLEntries* pBeliefs = GC.GetGameBeliefs();
+
+	for(int i = 0; i < pBeliefs->GetNumBeliefs(); i++)
+	{
+		if(HasBelief((BeliefTypes)i))
+		{
+			if (pBeliefs->GetEntry(i)->ShepherdAndFlock())
+			{
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+#endif
+
 #ifdef NQ_DEUS_VULT
 /// Is there a belief that matches Deus Vult?
 bool CvReligionBeliefs::IsDeusVult() const
@@ -2069,27 +2034,6 @@ bool CvReligionBeliefs::IsFaithPurchaseAllGreatPeople() const
 	return false;
 }
 
-#ifdef NQ_BELIEF_TOGGLE_ALLOW_FAITH_GIFTS_TO_MINORS
-/// Is there a belief that allows faith gifts to city states?
-bool CvReligionBeliefs::IsAllowsFaithGiftsToMinors() const
-{
-	CvBeliefXMLEntries* pBeliefs = GC.GetGameBeliefs();
-
-	for(int i = 0; i < pBeliefs->GetNumBeliefs(); i++)
-	{
-		if(HasBelief((BeliefTypes)i))
-		{
-			if (pBeliefs->GetEntry(i)->AllowsFaithGiftsToMinors())
-			{
-				return true;
-			}
-		}
-	}
-
-	return false;
-}
-#endif
-
 /// Serialization read
 void CvReligionBeliefs::Read(FDataStream& kStream)
 {
@@ -2111,9 +2055,6 @@ void CvReligionBeliefs::Read(FDataStream& kStream)
 	kStream >> m_iProphetStrengthModifier;
 	kStream >> m_iProphetCostModifier;
 	kStream >> m_iMissionaryStrengthModifier;
-#ifdef NQ_FLAT_FAITH_PER_CITIZEN_BORN_FROM_BELIEFS
-	kStream >> m_iFlatFaithPerCitizenBorn;
-#endif
 #ifdef NQ_BELIEF_EXTRA_MISSIONARY_SPREADS
 	kStream >> m_iMissionaryExtraSpreads;
 #endif
@@ -2187,9 +2128,6 @@ void CvReligionBeliefs::Write(FDataStream& kStream) const
 	kStream << m_iProphetStrengthModifier;
 	kStream << m_iProphetCostModifier;
 	kStream << m_iMissionaryStrengthModifier;
-#ifdef NQ_FLAT_FAITH_PER_CITIZEN_BORN_FROM_BELIEFS
-	kStream << m_iFlatFaithPerCitizenBorn;
-#endif
 #ifdef NQ_BELIEF_EXTRA_MISSIONARY_SPREADS
 	kStream << m_iMissionaryExtraSpreads;
 #endif

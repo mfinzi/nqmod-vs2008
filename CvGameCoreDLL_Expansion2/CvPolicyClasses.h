@@ -56,9 +56,6 @@ public:
 	int GetNumFreeTechs() const;
 	int GetNumFreePolicies() const;
 	int GetNumFreeGreatPeople() const;
-#ifdef NQ_EXTRA_SPIES_FROM_POLICIES
-	int GetNumExtraSpies() const;
-#endif
 	int GetMedianTechPercentChange() const;
 	int GetStrategicResourceMod() const;
 	int GetWonderProductionModifier() const;
@@ -93,9 +90,6 @@ public:
 	int GetHappinessPerGarrisonedUnit() const;
 	int GetCulturePerGarrisonedUnit() const;
 	int GetHappinessPerTradeRoute() const;
-#ifdef NQ_RAIL_CONNECTION_HAPPINESS_FROM_POLICIES
-	int GetHappinessPerRailConnection() const;
-#endif
 	int GetHappinessPerXPopulation() const;
 	int GetExtraHappinessPerLuxury() const;
 	int GetUnhappinessFromUnitsMod() const;
@@ -157,40 +151,6 @@ public:
 #ifdef FRUITY_TRADITION_LANDED_ELITE
 	int GetInternalTradeRouteFoodYieldChange() const;
 #endif
-#ifdef NQ_INTERNAL_TRADE_ROUTE_PRODUCTION_YIELD_CHANGE_FROM_POLICIES
-	int GetInternalTradeRouteProductionYieldChange() const;
-#endif
-#ifdef NQ_RAIL_CONNECTION_PRODUCTION_MODIFIER_FROM_POLICIES
-	int GetRailConnectionProductionModifier() const;
-#endif
-#ifdef NQ_COMBAT_BONUS_VS_SMALLER_CIV_FROM_POLICIES
-	int GetCombatBonusVsSmallerCiv() const;
-#endif
-#ifdef NQ_PRODUCTION_TO_GREAT_MUSICIANS_MODIFIER_FROM_POLICIES
-	int GetProductionToGreatMusiciansModifier() const;
-#endif
-#ifdef NQ_TRADE_MISSION_INFLUENCE_MODIFIER_FROM_POLICIES
-	int GetTradeMissionInfluenceModifier() const;
-#endif
-#ifdef NQ_SCIENCE_PER_GREAT_PERSON_BORN_FROM_POLICIES
-	int GetSciencePerGreatPersonBorn() const;
-#endif
-#ifdef NQ_INFLUENCE_BOOST_PER_GREAT_PERSON_BORN_FROM_POLICIES
-	int GetInfluenceBoostPerGreatPersonBorn() const;
-#endif
-#ifdef NQ_TOURISM_FROM_TRADE_MISSIONS_FROM_POLICIES
-	int GetTourismFromTradeMissions() const;
-#endif
-#ifdef NQ_HAPPINESS_FROM_GREAT_IMPROVEMENTS_FROM_POLICIES
-	int GetHappinessFromGreatImprovements() const;
-#endif
-#ifdef NQ_MINOR_FRIENDSHIP_GAIN_BULLY_GOLD_SUCCESS_FROM_POLICIES
-	int GetMinorFriendshipGainBullyGoldSuccess() const;
-#endif
-#ifdef NQ_COUP_CHANCE_MODIFIER_FROM_POLICIES
-	int GetCoupChanceModifier() const;
-#endif
-
 	int GetSharedReligionTourismModifier() const;
 	int GetTradeRouteTourismModifier() const;
 	int GetOpenBordersTourismModifier() const;
@@ -203,20 +163,11 @@ public:
 	int GetExtraTerritoryClaim() const; // NQMP GJS - Colonialism
 	int GetExtraTourismPerGreatWork() const; // NQMP GJS - Cultural Exchange
 	int GetTourismPerWonder() const; // NQMP GJS - Flourishing of the Arts
-#ifdef NQ_TOURISM_PER_CITY
-	int GetTourismPerCity() const;
-#endif
-#ifdef NQ_IDEOLOGY_PRESSURE_UNHAPPINESS_MODIFIER_FROM_POLICIES
-	int GetIdeologyPressureUnhappinessModifier() const;
-#endif
 	int GetProductionFromGarrison() const; // NQMP GJS - Military Caste
 	int GetPolicyBranchType() const;
 	int GetNumExtraBranches() const;
 	int GetHappinessToCulture() const;
 	int GetHappinessToScience() const;
-#ifdef NQ_GOLD_TO_SCIENCE_FROM_POLICIES
-	int GetGoldToScience() const;
-#endif
 	int GetNumCitiesFreeAestheticsSchools() const; // NQMP GJS - add support for NumCitiesFreeAestheticsSchools
 	int GetNumCitiesFreeWalls() const; // NQMP GJS - New Oligarchy add support for NumCitiesFreeWalls
 	int GetNumCitiesFreeCultureBuilding() const;
@@ -234,25 +185,6 @@ public:
 	bool IsSecondReligionPantheon() const;
 	bool IsAddReformationBelief() const;
 	bool IsEnablesSSPartHurry() const;
-#ifdef NQ_DIABLE_RESISTANCE_TIME_VIA_POLICIES
-	bool IsDisablesResistanceTime() const;
-#endif
-#ifdef NQ_PATRIOTIC_WAR
-	bool IsDoubleTrainedMilitaryLandUnit() const;
-#endif
-#ifdef NQ_WAR_HERO
-	bool IsWarHero() const;
-#endif
-#ifdef NQ_IGNORE_PUPPETS_FOR_RESEARCH_COSTS_FROM_POLICIES
-	bool IsIgnorePuppetsForResearchCosts() const;
-#endif
-#ifdef NQ_POLICY_TOGGLE_NO_MINOR_DOW_IF_FRIENDS
-	bool IsNoMinorDOWIfFriends() const;
-#endif
-#ifdef NQ_ALLOW_PUPPET_PURCHASING_FROM_POLICIES
-	bool IsAllowPuppetPurchasing() const;
-#endif
-
 	bool IsEnablesSSPartPurchase() const;
 	bool IsAbleToAnnexCityStates() const;
 	std::string pyGetWeLoveTheKing()
@@ -336,9 +268,6 @@ private:
 	int m_iNumFreeTechs;
 	int m_iNumFreePolicies;
 	int m_iNumFreeGreatPeople;
-#ifdef NQ_EXTRA_SPIES_FROM_POLICIES
-	int m_iNumExtraSpies;
-#endif
 	int m_iMedianTechPercentChange;
 	int m_iStrategicResourceMod;
 	int m_iWonderProductionModifier;
@@ -373,9 +302,6 @@ private:
 	int m_iHappinessPerGarrisonedUnit;
 	int m_iCulturePerGarrisonedUnit;
 	int m_iHappinessPerTradeRoute;
-#ifdef NQ_RAIL_CONNECTION_HAPPINESS_FROM_POLICIES
-	int m_iHappinessPerRailConnection;
-#endif
 	int m_iHappinessPerXPopulation;
 	int m_iExtraHappinessPerLuxury;
 	int m_iUnhappinessFromUnitsMod;
@@ -434,39 +360,6 @@ private:
 #ifdef FRUITY_TRADITION_LANDED_ELITE
 	int m_iInternalTradeRouteFoodYieldChange;
 #endif
-#ifdef NQ_INTERNAL_TRADE_ROUTE_PRODUCTION_YIELD_CHANGE_FROM_POLICIES
-	int m_iInternalTradeRouteProductionYieldChange;
-#endif
-#ifdef NQ_RAIL_CONNECTION_PRODUCTION_MODIFIER_FROM_POLICIES
-	int m_iRailConnectionProductionModifier;
-#endif
-#ifdef NQ_COMBAT_BONUS_VS_SMALLER_CIV_FROM_POLICIES
-	int m_iCombatBonusVsSmallerCiv;
-#endif
-#ifdef NQ_PRODUCTION_TO_GREAT_MUSICIANS_MODIFIER_FROM_POLICIES
-	int m_iProductionToGreatMusiciansModifier;
-#endif
-#ifdef NQ_TRADE_MISSION_INFLUENCE_MODIFIER_FROM_POLICIES
-	int m_iTradeMissionInfluenceModifier;
-#endif
-#ifdef NQ_SCIENCE_PER_GREAT_PERSON_BORN_FROM_POLICIES
-	int m_iSciencePerGreatPersonBorn;
-#endif
-#ifdef NQ_INFLUENCE_BOOST_PER_GREAT_PERSON_BORN_FROM_POLICIES
-	int m_iInfluenceBoostPerGreatPersonBorn;
-#endif
-#ifdef NQ_TOURISM_FROM_TRADE_MISSIONS_FROM_POLICIES
-	int m_iTourismFromTradeMissions;
-#endif
-#ifdef NQ_HAPPINESS_FROM_GREAT_IMPROVEMENTS_FROM_POLICIES
-	int m_iHappinessFromGreatImprovements;
-#endif
-#ifdef NQ_MINOR_FRIENDSHIP_GAIN_BULLY_GOLD_SUCCESS_FROM_POLICIES
-	int m_iMinorFriendshipGainBullyGoldSuccess;
-#endif
-#ifdef NQ_COUP_CHANCE_MODIFIER_FROM_POLICIES
-	int m_iCoupChanceModifier;
-#endif
 	int m_iSharedReligionTourismModifier;
 	int m_iTradeRouteTourismModifier;
 	int m_iOpenBordersTourismModifier;
@@ -479,13 +372,6 @@ private:
 	int m_iExtraTerritoryClaim; // NQMP GJS - Colonialism
 	int m_iExtraTourismPerGreatWork; // NQMP GJS - Cultural Exchange
 	int m_iTourismPerWonder; // NQMP GJS - Flourishing of the Arts
-#ifdef NQ_TOURISM_PER_CITY
-	int m_iTourismPerCity;
-#endif
-#ifdef NQ_IDEOLOGY_PRESSURE_UNHAPPINESS_MODIFIER_FROM_POLICIES
-	int m_iIdeologyPressureUnhappinessModifier;
-#endif
-
 	int m_iProductionFromGarrison; // NQMP GJS - Military Caste
 	int m_iFreeSpecialist;
 	int m_iMaxConscript;
@@ -496,9 +382,6 @@ private:
 	int m_iBarbarianCombatBonus;
 	int m_iHappinessToCulture;
 	int m_iHappinessToScience;
-#ifdef NQ_GOLD_TO_SCIENCE_FROM_POLICIES
-	int m_iGoldToScience;
-#endif
 	int m_iNumCitiesFreeAestheticsSchools; // NQMP GJS - add support for NumCitiesFreeAestheticsSchools
 	int m_iNumCitiesFreeWalls; // NQMP GJS - New Oligarchy add support for NumCitiesFreeWalls
 	int m_iNumCitiesFreeCultureBuilding;
@@ -514,24 +397,6 @@ private:
 	bool m_bSecondReligionPantheon;
 	bool m_bAddReformationBelief;
 	bool m_bEnablesSSPartHurry;
-#ifdef NQ_DIABLE_RESISTANCE_TIME_VIA_POLICIES
-	bool m_bDisablesResistanceTime;
-#endif
-#ifdef NQ_PATRIOTIC_WAR
-	bool m_bDoubleTrainedMilitaryLandUnit;
-#endif
-#ifdef NQ_WAR_HERO
-	bool m_bWarHero;
-#endif
-#ifdef NQ_IGNORE_PUPPETS_FOR_RESEARCH_COSTS_FROM_POLICIES
-	bool m_bIgnorePuppetsForResearchCosts;
-#endif
-#ifdef NQ_POLICY_TOGGLE_NO_MINOR_DOW_IF_FRIENDS
-	bool m_bNoMinorDOWIfFriends;
-#endif
-#ifdef NQ_ALLOW_PUPPET_PURCHASING_FROM_POLICIES
-	bool m_bAllowPuppetPurchasing;
-#endif
 	bool m_bEnablesSSPartPurchase;
 	bool m_bAbleToAnnexCityStates;
 
@@ -731,39 +596,6 @@ enum PolicyModifierType
 #ifdef FRUITY_TRADITION_LANDED_ELITE
 	POLICYMOD_INTERNAL_TRADE_FOOD_YIELD_CHANGE,
 #endif
-#ifdef NQ_INTERNAL_TRADE_ROUTE_PRODUCTION_YIELD_CHANGE_FROM_POLICIES
-	POLICYMOD_INTERNAL_TRADE_PRODUCTION_YIELD_CHANGE,
-#endif
-#ifdef NQ_RAIL_CONNECTION_PRODUCTION_MODIFIER_FROM_POLICIES
-	POLICYMOD_RAIL_CONNECTION_PRODUCTION_MODIFIER,
-#endif
-#ifdef NQ_COMBAT_BONUS_VS_SMALLER_CIV_FROM_POLICIES
-	POLICYMOD_COMBAT_BONUS_VS_SMALLER_CIV,
-#endif
-#ifdef NQ_PRODUCTION_TO_GREAT_MUSICIANS_MODIFIER_FROM_POLICIES
-	POLICYMOD_PRODUCTION_TO_GREAT_MUSICIANS_MODIFIER,
-#endif
-#ifdef NQ_TRADE_MISSION_INFLUENCE_MODIFIER_FROM_POLICIES
-	POLICYMOD_TRADE_MISSION_INFLUENCE_MODIFIER,
-#endif
-#ifdef NQ_SCIENCE_PER_GREAT_PERSON_BORN_FROM_POLICIES
-	POLICYMOD_SCIENCE_PER_GREAT_PERSON_BORN,
-#endif
-#ifdef NQ_INFLUENCE_BOOST_PER_GREAT_PERSON_BORN_FROM_POLICIES
-	POLICYMOD_INFLUENCE_BOOST_PER_GREAT_PERSON_BORN,
-#endif
-#ifdef NQ_TOURISM_FROM_TRADE_MISSIONS_FROM_POLICIES
-	POLICYMOD_TOURISM_FROM_TRADE_MISSIONS,
-#endif
-#ifdef NQ_HAPPINESS_FROM_GREAT_IMPROVEMENTS_FROM_POLICIES
-	POLICYMOD_HAPPINESS_FROM_GREAT_IMPROVEMENTS,
-#endif
-#ifdef NQ_MINOR_FRIENDSHIP_GAIN_BULLY_GOLD_SUCCESS_FROM_POLICIES
-	POLICYMOD_MINOR_FRIENDSHIP_GAIN_BULLY_GOLD_SUCCESS,
-#endif
-#ifdef NQ_COUP_CHANCE_MODIFIER_FROM_POLICIES
-	POLICYMOD_COUP_CHANCE_MODIFIER,
-#endif
     POLICYMOD_SHARED_RELIGION_TOURISM_MODIFIER,
     POLICYMOD_TRADE_ROUTE_TOURISM_MODIFIER,
 	POLICYMOD_OPEN_BORDERS_TOURISM_MODIFIER,
@@ -774,12 +606,6 @@ enum PolicyModifierType
 	POLICYMOD_PRODUCTION_FROM_GARRISON, // NQMP GJS - Military Caste
 	POLICYMOD_EXTRA_TOURISM_PER_GREAT_WORK, // NQMP GJS - Cultural Exchange
 	POLICYMOD_TOURISM_PER_WONDER, // NQMP GJS - Flourishing of the Arts
-#ifdef NQ_TOURISM_PER_CITY
-	POLICYMOD_TOURISM_PER_CITY,
-#endif
-#ifdef NQ_IDEOLOGY_PRESSURE_UNHAPPINESS_MODIFIER_FROM_POLICIES
-	POLICYMOD_IDEOLOGY_PRESSURE_UNHAPPINESS_MODIFIER,
-#endif
 	POLICYMOD_INTERNAL_TRADE_GOLD_CHANGE, // NQMP GJS - Silk Road
 };
 

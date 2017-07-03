@@ -752,20 +752,7 @@ void CvPlot::verifyUnitValidPlot()
 							
 							if (pLoopUnit != NULL)
 							{
-#ifdef NQ_NEVER_PUSH_OUT_OF_MINORS_ON_PEACE
-								bool bIsOwnedByMinor = false;
-								if (isOwned())
-								{
-									if (GET_PLAYER(getOwner()).isMinorCiv())
-									{
-										bIsOwnedByMinor = true;
-									}
-								}
-								// may want to make an extra check here about if it's owned by minor, we can still enter territory but with ignoring right of passage
-								if(!isValidDomainForLocation(*pLoopUnit) || (!bIsOwnedByMinor && !(pLoopUnit->canEnterTerritory(getTeam(), false /*bIgnoreRightOfPassage*/, isCity()))))
-#else
 								if(!isValidDomainForLocation(*pLoopUnit) || !(pLoopUnit->canEnterTerritory(getTeam(), false /*bIgnoreRightOfPassage*/, isCity())))
-#endif
 								{
 									if (!pLoopUnit->jumpToNearestValidPlot())
 										pLoopUnit->kill(false);
@@ -792,11 +779,7 @@ void CvPlot::verifyUnitValidPlot()
 					{
 						if(!(pLoopUnit->isInCombat()))
 						{
-#ifdef NQ_NEVER_PUSH_OUT_OF_MINORS_ON_PEACE
-							if(pLoopUnit->getTeam() != getTeam() && !GET_PLAYER(getOwner()).isMinorCiv())
-#else
 							if(pLoopUnit->getTeam() != getTeam()) // && getTeam() == NO_TEAM)// || !GET_TEAM(getTeam()).isVassal(pLoopUnit->getTeam())))
-#endif
 							{
 								if(isVisibleEnemyUnit(pLoopUnit))
 								{
@@ -2612,11 +2595,6 @@ int CvPlot::getBuildTime(BuildTypes eBuild, PlayerTypes ePlayer) const
 	iTime *= GC.getGame().getStartEraInfo().getBuildPercent();
 	iTime /= 100;
 
-#ifdef NQ_ROUND_BUILD_TIMES_DOWN
-	iTime /= 10; // round to lowest 10 for the sake of quick speed
-	iTime *= 10;
-#endif
-
 	return iTime;
 }
 
@@ -2624,53 +2602,33 @@ int CvPlot::getBuildTime(BuildTypes eBuild, PlayerTypes ePlayer) const
 //	--------------------------------------------------------------------------------
 int CvPlot::getBuildTurnsLeft(BuildTypes eBuild, PlayerTypes ePlayer, int iNowExtra, int iThenExtra) const
 {
-#ifdef NQ_FIX_BUILD_TIMES_UI
-	// work rate
-	int iTotalWorkRate = iThenExtra;
-	const CvUnit* pLoopUnit;
-	const IDInfo* pUnitNode = headUnitNode();
-	while(pUnitNode != NULL)
-	{
-		pLoopUnit = GetPlayerUnit(*pUnitNode);
-		pUnitNode = nextUnitNode(pUnitNode);
-
-		if(pLoopUnit && pLoopUnit->getBuildType() == eBuild)
-		{
-			iTotalWorkRate += pLoopUnit->workRate(true);
-		}
-	}
-	if(iTotalWorkRate <= 0)
-	{
-		//this means it will take forever under current circumstances
-		return INT_MAX;
-	}
-
-	// turns left = roundUp(build left / worker rate)
+#ifdef AUI_UNIT_FIX_2X_BUILD_SPEED_ON_FIRST_TURN_OF_BUILDING
 	int iBuildLeft = getBuildTime(eBuild, ePlayer) - getBuildProgress(eBuild);
-	int iTurnsLeft = iBuildLeft / iTotalWorkRate;
 
-	// if there's anything leftover, we actually have to bump up by 1 turn
-	if (iBuildLeft % iTotalWorkRate > 0)
-	{
-		iTurnsLeft++;
-	}
-
-	return iTurnsLeft;
+	if (iBuildLeft <= 0)
 #else
-
 	int iBuildLeft = getBuildTime(eBuild, ePlayer);
 
 	if(iBuildLeft == 0)
+#endif
 		return 0;
 
 	const IDInfo* pUnitNode;
 	const CvUnit* pLoopUnit;
+#ifdef AUI_UNIT_FIX_2X_BUILD_SPEED_ON_FIRST_TURN_OF_BUILDING
+	int iLoopBuildRate = 0;
+	int iTurnsLeft = 0;
+	// Max'es needed to counteract EUI code
+	int iNowBuildRate = MAX(iNowExtra, 0);
+	int iThenBuildRate = MAX(iThenExtra, 0);
+#else
 	int iNowBuildRate;
 	int iThenBuildRate;
 	int iTurnsLeft;
 
 	iNowBuildRate = iNowExtra;
 	iThenBuildRate = iThenExtra;
+#endif
 
 	pUnitNode = headUnitNode();
 
@@ -2681,11 +2639,20 @@ int CvPlot::getBuildTurnsLeft(BuildTypes eBuild, PlayerTypes ePlayer, int iNowEx
 
 		if(pLoopUnit && pLoopUnit->getBuildType() == eBuild)
 		{
+#ifdef AUI_UNIT_FIX_2X_BUILD_SPEED_ON_FIRST_TURN_OF_BUILDING
+			iLoopBuildRate = pLoopUnit->workRate(true);
+			//if (pLoopUnit->canMove())
+			//{
+			//	iNowBuildRate += iLoopBuildRate;
+			//}
+			iThenBuildRate += iLoopBuildRate;
+#else
 			if(pLoopUnit->canMove())
 			{
 				iNowBuildRate += pLoopUnit->workRate(false);
 			}
 			iThenBuildRate += pLoopUnit->workRate(true);
+#endif
 		}
 	}
 
@@ -2695,6 +2662,17 @@ int CvPlot::getBuildTurnsLeft(BuildTypes eBuild, PlayerTypes ePlayer, int iNowEx
 		return INT_MAX;
 	}
 
+#ifdef AUI_UNIT_FIX_2X_BUILD_SPEED_ON_FIRST_TURN_OF_BUILDING
+	iBuildLeft = MAX(0, iBuildLeft - iNowBuildRate);
+
+	iTurnsLeft = ((iBuildLeft + iThenBuildRate - 1) / iThenBuildRate);
+
+	// Works around weird UI bug
+	if (getBuildProgress(eBuild) == 0 && iTurnsLeft > 1)
+		iTurnsLeft++;
+
+	return MAX(1, iTurnsLeft);
+#else
 	iBuildLeft -= getBuildProgress(eBuild);
 	iBuildLeft -= iNowBuildRate;
 
@@ -2718,44 +2696,18 @@ int CvPlot::getBuildTurnsLeft(BuildTypes eBuild, PlayerTypes ePlayer, int iNowEx
 //	--------------------------------------------------------------------------------
 int CvPlot::getBuildTurnsTotal(BuildTypes eBuild, PlayerTypes ePlayer) const
 {
-#ifdef NQ_FIX_BUILD_TIMES_UI
-	// work rate
-	int iTotalWorkRate = 0;
-	const CvUnit* pLoopUnit;
-	const IDInfo* pUnitNode = headUnitNode();
-	while(pUnitNode != NULL)
-	{
-		pLoopUnit = GetPlayerUnit(*pUnitNode);
-		pUnitNode = nextUnitNode(pUnitNode);
-
-		if(pLoopUnit && pLoopUnit->getBuildType() == eBuild)
-		{
-			iTotalWorkRate += pLoopUnit->workRate(true);
-		}
-	}
-	if(iTotalWorkRate <= 0)
-	{
-		//this means it will take forever under current circumstances
-		return INT_MAX;
-	}
-
-	// turns left = roundUp(build left / worker rate)
-	int iBuildTime = getBuildTime(eBuild, ePlayer);
-	int iTurnsTotal = iBuildTime / iTotalWorkRate;
-
-	// if there's anything leftover, we actually have to bump up by 1 turn
-	if (iBuildTime % iTotalWorkRate > 0)
-	{
-		iTurnsTotal++;
-	}
-
-	return iTurnsTotal;
-#else
 	const IDInfo* pUnitNode;
 	const CvUnit* pLoopUnit;
 	int iNowBuildRate = 0;
 	int iThenBuildRate = 0;
+#ifdef AUI_UNIT_FIX_2X_BUILD_SPEED_ON_FIRST_TURN_OF_BUILDING
+	int iLoopBuildRate = 0;
+	int iBuildLeft = getBuildTime(eBuild, ePlayer);
+	if (iBuildLeft <= 0)
+		return 1;
+#else
 	int iBuildLeft = 0;
+#endif
 	int iTurnsLeft = 0;
 
 	pUnitNode = headUnitNode();
@@ -2767,11 +2719,20 @@ int CvPlot::getBuildTurnsTotal(BuildTypes eBuild, PlayerTypes ePlayer) const
 
 		if(pLoopUnit && pLoopUnit->getBuildType() == eBuild)
 		{
+#ifdef AUI_UNIT_FIX_2X_BUILD_SPEED_ON_FIRST_TURN_OF_BUILDING
+			iLoopBuildRate = pLoopUnit->workRate(true);
+			//if (pLoopUnit->canMove())
+			//{
+			//	iNowBuildRate += iLoopBuildRate;
+			//}
+			iThenBuildRate += iLoopBuildRate;
+#else
 			if(pLoopUnit->canMove())
 			{
 				iNowBuildRate += pLoopUnit->workRate(false);
 			}
 			iThenBuildRate += pLoopUnit->workRate(true);
+#endif
 		}
 	}
 
@@ -2781,6 +2742,17 @@ int CvPlot::getBuildTurnsTotal(BuildTypes eBuild, PlayerTypes ePlayer) const
 		return INT_MAX;
 	}
 
+#ifdef AUI_UNIT_FIX_2X_BUILD_SPEED_ON_FIRST_TURN_OF_BUILDING
+	iBuildLeft = MAX(0, iBuildLeft - iNowBuildRate);
+
+	iTurnsLeft = ((iBuildLeft + iThenBuildRate - 1) / iThenBuildRate);
+
+	// Works around weird UI bug
+	if (getBuildProgress(eBuild) == 0 && iTurnsLeft > 1)
+		iTurnsLeft++;
+
+	return MAX(1, iTurnsLeft);
+#else
 	iBuildLeft = getBuildTime(eBuild, ePlayer);
 
 	iBuildLeft = std::max(0, iBuildLeft);
@@ -2845,60 +2817,6 @@ int CvPlot::getFeatureProduction(BuildTypes eBuild, PlayerTypes ePlayer, CvCity*
 
 	return std::max(0, iProduction);
 }
-
-#ifdef NQ_FOOD_FROM_CHOPS
-//	--------------------------------------------------------------------------------
-int CvPlot::getFeatureFood(BuildTypes eBuild, PlayerTypes ePlayer, CvCity** ppCity) const
-{
-	int iFood;
-
-	TeamTypes eTeam = GET_PLAYER(ePlayer).getTeam();
-
-	if(getFeatureType() == NO_FEATURE)
-	{
-		return 0;
-	}
-
-	*ppCity = getWorkingCity();
-
-	if(*ppCity == NULL)
-	{
-		*ppCity = GC.getMap().findCity(getX(), getY(), NO_PLAYER, eTeam, false);
-	}
-
-	if(*ppCity == NULL)
-	{
-		return 0;
-	}
-
-	// Base value
-	//if(GET_PLAYER(ePlayer).GetAllFeatureProduction() > 0)
-	//{
-	//	iProduction = GET_PLAYER(ePlayer).GetAllFeatureProduction();
-	//}
-	//else
-	//{
-	iFood = GC.getBuildInfo(eBuild)->getFeatureFood(getFeatureType());
-	//}
-
-	// Distance mod
-	iFood -= (std::max(0, (plotDistance(getX(), getY(), (*ppCity)->getX(), (*ppCity)->getY()) - 2)) * 5);
-
-	iFood *= std::max(0, (GET_PLAYER((*ppCity)->getOwner()).getFeatureProductionModifier() + 100));
-	iFood /= 100;
-
-	iFood *= GC.getGame().getGameSpeedInfo().getFeatureProductionPercent();
-	iFood /= 100;
-
-	if(getTeam() != eTeam)
-	{
-		iFood *= GC.getDIFFERENT_TEAM_FEATURE_PRODUCTION_PERCENT();
-		iFood /= 100;
-	}
-
-	return std::max(0, iFood);
-}
-#endif
 
 
 //	--------------------------------------------------------------------------------
@@ -8049,14 +7967,6 @@ int CvPlot::calculateYield(YieldTypes eYield, bool bDisplay)
 			{
 				iYield += kYield.getGoldenAgeYield();
 			}
-#ifdef NQ_GOLDEN_PILGRIMAGE
-			// this is super hacky, I am a bad person and I should feel bad...
-			if (eYield == YIELD_FAITH && calculateYield(YIELD_GOLD, bDisplay) > 0)
-			{
-				iYield += GET_PLAYER(ePlayer).GetPlayerTraits()->GetGoldenAgeTileBonusFaith();
-			}
-//int CvPlot::getYieldWithBuild(BuildTypes eBuild, YieldTypes eYield, bool bWithUpgrade, PlayerTypes ePlayer) const
-#endif
 		}
 	}
 
@@ -9399,18 +9309,7 @@ bool CvPlot::changeBuildProgress(BuildTypes eBuild, int iChange, PlayerTypes ePl
 							GC.GetEngineUserInterface()->AddCityMessage(0, pCity->GetIDInfo(), pCity->getOwner(), false, GC.getEVENT_MESSAGE_TIME(), strBuffer);
 						}
 					}
-#ifdef NQ_FOOD_FROM_CHOPS
-					int iFood = getFeatureFood(eBuild, ePlayer, &pCity);
-					if (iFood > 0)
-					{
-						pCity->changeFood(iFood);
-						if(pCity->getOwner() == GC.getGame().getActivePlayer())
-						{
-							strBuffer = GetLocalizedText("TXT_KEY_MISC_CLEARING_FEATURE_FOOD", GC.getFeatureInfo(getFeatureType())->GetTextKey(), iFood, pCity->getNameKey());
-							GC.GetEngineUserInterface()->AddCityMessage(0, pCity->GetIDInfo(), pCity->getOwner(), false, GC.getEVENT_MESSAGE_TIME(), strBuffer);
-						}
-					}
-#endif
+
 					setFeatureType(NO_FEATURE);
 				}
 			}
@@ -10951,14 +10850,6 @@ int CvPlot::getYieldWithBuild(BuildTypes eBuild, YieldTypes eYield, bool bWithUp
 			{
 				iYield += kYield.getGoldenAgeYield();
 			}
-#ifdef NQ_GOLDEN_PILGRIMAGE
-			// this is super hacky, I am a bad person and I should feel bad...
-			if (eYield == YIELD_FAITH && getYieldWithBuild(eBuild, YIELD_GOLD, bWithUpgrade, ePlayer) > 0)
-			{
-				iYield += GET_PLAYER(ePlayer).GetPlayerTraits()->GetGoldenAgeTileBonusFaith();
-			}
-//int CvPlot::getYieldWithBuild(BuildTypes eBuild, YieldTypes eYield, bool bWithUpgrade, PlayerTypes ePlayer) const
-#endif
 		}
 	}
 

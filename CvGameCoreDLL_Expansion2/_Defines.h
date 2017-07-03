@@ -190,7 +190,7 @@
 #define AUI_DEAL_FIX_ACCURATE_EARLYGAME_RESEARCH_AGREEMENT_YIELDS
 */
 /// Automating a unit no longer resets the turn timer (from theCAndeMan)
-//#define NQM_GAME_FIX_TURN_TIMER_RESET_ON_AUTOMATION
+#define NQM_GAME_FIX_TURN_TIMER_RESET_ON_AUTOMATION
 /*
 /// If multiple civs have are eligible to found the league, choose a random one instead of the one with the highest slot
 #define AUI_VOTING_RANDOMIZED_LEAGUE_FOUNDER
@@ -255,8 +255,10 @@
 // ------ #define AUI_TECH_FIX_TEAMER_RESEARCH_COSTS
 /// The discount to tech cost awarded for other teams already owning a specific tech can now be toggled via an in-game option
 #define AUI_TECH_TOGGLEABLE_ALREADY_KNOWN_TECH_COST_DISCOUNT
+/*
 /// Restores the malus to coup chance if an enemy spy from the CS ally is present in the CS
 #define AUI_ESPIONAGE_FIX_RESTORE_ENEMY_SPY_COUP_MALUS
+*/
 /// Goody hut messages now properly appear for all yields, even if there's no popup
 #define AUI_PLAYER_FIX_RECEIVE_GOODY_MESSAGE
 /*
@@ -266,6 +268,8 @@
 #define AUI_UNIT_COMBAT_FIX_AIR_SWEEP_VS_GROUND_INTERCEPTOR
 /// The "force end turn" control now checks to make sure nothing (invalid) is blocking it
 #define AUI_GAME_FIX_CONTROL_FORCE_END_TURN_CHECKS_FOR_BLOCKING
+/// Fixed a bug where units building a new improvement or road would have 2x build speed on their first turn of building; commented out because it causes issues with the UI
+//#define AUI_UNIT_FIX_2X_BUILD_SPEED_ON_FIRST_TURN_OF_BUILDING
 /// Promotion testing is now done every time a unit's XP is changed, instead of having it manually called all the time
 #define AUI_UNIT_TEST_PROMOTION_READY_MOVED
 */
@@ -678,6 +682,8 @@
 #define NQ_NO_FAITH_PURCHASING_SCIENTISTS
 // Game Option: Extra Religions (allows any number of religions up to max players or 8, whichever is lower)
 #define NQ_ALLOW_EXTRA_RELIGIONS
+// American Pioneer
+#define NQ_AMERICAN_PIONEER
 /// Adds a new field for minimum city yield that adjust said yield when the city is on hills (currently -1)
 #define NQM_YIELD_MIN_CITY_ON_HILLS_ADJUST
 // Sweden UA now gives flat science in the empire when a great person is born
@@ -702,12 +708,10 @@
 // extra missionary spreads from religious belief
 #define NQ_BELIEF_EXTRA_MISSIONARY_SPREADS
 
-// allow religion one-shots (like deus vult, religious settlements, dharma)
+// allow religion one-shots (like deus vult, shepherd & flock, dharma)
 #define NQ_ALLOW_RELIGION_ONE_SHOTS
-// allow free settlers from beliefs
-#define NQ_FREE_SETTLERS_FROM_BELIEF
-// plot culture cost modifier from beliefs now only impacts religioun founder's cities
-#define NQ_PLOT_COST_FROM_BELIEF_IS_UNIQUE
+// free units from belief of Shepherd & Flock
+#define NQ_SHEPHERD_AND_FLOCK
 // free units from belief of Deus Vult
 #define NQ_DEUS_VULT
 // allow golden ages from beliefs
@@ -727,111 +731,5 @@
 #define NQ_FAITH_PER_CITY_STATE_THIS_RELIGION
 // cheating so that sacred sites applies both tourism and gold
 #define NQ_CHEAT_SACRED_SITES_AFFECTS_GOLD
-// all players can rush spaceship parts with Engineers now
-//#define NQ_ALLOW_SS_PART_HURRY_BY_DEFAULT // --- disabled
-// fix tourism from futurism so it scales at different game speeds
-#define NQ_FIX_ADD_TOURISM_GAME_SPEED_MOD
-// golden age points accrue even while in golden ages
-#define NQ_GOLDEN_AGE_OVERHAUL
-// coup chances now use base influence instead of effective influence (which would be -60 during war)
-#define NQ_COUP_FORMULA_USES_BASE_FRIENDSHIP_NOT_EFFECTIVE_FRIENDSHIP
-// show base influence you would have at peace in tooltip while at war with city states
-#define NQ_SHOW_BASE_INFLUENCE_WHILE_AT_WAR_IN_CS_TOOLTIP
-// disable gifting of great people between major powers
-#define NQ_NO_GIFTING_GREAT_PEOPLE_TO_MAJORS
-// world's fair # of turns scales with game speed now
-#define NQ_WORLDS_FAIR_GAME_SPEED_SCALING
-// one shot local population change when a building is constructed
-#define NQ_LOCAL_POPULATION_CHANGE_FROM_BUILDING
-// Lua hook for game event when reformation belief is added
-#define NQ_ADD_REFORMATION_LUA_HOOK
-// Food bonus for removing features
-#define NQ_FOOD_FROM_CHOPS
-// Unit turn ends on final attack even with multiple attacks per turn
-#define NQ_UNIT_TURN_ENDS_ON_FINAL_ATTACK
-// units that cross rivers always lose all movement unless amphibious (broken by 3/2 movement remaining bug)
-#define NQ_FIX_MOVES_THAT_CONSUME_ALL_MOVEMENT
-// clearing barbarian camps gives influence to all nearby city states
-#define NQ_NEVER_PUSH_OUT_OF_MINORS_ON_PEACE
-// spawning prohets now reduces faith by the amount required instead of all faith
-#define NQ_SPAWN_PROPHETS_REMOVE_ONLY_REQUIRED_FAITH
-// flat faith whenever a citizen is born from beliefs
-#define NQ_FLAT_FAITH_PER_CITIZEN_BORN_FROM_BELIEFS
-// % modifier to final unit production cost total (useful for settlers which have variable costs depending on start era)
-#define NQ_UNIT_FINAL_PRODUCTION_COST_MODIFIER
-// defense from Citizens as a stat for buildings
-#define NQ_BUILDING_DEFENSE_FROM_CITIZENS
-// free great work in this building if built in capital
-#define NQ_CHEAT_FIRST_ROYAL_LIBRARY_COMES_WITH_GREAT_WORK
-// trait that makes long term city state allies refuse bribes
-#define	NQ_NUM_TURNS_BEFORE_MINOR_ALLIES_REFUSE_BRIBES_FROM_TRAIT
-// trait attribute that make specific unit types immune to plunder mission
-#define NQ_UNIT_IMMUNE_TO_PLUNDER_FROM_TRAIT
-// fixing build times (sub-part of Delnar's fixes)
-#define NQ_FIX_BUILD_TIMES_UI
-// make build times round down to lowest 10 so that Quick Speed doesn't have built times of 201 or 402
-#define NQ_ROUND_BUILD_TIMES_DOWN
-// HACK: Golden Pilgrimage Trait (new civ Mali) needs to give +1 Faith to tiles that make at least 1 Gold during a golden age
-#define NQ_GOLDEN_PILGRIMAGE
-// HACK: Mali Treasury needs to be in C++ instead of Lua to fix the resync issue
-#define NQ_MALI_TREASURY
-// allow gifting faith to minors via beliefs
-#define NQ_BELIEF_TOGGLE_ALLOW_FAITH_GIFTS_TO_MINORS
-
-
-/// ---- IDEOLOGY OVERHAUL: AUTOCRACY ----
-// influence gain on gold tribute from policies
-#define NQ_MINOR_FRIENDSHIP_GAIN_BULLY_GOLD_SUCCESS_FROM_POLICIES
-// flat coup chance modifier
-#define NQ_COUP_CHANCE_MODIFIER_FROM_POLICIES
-// attack bonus in foreign lands during golden ages
-#define NQ_GOLDEN_AGE_FOREIGN_ATTACK_BONUS
-// with this policy, gain a free great artist whenever a great general is born (very ugly cheat code)
-#define NQ_WAR_HERO
-// ignore puppets when calculating tech research cost
-#define NQ_IGNORE_PUPPETS_FOR_RESEARCH_COSTS_FROM_POLICIES
-// allows purchasing of units in puppet cities from policies
-#define NQ_ALLOW_PUPPET_PURCHASING_FROM_POLICIES
-// bonus strength when near friendly city states or city states conquered by another civ
-#define NQ_COMBAT_STRENGTH_NEAR_FRIENDLY_MINOR
-
-
-/// ---- IDEOLOGY OVERHAUL: FREEDOM ----
-// trade mission influence modifier from policies
-#define NQ_TRADE_MISSION_INFLUENCE_MODIFIER_FROM_POLICIES
-// science per great person born from policies
-#define NQ_SCIENCE_PER_GREAT_PERSON_BORN_FROM_POLICIES
-// influence with all known city states per great person born from policies
-#define NQ_INFLUENCE_BOOST_PER_GREAT_PERSON_BORN_FROM_POLICIES
-// gold to science conversion ratio at empire level from policies
-#define NQ_GOLD_TO_SCIENCE_FROM_POLICIES
-// tourism with all known civs on trade missions from policies
-#define NQ_TOURISM_FROM_TRADE_MISSIONS_FROM_POLICIES
-// happiness from great person tile improvements from policies
-#define NQ_HAPPINESS_FROM_GREAT_IMPROVEMENTS_FROM_POLICIES
-// prevent friendly minors declaring war on you in support of their ally, policy toggle
-#define NQ_POLICY_TOGGLE_NO_MINOR_DOW_IF_FRIENDS
-
-/// ---- IDEOLOGY OVERHAUL: ORDER ----
-// tourism per city from policies
-#define NQ_TOURISM_PER_CITY
-// extra spies from policies
-#define NQ_EXTRA_SPIES_FROM_POLICIES
-// production from internal trade routes from policies
-#define NQ_INTERNAL_TRADE_ROUTE_PRODUCTION_YIELD_CHANGE_FROM_POLICIES
-// disables resistance time via policies
-#define NQ_DIABLE_RESISTANCE_TIME_VIA_POLICIES
-// unhappiness modifier for ideology pressure from policies
-#define NQ_IDEOLOGY_PRESSURE_UNHAPPINESS_MODIFIER_FROM_POLICIES
-// happineses from railway connections
-#define NQ_RAIL_CONNECTION_HAPPINESS_FROM_POLICIES
-// bonus production modifier from railway connections
-#define NQ_RAIL_CONNECTION_PRODUCTION_MODIFIER_FROM_POLICIES
-// policy toggle, when true makes each military land unit trained result in 2 units instead of 1
-#define NQ_PATRIOTIC_WAR
-// combat bonus vs smaller civ from policies
-#define NQ_COMBAT_BONUS_VS_SMALLER_CIV_FROM_POLICIES
-// percent of production converted into bonus % for great musician points
-#define NQ_PRODUCTION_TO_GREAT_MUSICIANS_MODIFIER_FROM_POLICIES
 
 #endif

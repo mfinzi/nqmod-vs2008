@@ -1771,11 +1771,7 @@ int CvPlayerEspionage::GetCoupChanceOfSuccess(uint uiSpyIndex)
 	}
 
 	int iAllyInfluence = pMinorCivAI->GetEffectiveFriendshipWithMajorTimes100(eAllyPlayer);
-#ifdef NQ_COUP_FORMULA_USES_BASE_FRIENDSHIP_NOT_EFFECTIVE_FRIENDSHIP
-	int iMyInfluence = pMinorCivAI->GetBaseFriendshipWithMajorTimes100(m_pPlayer->GetID());
-#else
 	int iMyInfluence = pMinorCivAI->GetEffectiveFriendshipWithMajorTimes100(m_pPlayer->GetID());
-#endif
 	int iDeltaInfluence = iAllyInfluence - iMyInfluence;
 
 	//float fNobodyBonus = 0.5;
@@ -1842,10 +1838,6 @@ int CvPlayerEspionage::GetCoupChanceOfSuccess(uint uiSpyIndex)
 
 	int iResultPercentage = 100 - (int)((iDeltaInfluence * fSpyMultipier) / 100);
 
-#ifdef NQ_COUP_CHANCE_MODIFIER_FROM_POLICIES
-	iResultPercentage += m_pPlayer->GetPlayerPolicies()->GetNumericModifier(POLICYMOD_COUP_CHANCE_MODIFIER);
-#endif
-
 	if(iResultPercentage > 85)
 	{
 		iResultPercentage = 85;
@@ -1902,11 +1894,7 @@ bool CvPlayerEspionage::AttemptCoup(uint uiSpyIndex)
 	int aiNewInfluenceValueTimes100[MAX_MAJOR_CIVS];
 	for(uint ui = 0; ui < MAX_MAJOR_CIVS; ui++)
 	{
-#ifdef NQ_COUP_FORMULA_USES_BASE_FRIENDSHIP_NOT_EFFECTIVE_FRIENDSHIP
-		aiNewInfluenceValueTimes100[ui] = pMinorCivAI->GetBaseFriendshipWithMajorTimes100((PlayerTypes)ui);
-#else
 		aiNewInfluenceValueTimes100[ui] = pMinorCivAI->GetEffectiveFriendshipWithMajorTimes100((PlayerTypes)ui);
-#endif
 	}
 
 	m_aSpyList[uiSpyIndex].m_bEvaluateReassignment = true; // flag for reassignment
@@ -1944,10 +1932,6 @@ bool CvPlayerEspionage::AttemptCoup(uint uiSpyIndex)
 			{
 				int iNewInfluence = aiNewInfluenceValueTimes100[ui] - (GC.getESPIONAGE_COUP_OTHER_PLAYERS_INFLUENCE_DROP() * 100);
 				iNewInfluence = max(iNewInfluence, 0);
-#ifdef NQ_COUP_FORMULA_USES_BASE_FRIENDSHIP_NOT_EFFECTIVE_FRIENDSHIP
-				// cap all others at the ally threshold of 60 though (it's further reduced by 20 later)
-				iNewInfluence = min(iNewInfluence, GC.getFRIENDSHIP_THRESHOLD_ALLIES() * 100);
-#endif
 				aiNewInfluenceValueTimes100[ui] = iNewInfluence;
 			}
 		}
@@ -2034,10 +2018,9 @@ bool CvPlayerEspionage::AttemptCoup(uint uiSpyIndex)
 			pNotifications->Add(eNotification, strNotification.toUTF8(), strSummary.toUTF8(), pCity->getX(), pCity->getY(), -1);
 		}
 	}
-	
+
 	pMinorCivAI->SetFriendshipWithMajorTimes100(m_pPlayer->GetID(), aiNewInfluenceValueTimes100[m_pPlayer->GetID()]);
 	pMinorCivAI->SetDisableNotifications(false);
-
 	// send notification to player
 	CvNotifications* pNotifications = m_pPlayer->GetNotifications();
 	if(pNotifications)

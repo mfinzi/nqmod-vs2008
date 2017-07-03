@@ -3072,13 +3072,6 @@ void CvCityCitizens::DoSpecialists()
 						{
 							iMod += GetPlayer()->GetPlayerTraits()->GetGoldenAgeGreatMusicianRateModifier();
 						}
-#ifdef NQ_PRODUCTION_TO_GREAT_MUSICIANS_MODIFIER_FROM_POLICIES
-						int iProductionToGreatMusiciansModifier = GetPlayer()->GetPlayerPolicies()->GetNumericModifier(POLICYMOD_PRODUCTION_TO_GREAT_MUSICIANS_MODIFIER);
-						if (iProductionToGreatMusiciansModifier > 0)
-						{
-							iMod += GetPlayer()->calculateTotalYield(YIELD_PRODUCTION) * iProductionToGreatMusiciansModifier / 100;
-						}
-#endif
 						iMod += GetPlayer()->getGreatMusicianRateModifier();
 					}
 					else if((UnitClassTypes)pkSpecialistInfo->getGreatPeopleUnitClass() == GC.getInfoTypeForString("UNITCLASS_MERCHANT"))
@@ -3746,13 +3739,6 @@ void CvCityCitizens::DoSpawnGreatPerson(UnitTypes eUnit, bool bIncrementCount, b
 	{
 		newUnit->SetResearchBulbAmount(kPlayer.GetScienceYieldFromPreviousTurns(GC.getGame().getGameTurn(), newUnit->getUnitInfo().GetBaseBeakersTurnsToCount()));
 	}
-
-#ifdef NQ_WAR_HERO
-	if (newUnit->IsGreatGeneral() && kPlayer.IsWarHero())
-	{
-		kPlayer.addFreeUnit((UnitTypes)GC.getInfoTypeForString("UNIT_ARTIST"));
-	}
-#endif
 
 	// Notification
 	if(GET_PLAYER(GetOwner()).GetNotifications())

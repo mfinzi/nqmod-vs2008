@@ -162,9 +162,6 @@ public:
 	int GetCityCountUnhappinessMod() const;
 	bool IsNoOccupiedUnhappiness() const;
 	int GetGlobalPopulationChange() const;
-#ifdef NQ_LOCAL_POPULATION_CHANGE_FROM_BUILDING
-	int GetLocalPopulationChange() const;
-#endif
 	int GetTechShare() const;
 	int GetFreeTechs() const;
 	int GetFreePolicies() const;
@@ -176,9 +173,6 @@ public:
 	bool IsNearbyMountainRequired() const;
 	bool IsAllowsRangeStrike() const;
 	int GetDefenseModifier() const;
-#ifdef NQ_BUILDING_DEFENSE_FROM_CITIZENS
-	int GetDefensePerCitizen() const;
-#endif
 	int GetGlobalDefenseModifier() const;
 	int GetExtraCityHitPoints() const;
 	int GetMinorFriendshipChange() const;
@@ -234,9 +228,6 @@ public:
 	bool IsRequiresHolyCity() const;
 	bool AffectSpiesNow() const;
 	bool IsEspionage() const;
-#ifdef NQ_MALI_TREASURY
-	bool IsMalianTreasury() const;
-#endif
 	bool AllowsFoodTradeRoutes() const;
 	bool AllowsProductionTradeRoutes() const;
 	bool NullifyInfluenceModifier() const;
@@ -395,9 +386,6 @@ private:
 	int m_iCityCountUnhappinessMod;
 	bool m_bNoOccupiedUnhappiness;
 	int m_iGlobalPopulationChange;
-#ifdef NQ_LOCAL_POPULATION_CHANGE_FROM_BUILDING
-	int m_iLocalPopulationChange;
-#endif
 	int m_iTechShare;
 	int m_iFreeTechs;
 	int m_iFreePolicies;
@@ -409,9 +397,6 @@ private:
 	bool m_bNearbyMountainRequired;
 	bool m_bAllowsRangeStrike;
 	int m_iDefenseModifier;
-#ifdef NQ_BUILDING_DEFENSE_FROM_CITIZENS
-	int m_iDefensePerCitizen;
-#endif
 	int m_iGlobalDefenseModifier;
 	int m_iExtraCityHitPoints;
 	int m_iMissionType;
@@ -468,9 +453,6 @@ private:
 	bool m_bRequiresHolyCity;
 	bool m_bAffectSpiesNow;
 	bool m_bEspionage;
-#ifdef NQ_MALI_TREASURY
-	bool m_bMalianTreasury;
-#endif
 	bool m_bAllowsFoodTradeRoutes;
 	bool m_bAllowsProductionTradeRoutes;
 	bool m_bNullifyInfluenceModifier;
@@ -694,10 +676,6 @@ public:
 
 	int GetBuildingDefense() const;
 	void ChangeBuildingDefense(int iChange);
-#ifdef NQ_BUILDING_DEFENSE_FROM_CITIZENS
-	int GetBuildingDefensePerCitizen() const;
-	void ChangeBuildingDefensePerCitizen(int iChange);
-#endif
 	int GetBuildingDefenseMod() const;
 	void ChangeBuildingDefenseMod(int iChange);
 
@@ -714,9 +692,6 @@ private:
 	int m_iNumBuildings;
 	int m_iBuildingProductionModifier;
 	int m_iBuildingDefense;
-#ifdef NQ_BUILDING_DEFENSE_FROM_CITIZENS
-	int m_iBuildingDefensePerCitizen;
-#endif
 	int m_iBuildingDefenseMod;
 	int m_iMissionaryExtraSpreads;
 	int m_iLandmarksTourismPercent;

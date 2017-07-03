@@ -43,12 +43,6 @@ CvTraitEntry::CvTraitEntry() :
 #ifdef NQ_SCIENCE_PER_GREAT_PERSON_BORN
 	m_iSciencePerGreatPersonBorn(0),
 #endif
-#ifdef NQ_NUM_TURNS_BEFORE_MINOR_ALLIES_REFUSE_BRIBES_FROM_TRAIT
-	m_iNumTurnsBeforeMinorAlliesRefuseBribes(0),
-#endif
-#ifdef NQ_GOLDEN_PILGRIMAGE
-	m_iGoldenAgeTileBonusFaith(0),
-#endif
 	m_iCultureFromKills(0),
 	m_iFaithFromKills(0),
 	m_iCityCultureBonus(0),
@@ -108,9 +102,6 @@ CvTraitEntry::CvTraitEntry() :
 	m_bTechBoostFromCapitalScienceBuildings(false),
 	m_bStaysAliveZeroCities(false),
 	m_bFaithFromUnimprovedForest(false),
-#ifdef NQ_UNIT_IMMUNE_TO_PLUNDER_FROM_TRAIT
-	m_bSeaTradeRoutesArePlunderImmune(false),
-#endif
 
 	// NQMP GJS - New France UA begin
 	m_bEarnsGreatPersonOnSlotOrGuild(false),
@@ -316,23 +307,6 @@ int CvTraitEntry::GetSciencePerGreatPersonBorn() const
 	return m_iSciencePerGreatPersonBorn;
 }
 #endif
-
-#ifdef NQ_NUM_TURNS_BEFORE_MINOR_ALLIES_REFUSE_BRIBES_FROM_TRAIT
-/// Accessor:: num turns before minor allies refuse bribes
-int CvTraitEntry::GetNumTurnsBeforeMinorAlliesRefuseBribes() const
-{
-	return m_iNumTurnsBeforeMinorAlliesRefuseBribes;
-}
-#endif
-
-#ifdef NQ_GOLDEN_PILGRIMAGE
-/// Accessor:: during golden ages, tiles that get bonus gold also get this much bonus faith
-int CvTraitEntry::GetGoldenAgeTileBonusFaith() const
-{
-	return m_iGoldenAgeTileBonusFaith;
-}
-#endif
-
 
 /// Accessor:: culture for kills
 int CvTraitEntry::GetCultureFromKills() const
@@ -695,14 +669,6 @@ bool CvTraitEntry::IsFaithFromUnimprovedForest() const
 	return m_bFaithFromUnimprovedForest;
 }
 
-#ifdef NQ_UNIT_IMMUNE_TO_PLUNDER_FROM_TRAIT
-/// Accessor: does this civ have naval trade units that are immune to plundering?
-bool CvTraitEntry::IsSeaTradeRoutesArePlunderImmune() const
-{
-	return m_bSeaTradeRoutesArePlunderImmune;
-}
-#endif
-
 // NQMP GJS - New France UA begin
 // Accessor: does this civ get free cultural Great People from Guilds and Wonders with Great Works Slots?
 bool CvTraitEntry::IsEarnsGreatPersonOnSlotOrGuild() const
@@ -1045,12 +1011,6 @@ bool CvTraitEntry::CacheResults(Database::Results& kResults, CvDatabaseUtility& 
 #ifdef NQ_SCIENCE_PER_GREAT_PERSON_BORN
 	m_iSciencePerGreatPersonBorn			= kResults.GetInt("SciencePerGreatPersonBorn");
 #endif
-#ifdef NQ_NUM_TURNS_BEFORE_MINOR_ALLIES_REFUSE_BRIBES_FROM_TRAIT
-	m_iNumTurnsBeforeMinorAlliesRefuseBribes = kResults.GetInt("NumTurnsBeforeMinorAlliesRefuseBribes");
-#endif
-#ifdef NQ_GOLDEN_PILGRIMAGE
-	m_iGoldenAgeTileBonusFaith              = kResults.GetInt("GoldenAgeTileBonusFaith");
-#endif
 	m_iCultureFromKills						= kResults.GetInt("CultureFromKills");
 	m_iFaithFromKills						= kResults.GetInt("FaithFromKills");
 	m_iCityCultureBonus						= kResults.GetInt("CityCultureBonus");
@@ -1151,9 +1111,6 @@ bool CvTraitEntry::CacheResults(Database::Results& kResults, CvDatabaseUtility& 
 	m_bTechBoostFromCapitalScienceBuildings = kResults.GetBool("TechBoostFromCapitalScienceBuildings");
 	m_bStaysAliveZeroCities = kResults.GetBool("StaysAliveZeroCities");
 	m_bFaithFromUnimprovedForest = kResults.GetBool("FaithFromUnimprovedForest");
-#ifdef NQ_UNIT_IMMUNE_TO_PLUNDER_FROM_TRAIT
-	m_bSeaTradeRoutesArePlunderImmune = kResults.GetBool("SeaTradeRoutesArePlunderImmune");
-#endif
 	m_bEarnsGreatPersonOnSlotOrGuild = kResults.GetBool("EarnsGreatPersonOnSlotOrGuild"); // NQMP GJS - New France UA
 	m_bBonusReligiousBelief = kResults.GetBool("BonusReligiousBelief");
 	m_bAbleToAnnexCityStates = kResults.GetBool("AbleToAnnexCityStates");
@@ -1563,12 +1520,6 @@ void CvPlayerTraits::InitPlayerTraits()
 #ifdef NQ_SCIENCE_PER_GREAT_PERSON_BORN
 			m_iSciencePerGreatPersonBorn += trait->GetSciencePerGreatPersonBorn();
 #endif
-#ifdef NQ_NUM_TURNS_BEFORE_MINOR_ALLIES_REFUSE_BRIBES_FROM_TRAIT
-			m_iNumTurnsBeforeMinorAlliesRefuseBribes += trait->GetNumTurnsBeforeMinorAlliesRefuseBribes();
-#endif
-#ifdef NQ_GOLDEN_PILGRIMAGE
-			m_iGoldenAgeTileBonusFaith += trait->GetGoldenAgeTileBonusFaith();
-#endif
 			m_iCultureFromKills += trait->GetCultureFromKills();
 			m_iFaithFromKills += trait->GetFaithFromKills();
 			m_iCityCultureBonus += trait->GetCityCultureBonus();
@@ -1659,12 +1610,6 @@ void CvPlayerTraits::InitPlayerTraits()
 			{
 				m_bFaithFromUnimprovedForest = true;
 			}
-#ifdef NQ_UNIT_IMMUNE_TO_PLUNDER_FROM_TRAIT
-			if(trait->IsSeaTradeRoutesArePlunderImmune())
-			{
-				m_bSeaTradeRoutesArePlunderImmune = true;
-			}
-#endif
 			// NQMP GJS - New France UA begin
 			if(trait->IsEarnsGreatPersonOnSlotOrGuild())
 			{
@@ -1877,12 +1822,6 @@ void CvPlayerTraits::Reset()
 #ifdef NQ_SCIENCE_PER_GREAT_PERSON_BORN
 	m_iSciencePerGreatPersonBorn = 0;
 #endif
-#ifdef NQ_NUM_TURNS_BEFORE_MINOR_ALLIES_REFUSE_BRIBES_FROM_TRAIT
-	m_iNumTurnsBeforeMinorAlliesRefuseBribes = 0;
-#endif
-#ifdef NQ_GOLDEN_PILGRIMAGE
-	m_iGoldenAgeTileBonusFaith = 0;
-#endif
 	m_iCultureFromKills = 0;
 	m_iFaithFromKills = 0;
 	m_iCityCultureBonus = 0;
@@ -1940,9 +1879,6 @@ void CvPlayerTraits::Reset()
 	m_bTechBoostFromCapitalScienceBuildings = false;
 	m_bStaysAliveZeroCities = false;
 	m_bFaithFromUnimprovedForest = false;
-#ifdef NQ_UNIT_IMMUNE_TO_PLUNDER_FROM_TRAIT
-	m_bSeaTradeRoutesArePlunderImmune = false;
-#endif
 	
 	// NQMP GJS - New France UA begin
 	m_bEarnsGreatPersonOnSlotOrGuild = false;
@@ -2897,12 +2833,6 @@ void CvPlayerTraits::Read(FDataStream& kStream)
 #ifdef NQ_SCIENCE_PER_GREAT_PERSON_BORN
 	kStream >> m_iSciencePerGreatPersonBorn;
 #endif
-#ifdef NQ_NUM_TURNS_BEFORE_MINOR_ALLIES_REFUSE_BRIBES_FROM_TRAIT
-	kStream >> m_iNumTurnsBeforeMinorAlliesRefuseBribes;
-#endif
-#ifdef NQ_GOLDEN_PILGRIMAGE
-	kStream >> m_iGoldenAgeTileBonusFaith;
-#endif
 	kStream >> m_iCultureFromKills;
 	if (uiVersion >= 19)
 	{
@@ -3095,9 +3025,6 @@ void CvPlayerTraits::Read(FDataStream& kStream)
 	kStream >> m_bStaysAliveZeroCities;
 
 	kStream >> m_bFaithFromUnimprovedForest;
-#ifdef NQ_UNIT_IMMUNE_TO_PLUNDER_FROM_TRAIT
-	kStream >> m_bSeaTradeRoutesArePlunderImmune;
-#endif
 
 	// NQMP GJS - New France UA begin
 	kStream >> m_bEarnsGreatPersonOnSlotOrGuild;
@@ -3304,12 +3231,6 @@ void CvPlayerTraits::Write(FDataStream& kStream)
 #ifdef NQ_SCIENCE_PER_GREAT_PERSON_BORN
 	kStream << m_iSciencePerGreatPersonBorn;
 #endif
-#ifdef NQ_NUM_TURNS_BEFORE_MINOR_ALLIES_REFUSE_BRIBES_FROM_TRAIT
-	kStream << m_iNumTurnsBeforeMinorAlliesRefuseBribes;
-#endif
-#ifdef NQ_GOLDEN_PILGRIMAGE
-	kStream << m_iGoldenAgeTileBonusFaith;
-#endif
 	kStream << m_iCultureFromKills;
 	kStream << m_iFaithFromKills;
 	kStream << m_iCityCultureBonus;
@@ -3368,9 +3289,6 @@ void CvPlayerTraits::Write(FDataStream& kStream)
 	kStream << m_bTechBoostFromCapitalScienceBuildings;
 	kStream << m_bStaysAliveZeroCities;
 	kStream << m_bFaithFromUnimprovedForest;
-#ifdef NQ_UNIT_IMMUNE_TO_PLUNDER_FROM_TRAIT
-	kStream << m_bSeaTradeRoutesArePlunderImmune;
-#endif
 
 	// NQMP GJS - New France UA begin
 	kStream << m_bEarnsGreatPersonOnSlotOrGuild;

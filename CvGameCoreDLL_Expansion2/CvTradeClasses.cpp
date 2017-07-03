@@ -1481,21 +1481,6 @@ PlayerTypes CvGameTrade::GetDestFromID (int iID)
 	return m_aTradeConnections[iIndex].m_eDestOwner;
 }
 
-#ifdef NQ_UNIT_IMMUNE_TO_PLUNDER_FROM_TRAIT
-//	--------------------------------------------------------------------------------
-/// GetDomainFromID
-DomainTypes CvGameTrade::GetDomainFromID (int iID)
-{
-	int iIndex = GetIndexFromID(iID);
-	if (iIndex < -1)
-	{
-		return NO_DOMAIN;
-	}
-
-	return m_aTradeConnections[iIndex].m_eDomain;
-}
-#endif
-
 //	--------------------------------------------------------------------------------
 /// GetIndexFromUnitID
 #ifdef AUI_CONSTIFY
@@ -2992,14 +2977,6 @@ int CvPlayerTrade::GetTradeConnectionValueTimes100 (const TradeConnection& kTrad
 					iValue += GET_PLAYER(kTradeConnection.m_eDestOwner).GetPlayerPolicies()->GetNumericModifier(POLICYMOD_INTERNAL_TRADE_FOOD_YIELD_CHANGE);
 #endif
 				}
-
-#ifdef NQ_INTERNAL_TRADE_ROUTE_PRODUCTION_YIELD_CHANGE_FROM_POLICIES
-				if (eYield == YIELD_PRODUCTION)
-				{
-					iValue += GET_PLAYER(kTradeConnection.m_eDestOwner).GetPlayerPolicies()->GetNumericModifier(POLICYMOD_INTERNAL_TRADE_PRODUCTION_YIELD_CHANGE);
-				}
-#endif
-
 				break;
 			case TRADE_CONNECTION_PRODUCTION:
 				if (eYield == YIELD_PRODUCTION)
@@ -3020,9 +2997,6 @@ int CvPlayerTrade::GetTradeConnectionValueTimes100 (const TradeConnection& kTrad
 					iModifier += GET_PLAYER(kTradeConnection.m_eDestOwner).GetPlayerPolicies()->GetNumericModifier(POLICYMOD_INTERNAL_TRADE_MODIFIER);
 					iValue *= iModifier;
 					iValue /= 100;
-#ifdef NQ_INTERNAL_TRADE_ROUTE_PRODUCTION_YIELD_CHANGE_FROM_POLICIES
-					iValue += GET_PLAYER(kTradeConnection.m_eDestOwner).GetPlayerPolicies()->GetNumericModifier(POLICYMOD_INTERNAL_TRADE_PRODUCTION_YIELD_CHANGE);
-#endif
 				}
 #ifdef FRUITY_TRADITION_LANDED_ELITE
 				if (eYield == YIELD_FOOD)
@@ -4288,7 +4262,7 @@ int CvPlayerTrade::GetNumTradeRoutesRemaining (bool bContinueTraining)
 
 #ifdef NQ_FAITH_PER_FOREIGN_TRADE_ROUTE
 //	--------------------------------------------------------------------------------
-int CvPlayerTrade::GetNumForeignTradeRoutes(PlayerTypes ePlayer)
+int CvPlayerTrade::GetNumForeignTradeRoutes()
 {
 	CvGameTrade* pTrade = GC.getGame().GetGameTrade();
 	int iResult = 0;
@@ -4299,7 +4273,7 @@ int CvPlayerTrade::GetNumForeignTradeRoutes(PlayerTypes ePlayer)
 			continue;
 		}
 		TradeConnection* pTradeConnection = &(pTrade->m_aTradeConnections[ui]);
-		if (pTradeConnection->m_eOriginOwner == ePlayer && pTradeConnection->m_eOriginOwner != pTradeConnection->m_eDestOwner)
+		if (pTradeConnection->m_eOriginOwner != pTradeConnection->m_eDestOwner)
 		{
 			iResult++;
 		}

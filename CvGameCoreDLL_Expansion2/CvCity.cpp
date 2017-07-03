@@ -1727,10 +1727,6 @@ void CvCity::doTurn()
 			iHitsHealed++;
 		}
 		int iBuildingDefense = m_pCityBuildings->GetBuildingDefense();
-#ifdef NQ_BUILDING_DEFENSE_FROM_CITIZENS
-		// add in defense per citizen here
-		iBuildingDefense += (m_pCityBuildings->GetBuildingDefensePerCitizen() * getPopulation());
-#endif
 		iBuildingDefense *= (100 + m_pCityBuildings->GetBuildingDefenseMod());
 		iBuildingDefense /= 100;
 		iHitsHealed += iBuildingDefense / 500;
@@ -5403,18 +5399,6 @@ int CvCity::getGeneralProductionModifiers(CvString* toolTipSink) const
 		{
 			GC.getGame().BuildProdModHelpText(toolTipSink, "TXT_KEY_PRODMOD_RAILROAD_CONNECTION", iTempMod);
 		}
-
-#ifdef NQ_RAIL_CONNECTION_PRODUCTION_MODIFIER_FROM_POLICIES
-		int iPolicyMod = GET_PLAYER(this->getOwner()).GetPlayerPolicies()->GetNumericModifier(POLICYMOD_RAIL_CONNECTION_PRODUCTION_MODIFIER);
-		if (iPolicyMod != 0)
-		{
-			iMultiplier += iPolicyMod;
-			if(toolTipSink)
-			{
-				GC.getGame().BuildProdModHelpText(toolTipSink, "TXT_KEY_PRODMOD_RAILROAD_CONNECTION_FROM_POLICIES", iPolicyMod);
-			}
-		}
-#endif
 	}
 
 	return iMultiplier;
@@ -6284,145 +6268,6 @@ void CvCity::processBuilding(BuildingTypes eBuilding, int iChange, bool bFirst, 
 			if(pBuildingInfo->IsCapital())
 				owningPlayer.setCapitalCity(this);
 
-#ifdef NQ_LOCAL_POPULATION_CHANGE_FROM_BUILDING
-			// Local Pop change
-			int iLocalPopulationChange = (BuildingClassTypes)pBuildingInfo->GetLocalPopulationChange();
-			if (iLocalPopulationChange != 0)
-			{
-				setPopulation(std::max(1, (getPopulation() + iLocalPopulationChange)));
-			}
-#endif
-
-#ifdef NQ_MALI_TREASURY
-			// HACK: Mali Treasury needs to be here instead
-			if (pBuildingInfo->IsMalianTreasury())
-			{
-				int validPlotCount = 0;
-				int validPlotList[NUM_CITY_PLOTS];
-				CvPlot* pLoopPlot;
-				for (int iCityPlotLoop = 1; iCityPlotLoop < NUM_CITY_PLOTS; iCityPlotLoop++) // start loop skipping city plot
-				{
-					pLoopPlot = plotCity(getX(), getY(), iCityPlotLoop);
-
-					// must have a valid plot
-					if(pLoopPlot == NULL)
-						continue;
-
-					// Must be owned by this player, not water, not mountain, and unimproved with no resources
-					if(pLoopPlot->getOwner() != getOwner() || pLoopPlot->isWater() || pLoopPlot->isMountain() || 
-						pLoopPlot->getImprovementType() != NO_IMPROVEMENT || pLoopPlot->getResourceType() != NO_RESOURCE)
-						continue;
-
-					// must be desert, tundra, plains, or grassland
-					if (pLoopPlot->getTerrainType() != TERRAIN_DESERT && pLoopPlot->getTerrainType() != TERRAIN_PLAINS && 
-						pLoopPlot->getTerrainType() != TERRAIN_TUNDRA && pLoopPlot->getTerrainType() != TERRAIN_GRASS)
-						continue;
-					
-					// cannot have any feature other than forest or jungle
-					if (pLoopPlot->getFeatureType() != NO_FEATURE && pLoopPlot->getFeatureType() != FEATURE_FOREST && 
-						pLoopPlot->getFeatureType() != FEATURE_JUNGLE)
-						continue;
-					
-					validPlotList[validPlotCount] = iCityPlotLoop;
-					validPlotCount++;
-				}
-
-				if (validPlotCount > 0)
-				{
-					int iIndex = GC.getGame().getJonRandNum(validPlotCount, "Mali Treasury random plot selection");
-					CvPlot* pPlot = GetCityCitizens()->GetCityPlotFromIndex(validPlotList[iIndex]);
-					
-					ResourceTypes eResourceGold = (ResourceTypes)GC.getInfoTypeForString("RESOURCE_GOLD", true);
-					ResourceTypes eResourceSalt = (ResourceTypes)GC.getInfoTypeForString("RESOURCE_SALT", true);
-					ResourceTypes eResourceCopper = (ResourceTypes)GC.getInfoTypeForString("RESOURCE_COPPER", true);
-					ResourceTypes eResourceSilver = (ResourceTypes)GC.getInfoTypeForString("RESOURCE_SILVER", true);
-					
-					int iGoldWeight = 0;
-					int iSaltWeight = 0;
-					int iCopperWeight = 0;
-					int iSilverWeight = 0;
-
-					if (pPlot->isHills())
-					{
-						iGoldWeight =   (eResourceGold != NO_RESOURCE)   ? 2 : 0;
-						iSaltWeight =   (eResourceSalt != NO_RESOURCE)   ? 0 : 0;
-						iCopperWeight = (eResourceCopper != NO_RESOURCE) ? 1 : 0;
-						iSilverWeight = (eResourceSilver != NO_RESOURCE) ? 1 : 0;
-					}
-					if (pPlot->getTerrainType() == TERRAIN_DESERT)
-					{
-						iGoldWeight =   (eResourceGold != NO_RESOURCE)   ? 4 : 0;
-						iSaltWeight =   (eResourceSalt != NO_RESOURCE)   ? 3 : 0;
-						iCopperWeight = (eResourceCopper != NO_RESOURCE) ? 2 : 0;
-						iSilverWeight = (eResourceSilver != NO_RESOURCE) ? 1 : 0;
-					}
-					if (pPlot->getTerrainType() == TERRAIN_GRASS)
-					{
-						iGoldWeight =   (eResourceGold != NO_RESOURCE)   ? 4 : 0;
-						iSaltWeight =   (eResourceSalt != NO_RESOURCE)   ? 1 : 0;
-						iCopperWeight = (eResourceCopper != NO_RESOURCE) ? 3 : 0;
-						iSilverWeight = (eResourceSilver != NO_RESOURCE) ? 1 : 0;
-					}
-					if (pPlot->getTerrainType() == TERRAIN_PLAINS)
-					{
-						iGoldWeight =   (eResourceGold != NO_RESOURCE)   ? 3 : 0;
-						iSaltWeight =   (eResourceSalt != NO_RESOURCE)   ? 3 : 0;
-						iCopperWeight = (eResourceCopper != NO_RESOURCE) ? 2 : 0;
-						iSilverWeight = (eResourceSilver != NO_RESOURCE) ? 1 : 0;
-					}
-					if (pPlot->getTerrainType() == TERRAIN_TUNDRA)
-					{
-						iGoldWeight =   (eResourceGold != NO_RESOURCE)   ? 1 : 0;
-						iSaltWeight =   (eResourceSalt != NO_RESOURCE)   ? 1 : 0;
-						iCopperWeight = (eResourceCopper != NO_RESOURCE) ? 1 : 0;
-						iSilverWeight = (eResourceSilver != NO_RESOURCE) ? 1 : 0;
-					}
-
-					int iTotalWeight = iGoldWeight + iSaltWeight + iCopperWeight + iSilverWeight;
-					if (iTotalWeight > 0)
-					{
-						const char* resourceName = "";
-						int resourceID;
-						int iRoll = GC.getGame().getJonRandNum(iTotalWeight, "Rolling for Mali Treasury resource type");
-						if (iRoll < iSilverWeight)
-						{
-							pPlot->setResourceType(eResourceSilver, 1);
-							resourceName = GC.getResourceInfo(eResourceSilver)->GetTextKey();
-							resourceID = eResourceSilver;
-						}
-						else if (iRoll < iSilverWeight + iCopperWeight)
-						{
-							pPlot->setResourceType(eResourceCopper, 1);
-							resourceName = GC.getResourceInfo(eResourceCopper)->GetTextKey();
-							resourceID = eResourceCopper;
-						}
-						else if (iRoll < iSilverWeight + iCopperWeight + iSaltWeight)
-						{
-							pPlot->setResourceType(eResourceSalt, 1);
-							resourceName = GC.getResourceInfo(eResourceSalt)->GetTextKey();
-							resourceID = eResourceSalt;
-						}
-						else
-						{
-							pPlot->setResourceType(eResourceGold, 1);
-							resourceName = GC.getResourceInfo(eResourceGold)->GetTextKey();
-							resourceID = eResourceGold;
-						}
-
-						// --- notification ---
-						Localization::String localizedText;
-						CvNotifications* pNotifications = GET_PLAYER(getOwner()).GetNotifications();
-						if(pNotifications)
-						{
-							localizedText = Localization::Lookup("TXT_KEY_TREASURY_RESOURCE_FOUND");
-							localizedText << resourceName << getNameKey();
-							pNotifications->Add(NOTIFICATION_DISCOVERED_BONUS_RESOURCE, localizedText.toUTF8(), localizedText.toUTF8(), pPlot->getX(), pPlot->getY(), resourceID);
-						}
-					}
-				}
-			}
-#endif
-
 			// Free Units
 			CvUnit* pFreeUnit;
 
@@ -6530,12 +6375,6 @@ void CvCity::processBuilding(BuildingTypes eBuilding, int iChange, bool bFirst, 
 								owningPlayer.incrementGreatGeneralsCreated();
 								if (!pFreeUnit->jumpToNearestValidPlot())
 									pFreeUnit->kill(false);	// Could not find a valid spot!
-#ifdef NQ_WAR_HERO
-								if (owningPlayer.IsWarHero())
-								{
-									owningPlayer.addFreeUnit((UnitTypes)GC.getInfoTypeForString("UNIT_ARTIST"));
-								}
-#endif
 							}
 							else if(pFreeUnit->IsGreatAdmiral())
 							{
@@ -6630,68 +6469,6 @@ void CvCity::processBuilding(BuildingTypes eBuilding, int iChange, bool bFirst, 
 				int iGWindex = 	GC.getGame().GetGameCulture()->CreateGreatWork(eGWType, eClass, m_eOwner, owningPlayer.GetCurrentEra(), pBuildingInfo->GetDescription());
 				m_pCityBuildings->SetBuildingGreatWork(eBuildingClass, 0, iGWindex);
 			}
-
-#ifdef NQ_CHEAT_FIRST_ROYAL_LIBRARY_COMES_WITH_GREAT_WORK
-			// This is going to be really ugly. May Google forgive my eSoul. You should get a free great work with your first Royal Library.
-			if (eBuilding == (BuildingTypes)GC.getInfoTypeForString("BUILDING_ROYAL_LIBRARY") && !owningPlayer.GetHasEverBuiltRoyalLibrary())
-			{
-				CvGameCulture *pCulture = GC.getGame().GetGameCulture();
-				if(pCulture == NULL)
-				{
-					CvAssertMsg(pCulture != NULL, "This should never happen.");
-				}
-				else
-				{
-					// get the great work we're spawning		
-					GreatWorkSlotType eGreatWorkSlot = CvTypes::getGREAT_WORK_SLOT_LITERATURE();
-					GreatWorkClass eGreatWorkClass = (GreatWorkClass)GC.getInfoTypeForString("GREAT_WORK_LITERATURE");
-					UnitTypes eUnitType = (UnitTypes)GC.getInfoTypeForString("UNIT_WRITER");
-					GreatWorkType eGreatWorkType = NO_GREAT_WORK;
-					CvString strName;
-					CvUnitEntry* pkUnitEntry = GC.getUnitInfo(eUnitType);
-					int iNumUnitCreated = GC.getGame().getUnitCreatedCount(eUnitType);
-					int iNumNames = pkUnitEntry->GetNumUnitNames();
-					if (iNumUnitCreated < iNumNames)
-					{
-						int iNameOffset = GC.getGame().getJonRandNum(iNumNames, "Unit name selection");
-						int iI;
-						for(iI = 0; iI < iNumNames; iI++)
-						{
-							int iIndex = (iNameOffset + iI) % iNumNames;
-							strName = pkUnitEntry->GetUnitNames(iIndex);
-							if(!GC.getGame().isGreatPersonBorn(strName))
-							{
-								eGreatWorkType = pkUnitEntry->GetGreatWorks(iIndex);
-								GC.getGame().addGreatPersonBornName(strName);
-								break;
-							}
-						}
-					}
-
-					// now spawn it
-					if (eGreatWorkType != NO_GREAT_WORK)
-					{
-						owningPlayer.SetHasEverBuiltRoyalLibrary(true); // this is where it should trigger permanently
-
-						Localization::String name = Localization::Lookup(strName);
-						CvString strBuffer;
-						strBuffer.Format("%s (%s)", name.toUTF8(), pkUnitEntry->GetDescription());
-						int iGWindex = GC.getGame().GetGameCulture()->CreateGreatWork(eGreatWorkType, eGreatWorkClass, m_eOwner, owningPlayer.GetCurrentEra(), strBuffer);
-						m_pCityBuildings->SetBuildingGreatWork(eBuildingClass, 0, iGWindex);
-
-						// --- notification ---
-						CvNotifications* pNotifications = owningPlayer.GetNotifications();
-						if(pNotifications)
-						{
-							Localization::String localizedText;
-							localizedText = Localization::Lookup("TXT_KEY_MISC_WONDER_COMPLETED");
-							localizedText << owningPlayer.getNameKey() << pCulture->GetGreatWorkName(iGWindex);
-							pNotifications->Add(NOTIFICATION_GREAT_WORK_COMPLETED_ACTIVE_PLAYER, localizedText.toUTF8(), localizedText.toUTF8(), getX(), getY(), iGWindex, owningPlayer.GetID());
-						}
-					}
-				}
-			}
-#endif
 
 			// Tech boost for science buildings in capital
 			if(owningPlayer.GetPlayerTraits()->IsTechBoostFromCapitalScienceBuildings())
@@ -7075,9 +6852,6 @@ void CvCity::processBuilding(BuildingTypes eBuilding, int iChange, bool bFirst, 
 	if(!bObsolete)
 	{
 		m_pCityBuildings->ChangeBuildingDefense(pBuildingInfo->GetDefenseModifier() * iChange);
-#ifdef NQ_BUILDING_DEFENSE_FROM_CITIZENS
-		m_pCityBuildings->ChangeBuildingDefensePerCitizen(pBuildingInfo->GetDefensePerCitizen() * iChange);
-#endif
 
 		owningTeam.changeBuildingClassCount(eBuildingClass, iChange);
 		owningPlayer.changeBuildingClassCount(eBuildingClass, iChange);
@@ -7271,14 +7045,14 @@ void CvCity::UpdateReligion(ReligionTypes eNewMajority)
 							}
 
 #ifdef NQ_CHEAT_SACRED_SITES_AFFECTS_GOLD
-							if (iYield == YIELD_GOLD || iYield == YIELD_FAITH) // and now also faith ... man this is getting ugly
+							if (iYield == YIELD_GOLD)
 							{
 								CvBuildingEntry *pkEntry = GC.getBuildingInfo(eBuilding);
 								if (pkEntry && pkEntry->GetFaithCost() > 0 && pkEntry->IsUnlockedByBelief() && pkEntry->GetProductionCost() == -1)
 								{
-									iYieldFromBuilding += pReligion->m_Beliefs.GetFaithBuildingTourism(); // ... super ugly...
+									iYieldFromBuilding += pReligion->m_Beliefs.GetFaithBuildingTourism();
 								}
-							} // ... may Google forgive my eSoul...
+							}
 #endif
 							switch(iYield)
 							{
@@ -8469,20 +8243,14 @@ int CvCity::GetJONSCultureThreshold() const
 	if(eMajority != NO_RELIGION)
 	{
 		const CvReligion* pReligion = GC.getGame().GetGameReligions()->GetReligion(eMajority, getOwner());
-#ifdef NQ_PLOT_COST_FROM_BELIEF_IS_UNIQUE
-		if (pReligion && getOwner() == pReligion->m_eFounder)
-#else
 		if(pReligion)
-#endif
 		{
 			iReligionMod = pReligion->m_Beliefs.GetPlotCultureCostModifier();
-#ifndef NQ_PLOT_COST_FROM_BELIEF_IS_UNIQUE
 			BeliefTypes eSecondaryPantheon = GetCityReligions()->GetSecondaryReligionPantheonBelief();
 			if (eSecondaryPantheon != NO_BELIEF)
 			{
 				iReligionMod += GC.GetGameBeliefs()->GetEntry(eSecondaryPantheon)->GetPlotCultureCostModifier();
 			}
-#endif
 		}
 	}
 
@@ -8787,30 +8555,6 @@ void CvCity::ChangeFaithPerTurnFromReligion(int iChange)
 		m_iFaithPerTurnFromReligion = (m_iFaithPerTurnFromReligion + iChange);
 	}
 }
-
-#ifdef NQ_FLAT_FAITH_PER_CITIZEN_BORN_FROM_BELIEFS
-//	--------------------------------------------------------------------------------
-int CvCity::GetFlatFaithOnCitizenBorn() const
-{
-	VALIDATE_OBJECT
-	int iValue = 0;
-	ReligionTypes eMajority = GetCityReligions()->GetReligiousMajority();
-	if (eMajority != NO_RELIGION)
-	{
-		const CvReligion* pReligion = GC.getGame().GetGameReligions()->GetReligion(eMajority, getOwner());
-		if (pReligion)
-		{
-			iValue = pReligion->m_Beliefs.GetFlatFaithPerCitizenBorn();
-			BeliefTypes eSecondaryPantheon = GetCityReligions()->GetSecondaryReligionPantheonBelief();
-			if (eSecondaryPantheon != NO_BELIEF)
-			{
-				iValue += GC.GetGameBeliefs()->GetEntry(eSecondaryPantheon)->GetFlatFaithPerCitizenBorn();
-			}
-		}
-	}
-	return iValue;
-}
-#endif
 
 //	--------------------------------------------------------------------------------
 int CvCity::getCultureRateModifier() const
@@ -9421,12 +9165,7 @@ void CvCity::DoResistanceTurn()
 	VALIDATE_OBJECT
 	if(IsResistance())
 	{
-#ifdef NQ_DIABLE_RESISTANCE_TIME_VIA_POLICIES
-		int turns = (GET_PLAYER(getOwner()).IsDisablesResistanceTime()) ? -GetResistanceTurns() : -1;
-		ChangeResistanceTurns(turns);
-#else
 		ChangeResistanceTurns(-1);
-#endif
 	}
 }
 
@@ -10528,7 +10267,7 @@ int CvCity::getBaseYieldRateModifier(YieldTypes eIndex, int iExtra, CvString* to
 		iTempMod = GetCityBuildings()->GetCityStateTradeRouteGoldModifier();
 		iModifier += iTempMod;
 		if(toolTipSink){
-			GC.getGame().BuildProdModHelpText(toolTipSink, "TXT_KEY_GOLDMOD_YIELD_PER_MINOR_TRADE_ROUTE", iTempMod); // Note: unsure if this will work for the tooltip
+			GC.getGame().BuildProdModHelpText(toolTipSink, "TXT_KEY_GOLDMOD_YIELD_T1_ECONOMIC_UNION", iTempMod); // Note: unsure if this will work for the tooltip
 		}
 	}
 	// NQMP GJS - new Economic Union END
@@ -11665,10 +11404,6 @@ void CvCity::updateStrengthValue()
 
 	// Building Defense
 	int iBuildingDefense = m_pCityBuildings->GetBuildingDefense();
-#ifdef NQ_BUILDING_DEFENSE_FROM_CITIZENS
-	// add in defense per citizen here
-	iBuildingDefense += (m_pCityBuildings->GetBuildingDefensePerCitizen() * getPopulation());
-#endif
 
 	iBuildingDefense *= (100 + m_pCityBuildings->GetBuildingDefenseMod());
 	iBuildingDefense /= 100;
@@ -11736,10 +11471,6 @@ int CvCity::getStrengthValue(bool bForRangeStrike) const
 		int iValue = m_iStrengthValue;
 
 		iValue -= m_pCityBuildings->GetBuildingDefense();
-#ifdef NQ_BUILDING_DEFENSE_FROM_CITIZENS
-		// subtract defense per citizen here as well (city strikes don't use defense values)
-		iValue -= (m_pCityBuildings->GetBuildingDefensePerCitizen() * getPopulation());
-#endif
 
 		CvAssertMsg(iValue > 0, "City strength should always be greater than zero. Please show Jon this and send your last 5 autosaves.");
 
@@ -13298,17 +13029,6 @@ void CvCity::popOrder(int iNum, bool bFinish, bool bChoose)
 			int iResult = CreateUnit(eTrainUnit, eTrainAIUnit);
 			if(iResult != FFreeList::INVALID_INDEX)
 			{
-#ifdef NQ_PATRIOTIC_WAR
-				if (GET_PLAYER(getOwner()).IsDoubleTrainedMilitaryLandUnit())
-				{
-					CvUnitEntry* pkUnitInfo = GC.getUnitInfo(eTrainUnit);
-					if (pkUnitInfo->GetDomainType() == DOMAIN_LAND && pkUnitInfo->GetCombat() > 0)
-					{
-						CreateUnit(eTrainUnit, eTrainAIUnit);
-					}
-				}
-#endif
-
 				ICvEngineScriptSystem1* pkScriptSystem = gDLL->GetScriptSystem();
 				if (pkScriptSystem) 
 				{
@@ -14128,14 +13848,8 @@ bool CvCity::IsCanPurchase(bool bTestPurchaseCost, bool bTestTrainable, UnitType
 
 	// Can't purchase anything in a puppeted city
 	// slewis - The Venetian Exception
-#ifdef NQ_ALLOW_PUPPET_PURCHASING_FROM_POLICIES
-	if (IsPuppet())
-	{
-		if (!GetPlayer()->GetPlayerTraits()->IsNoAnnexing() && !GetPlayer()->IsAllowPuppetPurchasing())
-		{
-			return false;
-		}
-	}
+#ifdef AUI_CITY_FIX_VENICE_PUPPETS_GET_NO_YIELD_PENALTIES_BESIDES_CULTURE
+	if (IsPuppet() && !GetPlayer()->GetPlayerTraits()->IsNoAnnexing())
 #else
 	bool bIsPuppet = IsPuppet();
 	bool bVenetianException = false;
@@ -14145,10 +13859,10 @@ bool CvCity::IsCanPurchase(bool bTestPurchaseCost, bool bTestTrainable, UnitType
 	}
 
 	if (bIsPuppet && !bVenetianException)
+#endif
 	{
 		return false;
 	}
-#endif
 
 	// Check situational reasons we can't purchase now (similar to not having enough gold or faith)
 	if(bTestPurchaseCost)
@@ -14607,12 +14321,6 @@ void CvCity::Purchase(UnitTypes eUnitType, BuildingTypes eBuildingType, ProjectT
 			else if (eUnitClass == GC.getInfoTypeForString("UNITCLASS_GREAT_GENERAL"))
 			{
 				kPlayer.incrementGeneralsFromFaith();
-#ifdef NQ_WAR_HERO
-				if (kPlayer.IsWarHero())
-				{
-					kPlayer.addFreeUnit((UnitTypes)GC.getInfoTypeForString("UNIT_ARTIST"));
-				}
-#endif
 			}
 			else if (eUnitClass == GC.getInfoTypeForString("UNITCLASS_GREAT_ADMIRAL"))
 			{
@@ -14751,25 +14459,6 @@ void CvCity::doGrowth()
 		}
 		else
 		{
-#ifdef NQ_FLAT_FAITH_PER_CITIZEN_BORN_FROM_BELIEFS
-			// first calculate any bonuses the player gets from growing a pop, then actually grow since religion may change at that point
-			int iFaith = this->GetFlatFaithOnCitizenBorn();
-			if (iFaith > 0)
-			{
-				iFaith *= GC.getGame().getGameSpeedInfo().getTrainPercent();
-				iFaith /= 100;
-				GET_PLAYER(getOwner()).ChangeFaith(iFaith);
-				if(getOwner() == GC.getGame().getActivePlayer())
-				{
-					char text[256] = {0};
-					//float fDelay = GC.getPOST_COMBAT_TEXT_DELAY() * (1 + ((float)iDelay * 0.5f)); // 1 is added to avoid overlapping with XP text
-					sprintf_s(text, "[COLOR_WHITE]+%d[ENDCOLOR][ICON_PEACE]", iFaith);
-					GC.GetEngineUserInterface()->AddPopupText(getX(), getY(), text, 0.0);//fDelay);
-				}
-
-			}
-#endif
-
 #ifdef NQM_FAST_COMP
 			changeFood(-MAX(0, growthThreshold() - getFoodKept()));
 #else

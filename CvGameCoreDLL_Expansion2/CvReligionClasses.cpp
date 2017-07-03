@@ -1315,19 +1315,6 @@ void CvGameReligions::AddReformationBelief(PlayerTypes ePlayer, ReligionTypes eR
 	kPlayer.doSelfConsistencyCheckAllCities();
 #endif
 
-#ifdef NQ_ADD_REFORMATION_LUA_HOOK
-	ICvEngineScriptSystem1* pkScriptSystem = gDLL->GetScriptSystem();
-	if(pkScriptSystem) 
-	{
-		CvLuaArgsHandle args;
-		args->Push(ePlayer);
-		args->Push(eReligion);
-		args->Push(eBelief1);
-		bool bResult;
-		LuaSupport::CallHook(pkScriptSystem, "ReformationAdded", args.get(), bResult);
-	}
-#endif
-
 	//Notify the masses
 	for(int iNotifyLoop = 0; iNotifyLoop < MAX_MAJOR_CIVS; ++iNotifyLoop){
 		PlayerTypes eNotifyPlayer = (PlayerTypes) iNotifyLoop;
@@ -1372,7 +1359,6 @@ void CvGameReligions::AddReformationBelief(PlayerTypes ePlayer, ReligionTypes eR
 			LogReligionMessage(strLogMsg);
 		}
 	}
-
 	GC.GetEngineUserInterface()->setDirty(CityInfo_DIRTY_BIT, true);
 }
 
@@ -2500,11 +2486,7 @@ bool CvGameReligions::CheckSpawnGreatProphet(CvPlayer& kPlayer)
 	if(pSpawnCity != NULL && pSpawnCity->getOwner() == kPlayer.GetID())
 	{
 		pSpawnCity->GetCityCitizens()->DoSpawnGreatPerson(eUnit, false /*bIncrementCount*/, true);
-#ifdef NQ_SPAWN_PROPHETS_REMOVE_ONLY_REQUIRED_FAITH
-		kPlayer.ChangeFaith(-iCost);
-#else
 		kPlayer.SetFaith(0);
-#endif
 	}
 	else
 	{
@@ -2512,11 +2494,7 @@ bool CvGameReligions::CheckSpawnGreatProphet(CvPlayer& kPlayer)
 		if(pSpawnCity != NULL)
 		{
 			pSpawnCity->GetCityCitizens()->DoSpawnGreatPerson(eUnit, false /*bIncrementCount*/, true);
-#ifdef NQ_SPAWN_PROPHETS_REMOVE_ONLY_REQUIRED_FAITH
-			kPlayer.ChangeFaith(-iCost);
-#else
 			kPlayer.SetFaith(0);
-#endif
 		}
 	}
 
@@ -2775,13 +2753,6 @@ int CvPlayerReligions::GetCostNextProphet(bool bIncludeBeliefDiscounts, bool bAd
 			iCost /= 100;
 		}
 	}
-
-#ifdef NQ_SPAWN_PROPHETS_REMOVE_ONLY_REQUIRED_FAITH
-	// Make the number not be funky
-	int iDivisor = /*10*/ GC.getGOLD_PURCHASE_VISIBLE_DIVISOR();
-	iCost /= iDivisor;
-	iCost *= iDivisor;
-#endif
 
 	return iCost;
 }
@@ -6460,11 +6431,6 @@ int CvReligionAI::ScoreBeliefForPlayer(CvBeliefEntry* pEntry)
 		}
 	}
 
-#ifdef NQ_FREE_SETTLERS_FROM_BELIEF
-	// extra value for expansionist civs
-	iRtnValue += pEntry->GetNumFreeSettlers() * iFlavorExpansion;
-#endif
-
 	//-----------------
 	// ENHANCER BELIEFS
 	//-----------------
@@ -6472,15 +6438,6 @@ int CvReligionAI::ScoreBeliefForPlayer(CvBeliefEntry* pEntry)
 	iRtnValue += iFlavorDiplomacy * pEntry->GetFriendlyCityStateSpreadModifier() / 20;
 	iRtnValue += iFlavorDefense * pEntry->GetCombatModifierFriendlyCities() / 4;
 	iRtnValue += iFlavorOffense * pEntry->GetCombatModifierEnemyCities() / 4;
-#ifdef NQ_DEUS_VULT
-	if (pEntry->DeusVult())
-	{
-		iRtnValue += (iFlavorOffense + iFlavorDefense) * 3;
-	}
-#endif
-#ifdef NQ_GOLDEN_AGE_TURNS_FROM_BELIEF
-	iRtnValue += pEntry->GetGoldenAgeTurns() * (iFlavorGold + iFlavorCulture) / 5;
-#endif
 
 	// Chosen EARLY?
 	if (iReligionsEnhancedPercent < 33)

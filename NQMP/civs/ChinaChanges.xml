@@ -2,10 +2,10 @@
 <!-- Created by ModBuddy on 2016-09-14 20:53:27 -->
 <GameData>
 	
-	<!-- UA no longer provides +50% GG points or extra combat strength. Instead, now any unit that starts it turn on or adjacent to a GG gets +1 movement for the turn. -->
+	<!-- UA no longer provides +50% GG points. Instead, now any unit that starts it turn on or adjacent to a GG gets +1 movement for the turn. -->
 	<Traits>
 		<Update>
-			<Set GreatGeneralRateModifier="0" GreatGeneralExtraBonus="0" />
+			<Set GreatGeneralRateModifier="0" />
 			<Where Type="TRAIT_ART_OF_WAR" />
 		</Update>
 	</Traits>
@@ -65,49 +65,25 @@
 	<Language_en_US>
 		<Delete Tag="TXT_KEY_TRAIT_ART_OF_WAR" />
 		<Row Tag="TXT_KEY_TRAIT_ART_OF_WAR">
-			<Text>Military land units that start the turn on or adjacent to a Great General have +1 [ICON_MOVES] Movement.</Text>
-		</Row>
-		<Row Tag="TXT_KEY_PROMOTION_ART_OF_WAR">
-			<Text>Art of War</Text>
-		</Row>
-		<Row Tag="TXT_KEY_PROMOTION_ART_OF_WAR_HELP">
-			<Text>+1 [ICON_MOVES] Movement if the turn was started adjacent to a Great General</Text>
+			<Text>Great Generals provide 15% additional bonus to [ICON_STRENGTH] Combat Strength. Military land units that start the turn on or adjacent to a Great General have +1 [ICON_MOVES] Movement.</Text>
 		</Row>
 	</Language_en_US>
 	<Language_DE_DE>
 		<Delete Tag="TXT_KEY_TRAIT_ART_OF_WAR" />
 		<Row Tag="TXT_KEY_TRAIT_ART_OF_WAR">
-			<Text>[COLOR_WARNING_TEXT](DE_DE text) [ENDCOLOR]Military land units that start the turn on or adjacent to a Great General have +1 [ICON_MOVES] Movement.</Text>
-		</Row>
-		<Row Tag="TXT_KEY_PROMOTION_ART_OF_WAR">
-			<Text>[COLOR_WARNING_TEXT](DE_DE text) [ENDCOLOR]Art of War</Text>
-		</Row>
-		<Row Tag="TXT_KEY_PROMOTION_ART_OF_WAR_HELP">
-			<Text>[COLOR_WARNING_TEXT](DE_DE text) [ENDCOLOR]+1 [ICON_MOVES] Movement if the turn was started adjacent to a Great General</Text>
+			<Text>[COLOR_WARNING_TEXT](DE_DE text) [ENDCOLOR]Great Generals provide 15% additional bonus to [ICON_STRENGTH] Combat Strength. Military land units that start the turn on or adjacent to a Great General have +1 [ICON_MOVES] Movement.</Text>
 		</Row>
 	</Language_DE_DE>
 	<Language_PL_PL>
 		<Delete Tag="TXT_KEY_TRAIT_ART_OF_WAR" />
 		<Row Tag="TXT_KEY_TRAIT_ART_OF_WAR">
-			<Text>[COLOR_WARNING_TEXT](PL_PL text) [ENDCOLOR]Military land units that start the turn on or adjacent to a Great General have +1 [ICON_MOVES] Movement.</Text>
-		</Row>
-		<Row Tag="TXT_KEY_PROMOTION_ART_OF_WAR">
-			<Text>[COLOR_WARNING_TEXT](PL_PL text) [ENDCOLOR]Art of War</Text>
-		</Row>
-		<Row Tag="TXT_KEY_PROMOTION_ART_OF_WAR_HELP">
-			<Text>[COLOR_WARNING_TEXT](PL_PL text) [ENDCOLOR]+1 [ICON_MOVES] Movement if the turn was started adjacent to a Great General</Text>
+			<Text>[COLOR_WARNING_TEXT](PL_PL text) [ENDCOLOR]Great Generals provide 15% additional bonus to [ICON_STRENGTH] Combat Strength. Military land units that start the turn on or adjacent to a Great General have +1 [ICON_MOVES] Movement.</Text>
 		</Row>
 	</Language_PL_PL>
 	<Language_RU_RU>
 		<Delete Tag="TXT_KEY_TRAIT_ART_OF_WAR" />
 		<Row Tag="TXT_KEY_TRAIT_ART_OF_WAR">
-			<Text>[COLOR_WARNING_TEXT](RU_RU text) [ENDCOLOR]Military land units that start the turn on or adjacent to a Great General have +1 [ICON_MOVES] Movement.</Text>
-		</Row>
-		<Row Tag="TXT_KEY_PROMOTION_ART_OF_WAR">
-			<Text>[COLOR_WARNING_TEXT](RU_RU text) [ENDCOLOR]Art of War</Text>
-		</Row>
-		<Row Tag="TXT_KEY_PROMOTION_ART_OF_WAR_HELP">
-			<Text>[COLOR_WARNING_TEXT](RU_RU text) [ENDCOLOR]+1 [ICON_MOVES] Movement if the turn was started adjacent to a Great General</Text>
+			<Text>[COLOR_WARNING_TEXT](RU_RU text) [ENDCOLOR]Great Generals provide 15% additional bonus to [ICON_STRENGTH] Combat Strength. Military land units that start the turn on or adjacent to a Great General have +1 [ICON_MOVES] Movement.</Text>
 		</Row>
 	</Language_RU_RU>
 	

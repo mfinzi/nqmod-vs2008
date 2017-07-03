@@ -285,9 +285,6 @@ void CvLuaPlayer::PushMethods(lua_State* L, int t)
 	Method(GetFaithPerTurnFromCities);
 	Method(GetFaithPerTurnFromMinorCivs);
 	Method(GetFaithPerTurnFromReligion);
-#ifdef NQ_BELIEF_TOGGLE_ALLOW_FAITH_GIFTS_TO_MINORS
-	Method(CanFaithGiftMinors);
-#endif
 	Method(HasCreatedPantheon);
 	Method(GetBeliefInPantheon);
 	Method(HasCreatedReligion);
@@ -367,9 +364,6 @@ void CvLuaPlayer::PushMethods(lua_State* L, int t)
 	Method(ChangeBarbarianCombatBonus);
 	Method(GetCombatBonusVsHigherTech);
 	Method(GetCombatBonusVsLargerCiv);
-#ifdef NQ_COMBAT_BONUS_VS_SMALLER_CIV_FROM_POLICIES
-	Method(GetCombatBonusVsSmallerCiv);
-#endif
 
 	Method(GetGarrisonedCityRangeStrikeModifier);
 	Method(ChangeGarrisonedCityRangeStrikeModifier);
@@ -570,9 +564,6 @@ void CvLuaPlayer::PushMethods(lua_State* L, int t)
 	Method(IsPlayerHasOpenBordersAutomatically);
 	Method(GetFriendshipChangePerTurnTimes100);
 	Method(GetMinorCivFriendshipWithMajor);
-#ifdef NQ_SHOW_BASE_INFLUENCE_WHILE_AT_WAR_IN_CS_TOOLTIP
-	Method(GetMinorCivBaseFriendshipWithMajor);
-#endif
 	Method(ChangeMinorCivFriendshipWithMajor);
 	Method(GetMinorCivFriendshipAnchorWithMajor);
 	Method(GetMinorCivFriendshipLevelWithMajor);
@@ -596,9 +587,6 @@ void CvLuaPlayer::PushMethods(lua_State* L, int t)
 	Method(GetTurnsSinceThreatenedByBarbarians);
 	Method(GetTurnsSinceThreatenedAnnouncement);
 	Method(GetFriendshipFromGoldGift);
-#ifdef NQ_BELIEF_TOGGLE_ALLOW_FAITH_GIFTS_TO_MINORS
-	Method(GetFriendshipFromFaithGift);
-#endif
 	Method(GetFriendshipNeededForNextLevel);
 	Method(GetMinorCivFavoriteMajor);
 	Method(GetMinorCivScienceFriendshipBonus);
@@ -675,12 +663,6 @@ void CvLuaPlayer::PushMethods(lua_State* L, int t)
 	Method(GetScienceFromCitiesTimes100);
 	Method(GetScienceFromOtherPlayersTimes100);
 	Method(GetScienceFromHappinessTimes100);
-#ifdef NQ_GOLD_TO_SCIENCE_FROM_POLICIES
-	Method(GetScienceFromGoldTimes100);
-#endif
-#ifdef NQ_MINOR_FRIENDSHIP_GAIN_BULLY_GOLD_SUCCESS_FROM_POLICIES
-	Method(GetMinorFriendshipGainBullyGoldSuccess);
-#endif
 	Method(GetScienceFromResearchAgreementsTimes100);
 	Method(GetScienceFromBudgetDeficitTimes100);
 
@@ -913,9 +895,6 @@ void CvLuaPlayer::PushMethods(lua_State* L, int t)
 	Method(IsTraitBonusReligiousBelief);
 	Method(GetHappinessFromLuxury);
 	Method(IsAbleToAnnexCityStates);
-#ifdef NQ_NUM_TURNS_BEFORE_MINOR_ALLIES_REFUSE_BRIBES_FROM_TRAIT
-	Method(GetNumTurnsBeforeMinorAlliesRefuseBribes);
-#endif
 	Method(IsUsingMayaCalendar);
 	Method(GetMayaCalendarString);
 	Method(GetMayaCalendarLongString);
@@ -952,9 +931,6 @@ void CvLuaPlayer::PushMethods(lua_State* L, int t)
 	Method(GetDealMyValue);
 	Method(GetDealTheyreValue);
 	Method(MayNotAnnex);
-#ifdef NQ_ALLOW_PUPPET_PURCHASING_FROM_POLICIES
-	Method(IsAllowPuppetPurchasing);
-#endif
 
 	Method(GetEspionageCityStatus);
 	Method(GetNumSpies);
@@ -2713,18 +2689,6 @@ int CvLuaPlayer::lGetFaithPerTurnFromReligion(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlayerAI::GetFaithPerTurnFromReligion);
 }
-#ifdef NQ_BELIEF_TOGGLE_ALLOW_FAITH_GIFTS_TO_MINORS
-//------------------------------------------------------------------------------
-//bool CanFaithGiftMinors();
-int CvLuaPlayer::lCanFaithGiftMinors(lua_State* L)
-{
-	CvPlayerAI* pkPlayer = GetInstance(L);
-	const bool bResult = pkPlayer->CanFaithGiftMinors();
-	lua_pushboolean(L, bResult);
-
-	return 1;
-}
-#endif
 //------------------------------------------------------------------------------
 //bool HasCreatedPantheon();
 int CvLuaPlayer::lHasCreatedPantheon(lua_State* L)
@@ -4815,18 +4779,6 @@ int CvLuaPlayer::lGetCombatBonusVsLargerCiv(lua_State* L)
 	}
 	return 1;
 }
-#ifdef NQ_COMBAT_BONUS_VS_SMALLER_CIV_FROM_POLICIES
-//------------------------------------------------------------------------------
-int CvLuaPlayer::lGetCombatBonusVsSmallerCiv(lua_State* L)
-{
-	CvPlayer* pkPlayer = GetInstance(L);
-	if(pkPlayer)
-	{
-		lua_pushinteger(L, pkPlayer->GetPlayerPolicies()->GetNumericModifier(POLICYMOD_COMBAT_BONUS_VS_SMALLER_CIV));
-	}
-	return 1;
-}
-#endif
 //------------------------------------------------------------------------------
 int CvLuaPlayer::lIsAlwaysSeeBarbCamps(lua_State* L)
 {
@@ -5538,18 +5490,7 @@ int CvLuaPlayer::lGetPolicyGreatMusicianRateModifier(lua_State* L)
 	CvPlayer* pkPlayer = GetInstance(L);
 	if(pkPlayer)
 	{
-		
-#ifdef NQ_PRODUCTION_TO_GREAT_MUSICIANS_MODIFIER_FROM_POLICIES
-		int iMod = pkPlayer->GetPlayerPolicies()->GetNumericModifier(POLICYMOD_GREAT_MUSICIAN_RATE);
-		int iProductionToGreatMusiciansModifier = pkPlayer->GetPlayerPolicies()->GetNumericModifier(POLICYMOD_PRODUCTION_TO_GREAT_MUSICIANS_MODIFIER);
-		if (iProductionToGreatMusiciansModifier > 0)
-		{
-			iMod += pkPlayer->calculateTotalYield(YIELD_PRODUCTION) * iProductionToGreatMusiciansModifier / 100;
-		}
-		lua_pushinteger(L, iMod);
-#else
 		lua_pushinteger(L, pkPlayer->GetPlayerPolicies()->GetNumericModifier(POLICYMOD_GREAT_MUSICIAN_RATE));
-#endif
 	}
 	return 1;
 }
@@ -6168,18 +6109,6 @@ int CvLuaPlayer::lGetMinorCivFriendshipWithMajor(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-#ifdef NQ_SHOW_BASE_INFLUENCE_WHILE_AT_WAR_IN_CS_TOOLTIP
-//------------------------------------------------------------------------------
-int CvLuaPlayer::lGetMinorCivBaseFriendshipWithMajor(lua_State* L)
-{
-	CvPlayerAI* pkPlayer = GetInstance(L);
-	const PlayerTypes ePlayer = (PlayerTypes) lua_tointeger(L, 2);
-
-	const int iResult = pkPlayer->GetMinorCivAI()->GetBaseFriendshipWithMajor(ePlayer);
-	lua_pushinteger(L, iResult);
-	return 1;
-}
-#endif
 //------------------------------------------------------------------------------
 //void ChangeMinorCivFriendshipWithMajor(PlayerTypes ePlayer, int iChange);
 int CvLuaPlayer::lChangeMinorCivFriendshipWithMajor(lua_State* L)
@@ -6463,19 +6392,6 @@ int CvLuaPlayer::lGetFriendshipFromGoldGift(lua_State* L)
 	lua_pushinteger(L, iResult);
 	return 1;
 }
-#ifdef NQ_BELIEF_TOGGLE_ALLOW_FAITH_GIFTS_TO_MINORS
-//------------------------------------------------------------------------------
-int CvLuaPlayer::lGetFriendshipFromFaithGift(lua_State* L)
-{
-	CvPlayerAI* pkPlayer = GetInstance(L);
-	const PlayerTypes eMajor = (PlayerTypes) lua_tointeger(L, 2);
-	const int iFaith = lua_tointeger(L, 3);
-
-	const int iResult = pkPlayer->GetMinorCivAI()->GetFriendshipFromFaithGift(eMajor, iFaith);
-	lua_pushinteger(L, iResult);
-	return 1;
-}
-#endif
 //------------------------------------------------------------------------------
 int CvLuaPlayer::lGetMinorCivFavoriteMajor(lua_State* L)
 {
@@ -7037,20 +6953,6 @@ int CvLuaPlayer::lGetScienceFromHappinessTimes100(lua_State* L)
 {
 	return BasicLuaMethod(L, &CvPlayerAI::GetScienceFromHappinessTimes100);
 }
-#ifdef NQ_GOLD_TO_SCIENCE_FROM_POLICIES
-//int GetScienceFromGoldTimes100();
-int CvLuaPlayer::lGetScienceFromGoldTimes100(lua_State* L)
-{
-	return BasicLuaMethod(L, &CvPlayerAI::GetScienceFromGoldTimes100);
-}
-#endif
-#ifdef NQ_MINOR_FRIENDSHIP_GAIN_BULLY_GOLD_SUCCESS_FROM_POLICIES
-//int GetMinorFriendshipGainBullyGoldSuccess();
-int CvLuaPlayer::lGetMinorFriendshipGainBullyGoldSuccess(lua_State* L)
-{
-	return BasicLuaMethod(L, &CvPlayerAI::GetMinorFriendshipGainBullyGoldSuccess);
-}
-#endif
 //int GetScienceFromResearchAgreementsTimes100();
 int CvLuaPlayer::lGetScienceFromResearchAgreementsTimes100(lua_State* L)
 {
@@ -9423,17 +9325,6 @@ int CvLuaPlayer::lIsAbleToAnnexCityStates(lua_State* L)
 	}
 	return 1;
 }
-#ifdef NQ_NUM_TURNS_BEFORE_MINOR_ALLIES_REFUSE_BRIBES_FROM_TRAIT
-//------------------------------------------------------------------------------
-int CvLuaPlayer::lGetNumTurnsBeforeMinorAlliesRefuseBribes(lua_State* L)
-{
-	CvPlayerAI* pkPlayer = GetInstance(L);
-
-	const int iResult = pkPlayer->GetNumTurnsBeforeMinorAlliesRefuseBribes();
-	lua_pushinteger(L, iResult);
-	return 1;
-}
-#endif
 //------------------------------------------------------------------------------
 int CvLuaPlayer::lIsUsingMayaCalendar(lua_State* L)
 {
@@ -10701,16 +10592,6 @@ int CvLuaPlayer::lMayNotAnnex(lua_State* L)
 	lua_pushboolean(L, pkThisPlayer->GetPlayerTraits()->IsNoAnnexing());
 	return 1;
 }
-
-#ifdef NQ_ALLOW_PUPPET_PURCHASING_FROM_POLICIES
-//------------------------------------------------------------------------------
-int CvLuaPlayer::lIsAllowPuppetPurchasing(lua_State* L)
-{
-	CvPlayerAI* pkThisPlayer = GetInstance(L);
-	lua_pushboolean(L, pkThisPlayer->IsAllowPuppetPurchasing());
-	return 1;
-}
-#endif
 
 //------------------------------------------------------------------------------
 int CvLuaPlayer::lGetEspionageCityStatus(lua_State* L)

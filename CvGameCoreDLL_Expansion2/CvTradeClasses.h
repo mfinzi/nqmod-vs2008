@@ -172,9 +172,6 @@ public:
 	int GetIndexFromID (int iID);
 	PlayerTypes GetOwnerFromID (int iID);
 	PlayerTypes GetDestFromID (int iID);
-#ifdef NQ_UNIT_IMMUNE_TO_PLUNDER_FROM_TRAIT
-	DomainTypes GetDomainFromID (int iID);
-#endif
 	
 	int GetIndexFromUnitID(int iUnitID, PlayerTypes eOwner);
 	bool IsUnitIDUsed (int iUnitID);
@@ -367,7 +364,7 @@ public:
 
 	int GetNumDifferentTradingPartners (void);
 #ifdef NQ_FAITH_PER_FOREIGN_TRADE_ROUTE
-	int GetNumForeignTradeRoutes(PlayerTypes ePlayer);
+	int GetNumForeignTradeRoutes();
 #endif
 #endif
 
