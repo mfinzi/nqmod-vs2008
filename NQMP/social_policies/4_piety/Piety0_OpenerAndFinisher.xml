@@ -6,25 +6,25 @@
 	<Language_en_US>
 		<Delete Tag="TXT_KEY_POLICY_BRANCH_PIETY_HELP" />
 		<Row Tag="TXT_KEY_POLICY_BRANCH_PIETY_HELP">
-			<Text>[COLOR_POSITIVE_TEXT]Piety[ENDCOLOR] increases the [ICON_PEACE] Faith of empires.[NEWLINE][NEWLINE]Adopting Piety provides you with +1 [ICON_CULTURE] Culture and +1 [ICON_PEACE] Faith in the [ICON_CAPITAL] Capital and allows you to build Shrines and Temples in half the usual time. Unlocks building Stonehenge.[NEWLINE][NEWLINE]Adopting all Policies in the Piety tree causes a Great Prophet to appear and provides +4 [ICON_PRODUCTION] from the Grand Temple. Holy Sites provide +1 [ICON_FOOD] Food and +3 [ICON_CULTURE] Culture.</Text>
+			<Text>[COLOR_POSITIVE_TEXT]Piety[ENDCOLOR] increases the [ICON_PEACE] Faith of empires.[NEWLINE][NEWLINE]Adopting Piety provides you with +1 [ICON_CULTURE] Culture and +1 [ICON_PEACE] Faith in the [ICON_CAPITAL] Capital and allows you to build Shrines and Temples in half the usual time. [NEWLINE][NEWLINE]Adopting all Policies in the Piety tree causes a Great Prophet to appear and provides +4 [ICON_PRODUCTION] from the Grand Temple. Holy Sites provide +1 [ICON_FOOD] Food and +3 [ICON_CULTURE] Culture.</Text>
 		</Row>
 	</Language_en_US>
 	<Language_DE_DE>
 		<Delete Tag="TXT_KEY_POLICY_BRANCH_PIETY_HELP" />
 		<Row Tag="TXT_KEY_POLICY_BRANCH_PIETY_HELP">
-			<Text>[COLOR_WARNING_TEXT](DE_DE text) [ENDCOLOR][COLOR_POSITIVE_TEXT]Piety[ENDCOLOR] increases the [ICON_PEACE] Faith of empires.[NEWLINE][NEWLINE]Adopting Piety provides you with +1 [ICON_CULTURE] Culture and +1 [ICON_PEACE] Faith in the [ICON_CAPITAL] Capital and allows you to build Shrines and Temples in half the usual time. Unlocks building Stonehenge.[NEWLINE][NEWLINE]Adopting all Policies in the Piety tree causes a Great Prophet to appear and provides +4 [ICON_PRODUCTION] from the Grand Temple. Holy Sites provide +1 [ICON_FOOD] Food and +3 [ICON_CULTURE] Culture.</Text>
+			<Text>[COLOR_WARNING_TEXT](DE_DE text) [ENDCOLOR][COLOR_POSITIVE_TEXT]Piety[ENDCOLOR] increases the [ICON_PEACE] Faith of empires.[NEWLINE][NEWLINE]Adopting Piety provides you with +1 [ICON_CULTURE] Culture and +1 [ICON_PEACE] Faith in the [ICON_CAPITAL] Capital and allows you to build Shrines and Temples in half the usual time.[NEWLINE][NEWLINE]Adopting all Policies in the Piety tree causes a Great Prophet to appear and provides +4 [ICON_PRODUCTION] from the Grand Temple. Holy Sites provide +1 [ICON_FOOD] Food and +3 [ICON_CULTURE] Culture.</Text>
 		</Row>
 	</Language_DE_DE>
 	<Language_PL_PL>
 		<Delete Tag="TXT_KEY_POLICY_BRANCH_PIETY_HELP" />
 		<Row Tag="TXT_KEY_POLICY_BRANCH_PIETY_HELP">
-			<Text>[COLOR_WARNING_TEXT](PL_PL text) [ENDCOLOR][COLOR_POSITIVE_TEXT]Piety[ENDCOLOR] increases the [ICON_PEACE] Faith of empires.[NEWLINE][NEWLINE]Adopting Piety provides you with +1 [ICON_CULTURE] Culture and +1 [ICON_PEACE] Faith in the [ICON_CAPITAL] Capital and allows you to build Shrines and Temples in half the usual time. Unlocks building Stonehenge.[NEWLINE][NEWLINE]Adopting all Policies in the Piety tree causes a Great Prophet to appear and provides +4 [ICON_PRODUCTION] from the Grand Temple. Holy Sites provide +1 [ICON_FOOD] Food and +3 [ICON_CULTURE] Culture.</Text>
+			<Text>[COLOR_WARNING_TEXT](PL_PL text) [ENDCOLOR][COLOR_POSITIVE_TEXT]Piety[ENDCOLOR] increases the [ICON_PEACE] Faith of empires.[NEWLINE][NEWLINE]Adopting Piety provides you with +1 [ICON_CULTURE] Culture and +1 [ICON_PEACE] Faith in the [ICON_CAPITAL] Capital and allows you to build Shrines and Temples in half the usual time.[NEWLINE][NEWLINE]Adopting all Policies in the Piety tree causes a Great Prophet to appear and provides +4 [ICON_PRODUCTION] from the Grand Temple. Holy Sites provide +1 [ICON_FOOD] Food and +3 [ICON_CULTURE] Culture.</Text>
 		</Row>
 	</Language_PL_PL>
 	<Language_RU_RU>
 		<Delete Tag="TXT_KEY_POLICY_BRANCH_PIETY_HELP" />
 		<Row Tag="TXT_KEY_POLICY_BRANCH_PIETY_HELP">
-			<Text>[COLOR_WARNING_TEXT](RU_RU text) [ENDCOLOR][COLOR_POSITIVE_TEXT]Piety[ENDCOLOR] increases the [ICON_PEACE] Faith of empires.[NEWLINE][NEWLINE]Adopting Piety provides you with +1 [ICON_CULTURE] Culture and +1 [ICON_PEACE] Faith in the [ICON_CAPITAL] Capital and allows you to build Shrines and Temples in half the usual time. Unlocks building Stonehenge.[NEWLINE][NEWLINE]Adopting all Policies in the Piety tree causes a Great Prophet to appear and provides +4 [ICON_PRODUCTION] from the Grand Temple. Holy Sites provide +1 [ICON_FOOD] Food and +3 [ICON_CULTURE] Culture.</Text>
+			<Text>[COLOR_WARNING_TEXT](RU_RU text) [ENDCOLOR][COLOR_POSITIVE_TEXT]Piety[ENDCOLOR] increases the [ICON_PEACE] Faith of empires.[NEWLINE][NEWLINE]Adopting Piety provides you with +1 [ICON_CULTURE] Culture and +1 [ICON_PEACE] Faith in the [ICON_CAPITAL] Capital and allows you to build Shrines and Temples in half the usual time.[NEWLINE][NEWLINE]Adopting all Policies in the Piety tree causes a Great Prophet to appear and provides +4 [ICON_PRODUCTION] from the Grand Temple. Holy Sites provide +1 [ICON_FOOD] Food and +3 [ICON_CULTURE] Culture.</Text>
 		</Row>
 	</Language_RU_RU>
 
@@ -34,10 +34,6 @@
 		<Update>
 			<Where Type="BUILDING_MOSQUE_OF_DJENNE"/>
 			<Set PolicyBranchType="NULL"/>
-		</Update>
-		<Update>
-			<Where Type="BUILDING_STONEHENGE"/>
-			<Set PolicyBranchType="POLICY_BRANCH_PIETY"/>
 		</Update>
 	</Buildings>
 	<Policy_BuildingClassYieldChanges>
@@ -55,12 +51,7 @@
 			<CultureChange>1</CultureChange>
 		</Row>
 	</Policy_BuildingClassCultureChanges>
-	<Buildings>
-		<Update>
-			<Set Help="TXT_KEY_WONDER_STONEHENGE_HELP" />
-			<Where Type="BUILDING_STONEHENGE" />
-		</Update>
-	</Buildings>
+
 	<Language_en_US>
 		<Delete Tag="TXT_KEY_WONDER_MOSQUE_OF_DJENNE_HELP" />
 		<Row Tag="TXT_KEY_WONDER_MOSQUE_OF_DJENNE_HELP">
