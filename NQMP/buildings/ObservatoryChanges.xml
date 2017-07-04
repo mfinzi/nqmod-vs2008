@@ -5,7 +5,7 @@
 	<!-- Allows Observatories anywhere -->
 	<Buildings>
 		<Update>
-			<Set Mountain="true" MountainScienceYield="6" />
+			<Set Mountain="0" MountainScienceYield="6" />
 			<Where BuildingClass="BUILDINGCLASS_OBSERVATORY" />
 		</Update>
 	</Buildings>
