@@ -23,19 +23,19 @@
 	<Language_DE_DE>
 		<Delete Tag="TXT_KEY_WONDER_STONEHENGE_HELP" />
 		<Row Tag="TXT_KEY_WONDER_STONEHENGE_HELP">
-			<Text>[COLOR_WARNING_TEXT](DE_DE text) [ENDCOLOR]Requires Piety. [ICON_CULTURE] Culture and [ICON_GOLD] Gold costs of acquiring new tiles reduced by 25% in every city. Grants 150 Faith (on Standard Speed) when built.</Text>
+			<Text>[COLOR_WARNING_TEXT](DE_DE text) [ENDCOLOR]  [ICON_CULTURE] Culture and [ICON_GOLD] Gold costs of acquiring new tiles reduced by 25% in every city. Grants 150 Faith (on Standard Speed) when built.</Text>
 		</Row>
 	</Language_DE_DE>
 	<Language_PL_PL>
 		<Delete Tag="TXT_KEY_WONDER_STONEHENGE_HELP" />
 		<Row Tag="TXT_KEY_WONDER_STONEHENGE_HELP">
-			<Text>[COLOR_WARNING_TEXT](PL_PL text) [ENDCOLOR]Requires Piety. [ICON_CULTURE] Culture and [ICON_GOLD] Gold costs of acquiring new tiles reduced by 25% in every city. Grants 150 Faith (on Standard Speed) when built.</Text>
+			<Text>[COLOR_WARNING_TEXT](PL_PL text) [ENDCOLOR] [ICON_CULTURE] Culture and [ICON_GOLD] Gold costs of acquiring new tiles reduced by 25% in every city. Grants 150 Faith (on Standard Speed) when built.</Text>
 		</Row>
 	</Language_PL_PL>
 	<Language_RU_RU>
 		<Delete Tag="TXT_KEY_WONDER_STONEHENGE_HELP" />
 		<Row Tag="TXT_KEY_WONDER_STONEHENGE_HELP">
-			<Text>[COLOR_WARNING_TEXT](RU_RU text) [ENDCOLOR]Requires Piety. [ICON_CULTURE] Culture and [ICON_GOLD] Gold costs of acquiring new tiles reduced by 25% in every city. Grants 150 Faith (on Standard Speed) when built.</Text>
+			<Text>[COLOR_WARNING_TEXT](RU_RU text) [ENDCOLOR] [ICON_CULTURE] Culture and [ICON_GOLD] Gold costs of acquiring new tiles reduced by 25% in every city. Grants 150 Faith (on Standard Speed) when built.</Text>
 		</Row>
 	</Language_RU_RU>
 
